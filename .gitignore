@@ -1,4 +1,5 @@
 .credentials/
 data/
+Docs/
 client_secret.json
 config.py
