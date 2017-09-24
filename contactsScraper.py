@@ -67,7 +67,7 @@ def getAgencyDir():
 
     #specify sheetID and range
     spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
-    rangeName = 'Org Leadership Websites!A2:B'
+    rangeName = 'Org Leadership Websites!A2:E'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     values = result.get('values', [])
