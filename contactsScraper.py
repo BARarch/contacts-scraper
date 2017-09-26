@@ -149,61 +149,84 @@ def sheetRecord(row, recordKeys):
 
 # Company Directory Manager Classes
 class DirectoryManager(object):
-    ## The goal of this class is to manage the directory in the enviroment not to be one!
-    ## the directory as well as it access and packaging functions will opporate as utility functions, these
-    ## the routines of this class will call those utility functions
-    def __init__(self, orgRecords):
-        self.orgRecords = orgRecords
-        #self.browser = webdriver.Chrome(path_to_chromedriver)
-        
-    def findOrgRecord(self, organization):
-        for org in self.orgRecords:
-            if organization == org['Organization']:
-                return org
-            
-    def get_organizations(self):
-        return [x['Organization'] for x in self.orgRecords]
-            
-    def orgRecordIndex(self, orgRecord):
-        return self.orgRecords.index(orgRecord)
-    
-    def linkList(self, orgRecord):
-        lis = [orgRecord['Directory link'], orgRecord['Link 2'], orgRecord['Link 3'], orgRecord['Link 4']]
-        return lis[:lis.index('')]
-    
-    def writeRecordRow(self, row, index):
-        """Google Sheets API Code.
-        """
-        credentials = get_credentials()
-        http = credentials.authorize(smgs.httplib2.Http())
-        discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-                        'version=v4')
-        service = smgs.discovery.build('sheets', 'v4', http=http,
-                                  discoveryServiceUrl=discoveryUrl)
+	## The goal of this class is to manage the directory in the enviroment not to be one!
+	## the directory as well as it access and packaging functions will opporate as utility functions, these
+	## the routines of this class will call those utility functions
+	def __init__(self, orgRecords):
+	    self.orgRecords = orgRecords
+	    #self.browser = webdriver.Chrome(path_to_chromedriver)
+	    
+	def findOrgRecord(self, organization):
+	    for org in self.orgRecords:
+	        if organization == org['Organization']:
+	            return org
+	        
+	def get_organizations(self):
+	    return [x['Organization'] for x in self.orgRecords]
+	        
+	def orgRecordIndex(self, orgRecord):
+	    return self.orgRecords.index(orgRecord)
 
-        spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
-        value_input_option = 'RAW'
-        rangeName = 'Org Leadership Websites!F' + str(index + 2)
-        values = row
-        body = {
-              'values': values
-        }
+	def linkList(self, orgRecord):
+	    lis = [orgRecord['Directory link'], orgRecord['Link 2'], orgRecord['Link 3'], orgRecord['Link 4']]
+	    return lis[:lis.index('')]
 
-        result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
-                                                        valueInputOption=value_input_option, body=body).execute()
+	def writeRecordRow(self, row, index):
+		"""Google Sheets API Code.
+		"""
+		credentials = get_credentials()
+		http = credentials.authorize(smgs.httplib2.Http())
+		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+		                'version=v4')
+		service = smgs.discovery.build('sheets', 'v4', http=http,
+		                          discoveryServiceUrl=discoveryUrl)
 
-        return result
+		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+		value_input_option = 'RAW'
+		rangeName = 'Org Leadership Websites!F' + str(index + 2)
+		values = row
+		body = {
+		      'values': values
+		}
+
+		result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
+		                                                valueInputOption=value_input_option, body=body).execute()
+
+		return result
+
+	def writeRecordNote(self, note, index):
+		"""Google Sheets API Code.
+		"""
+		credentials = get_credentials()
+		http = credentials.authorize(smgs.httplib2.Http())
+		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+		                'version=v4')
+		service = smgs.discovery.build('sheets', 'v4', http=http,
+		                          discoveryServiceUrl=discoveryUrl)
+
+		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+		value_input_option = 'RAW'
+		rangeName = 'Org Leadership Websites!J' + str(index + 2)
+		values = [[note]]
+		body = {
+		      'values': values
+		}
+
+		result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
+		                                                valueInputOption=value_input_option, body=body).execute()
+
+		return result
     
 
 class OrgSession(DirectoryManager):
 	chromeBrowserPath = '/Users/Anthony/scripts/Contacts-Scraper/Drivers/chromedriver' # change path as needed 
-	sessionBrowser = webdriver.Chrome(chromeBrowserPath) 
+	#sessionBrowser = webdriver.Chrome(chromeBrowserPath) 
 
 	MillisecondFormatMax = 2
 
 	def __init__(self, orgRecords):
 		DirectoryManager.__init__(self, orgRecords)
-		
+		self.sessionBrowser = webdriver.Chrome(OrgSession.chromeBrowserPath)
         
 	def processSession(self, organization):
 		self.organization = organization
@@ -214,7 +237,7 @@ class OrgSession(DirectoryManager):
 		self.links = DirectoryManager.linkList(self, self.orgRecord)
 
 		## Retreve Queries
-		self.orgQueries = [OrgQuery(link, OrgSession.sessionBrowser) for link in self.links]
+		self.orgQueries = [OrgQuery(link, self.sessionBrowser) for link in self.links]
 		    
 		## Analyze Query Session Collect Data
 		callTime = self.orgQueries[-1].get_callTimeStr()  # This is the Call time for the last link in the Session
@@ -234,6 +257,26 @@ class OrgSession(DirectoryManager):
 
 		## Return Query Objects
 		return self.orgQueries
+
+	def serialSessionNote(self, note):
+		## Write a note to the organization row of the previous session
+		return DirectoryManager.writeRecordNote(self, note, self.sessionIndex)	
+
+	def organizationSessionNote(self, organization, note):
+		orgRecord = DirectoryManager.findOrgRecord(self, organization)
+		index = DirectoryManager.orgRecordIndex(self, orgRecord)
+		return DirectoryManager.writeRecordNote(self, note, index)
+
+class BatchSessionPing(OrgSession):
+	def __init__(self, orgRecords):
+		OrgSession.__init__(self, orgRecords)
+		for org in DirectoryManager.get_organizations(self):
+			try:
+				q = OrgSession.processSession(self, org)
+			except:
+				OrgSession.organizationSessionNote(self, org, "Something Happend Here")
+
+		return "DONE"
 
 
 class OrgQuery(object):
@@ -286,5 +329,8 @@ if __name__ == '__main__':
 	cr = pd.DataFrame(contactRecords)
 	dr = pd.DataFrame(orgRecords)
 	print('DATAFRAMES READY')
+
+
+
 
 	
