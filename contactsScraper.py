@@ -2,6 +2,7 @@ import pandas as pd
 import scraperModelGS as smgs
 
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException 
 from bs4 import BeautifulSoup
 
 import time
@@ -220,13 +221,16 @@ class DirectoryManager(object):
 
 class OrgSession(DirectoryManager):
 	chromeBrowserPath = '/Users/Anthony/scripts/Contacts-Scraper/Drivers/chromedriver' # change path as needed 
-	#sessionBrowser = webdriver.Chrome(chromeBrowserPath) 
 
 	MillisecondFormatMax = 2
+	PageLoadTimeout = 20
+	ScriptLoadTimeout = 20
 
 	def __init__(self, orgRecords):
 		DirectoryManager.__init__(self, orgRecords)
 		self.sessionBrowser = webdriver.Chrome(OrgSession.chromeBrowserPath)
+		self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)
+		self.sessionBrowser.set_script_timeout(OrgSession.ScriptLoadTimeout)
         
 	def processSession(self, organization):
 		self.organization = organization
@@ -240,9 +244,29 @@ class OrgSession(DirectoryManager):
 		self.orgQueries = [OrgQuery(link, self.sessionBrowser) for link in self.links]
 		    
 		## Analyze Query Session Collect Data
-		callTime = self.orgQueries[-1].get_callTimeStr()  # This is the Call time for the last link in the Session
+		reportRow = self.orgSessionStatusCheck()
+
+
+		res = DirectoryManager.writeRecordRow(self, [reportRow], self.sessionIndex)
+
+		## Return Query Objects
+		return self.orgQueries
+
+	def orgSessionStatusCheck(self):
+		# Documents performance and exceptions
+		if self.anyQueryTimeouts():		#There is a timeout
+			self.new_Browser()		#Get a new brower
+			self.serialSessionNote('We have a timeout')		#Send a Note
+			self.sessionStatus = 'Bad'		#Set session Status to bad
+			return[self.orgQueries[-1].get_callTimeStr(), '--', '--', self.sessionStatus]
+		elif self.anyOtherQueryExceptions():	#There are other exceptions
+			self.serialSessionNote('There is either bad source or bad parsing on doc')	#Send a Note
+			self.sessionStatus = 'Bad'		#Set session Status to bad
+			return[self.orgQueries[-1].get_callTimeStr(), '--', '--', self.sessionStatus]
+
 		totalTime = sum([query.get_responseTime() for query in self.orgQueries])
 		self.sessionStatus = 'Good'
+		self.serialSessionEraseNote()  # For good Session Erase whever note is there
 
 		## Set Response time in Second or Millisecond format
 		if totalTime < OrgSession.MillisecondFormatMax:
@@ -252,15 +276,35 @@ class OrgSession(DirectoryManager):
 			timeUnit = 's'
 			totalTimeFormat = '%.3f' % totalTime
 
+		return [self.orgQueries[-1].get_callTimeStr() , totalTimeFormat, timeUnit, self.sessionStatus]
 
-		res = DirectoryManager.writeRecordRow(self, [[callTime, totalTimeFormat, timeUnit, self.sessionStatus ]], self.sessionIndex)
+	def anyQueryTimeouts(self):
+		for query in self.orgQueries:
+			if query.timed_out():
+				return True
+		return False
 
-		## Return Query Objects
-		return self.orgQueries
+	def anyOtherQueryExceptions(self):
+		for query in self.orgQueries:
+			if query.source_bad() or query.soup_bad():
+				return True
+		return False
+
+
+	def new_Browser(self):
+		self.sessionBrowser.close()
+		self.sessionBrowser = webdriver.Chrome(OrgSession.chromeBrowserPath)
+		self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)
+		self.sessionBrowser.set_script_timeout(OrgSession.ScriptLoadTimeout)
+
 
 	def serialSessionNote(self, note):
 		## Write a note to the organization row of the previous session
 		return DirectoryManager.writeRecordNote(self, note, self.sessionIndex)	
+
+	def serialSessionEraseNote(self):
+		## Write a note to the organization row of the previous session
+		return DirectoryManager.writeRecordNote(self, '', self.sessionIndex)
 
 	def organizationSessionNote(self, organization, note):
 		orgRecord = DirectoryManager.findOrgRecord(self, organization)
@@ -275,37 +319,65 @@ class BatchSessionPing(OrgSession):
 				q = OrgSession.processSession(self, org)
 			except:
 				OrgSession.organizationSessionNote(self, org, "Something Happend Here")
+				OrgSession.new_Browser(self)
 
-		return "DONE"
+		
 
 
 class OrgQuery(object):
-    def __init__(self, link, browser):
-        self.link = link
-        start = time.clock()
-        self.query = browser.get(link)
-        self.pageSource = browser.page_source
-        self.soup = BeautifulSoup(self.pageSource, 'lxml')
-        self.responseTime = time.clock() - start
-        self.callTime = dt.datetime.now()
-        
-    def get_query(self):
-        return self.query
-    
-    def get_pageSource(self):
-        return self.pageSource
-    
-    def get_soup(self):
-        return self.soup
-    
-    def get_responseTime(self):
-        return self.responseTime
-    
-    def get_callTime(self):
-        return self.callTime
-        
-    def get_callTimeStr(self):
-        return self.callTime.strftime('%a %b %d, %Y  %H:%M:%S')
+	def __init__(self, link, browser):
+		self.link = link
+		try:
+			start = time.clock()
+			self.query = browser.get(link)
+			self.responseTime = time.clock() - start
+		except TimeoutException:
+			self.timeOut = True
+		else:
+			self.timeOut = False
+
+		try:
+			self.pageSource = browser.page_source
+		except:
+			self.sourceError = True
+		else:
+			self.sourceError = False
+
+		try:
+			self.soup = BeautifulSoup(self.pageSource, 'lxml')
+		except:
+			self.soupError = True
+		else:
+			self.soupError = False
+
+		self.callTime = dt.datetime.now()
+
+	def get_query(self):
+		return self.query
+
+	def get_pageSource(self):
+		return self.pageSource
+
+	def get_soup(self):
+		return self.soup
+
+	def get_responseTime(self):
+		return self.responseTime
+
+	def get_callTime(self):
+		return self.callTime
+
+	def get_callTimeStr(self):
+		return self.callTime.strftime('%a %b %d, %Y  %H:%M:%S')
+
+	def timed_out(self):
+		return self.timeOut
+
+	def source_bad(self):
+		return self.sourceError
+
+	def soup_bad(self):
+		return self.soupError
         
 
 
