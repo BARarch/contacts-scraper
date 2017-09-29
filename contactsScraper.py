@@ -292,10 +292,12 @@ class OrgSession(DirectoryManager):
 
 
 	def new_Browser(self):
-		self.sessionBrowser.close()
-		self.sessionBrowser = webdriver.Chrome(OrgSession.chromeBrowserPath)
-		self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)
-		self.sessionBrowser.set_script_timeout(OrgSession.ScriptLoadTimeout)
+		try:
+			self.sessionBrowser.close()
+		finally:
+			self.sessionBrowser = webdriver.Chrome(OrgSession.chromeBrowserPath)
+			self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)
+			self.sessionBrowser.set_script_timeout(OrgSession.ScriptLoadTimeout)
 
 
 	def serialSessionNote(self, note):
