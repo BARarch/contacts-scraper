@@ -213,6 +213,19 @@ class ContactPointerFamily(object):
 class VerifiedPointer(ContactPointerFamily):
 	get_credentials = smgs.modelInit()
 
+	def __init__(self, rec):
+		ContactPointerFamily.__init__(self, rec)
+		self.mary = ContactPointerFamily.get_mary(self)
+		self.minnie = ContactPointerFamily.get_minnie(self)
+		self.martina = ContactPointerFamily.get_martina(self)
+		self.nate = ContactPointerFamily.get_nate(self)
+		self.nathan = ContactPointerFamily.get_nathan(self)
+		self.tom = ContactPointerFamily.get_tom(self)
+		self.fred = ContactPointerFamily.get_fred(self)
+		self.larry = ContactPointerFamily.get_larry(self)
+		
+
+
 
 	## Call this function first to setup sheet writing for the class
 	@classmethod
