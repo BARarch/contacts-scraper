@@ -39,8 +39,8 @@ class ContactPointerFamily(object):
 		self.titleReg = re.compile('^.*%s.*$' % self.rec['Title'].to_string(index=False))
 
 		# Find Fred and Larry, Elements in tree that match text for first name and last name
-		fred = ContactPointerFamily.docSoup.findAll(text=firstNameReg)
-		larry = ContactPointerFamily.docSoup.findAll(text=lastNameReg)
+		fred = ContactPointerFamily.docSoup.findAll(text=self.firstNameReg)
+		larry = ContactPointerFamily.docSoup.findAll(text=self.lastNameReg)
 
 		try:
 			self.contactPointers['fred'] = fred[0]
@@ -60,7 +60,7 @@ class ContactPointerFamily(object):
 
 		for t in titleWords:
 			wordReg = re.compile('^.*%s.*$' % t)
-			reggies = namicSoup.findAll(text=wordReg)
+			reggies = ContactPointerFamily.docSoup.findAll(text=wordReg)
 			for reggie in reggies:
 				if reggie in reggieCounts:
 					reggieCounts[reggie] += 1
@@ -81,7 +81,7 @@ class ContactPointerFamily(object):
 			## Most Name Pointers will be nathan(s) because the first and last name of a contact will be in the same element
 			self.contactPointers['nathan'] = self.contactPointers['fred']
 		else:
-			self.contactPointers['nate'] = ContactPointerFamily.commonParent(self.contactPointers['fred'], self.contactPointers['larry']
+			self.contactPointers['nate'] = ContactPointerFamily.commonParent(self.contactPointers['fred'], self.contactPointers['larry'])
 
 		## Assign Find Mother Element shes either Mindy, Martina, or the general case Mary
 		if 'nathan' in self.contactPointers:
@@ -97,24 +97,95 @@ class ContactPointerFamily(object):
 			if tomsCommonParent is self.contactPointers['nate']:
 				## Martina: nate is toms parent too
 				self.contactPointers['martina'] = tomsCommonParent
-				
+
 			else:
 				## Mary: again, the General Case
 				self.contactPointers['mary'] = tomsCommonParent
 
+	def mary_here(self):
+		return 'mary' in self.contactPointers
+
+	def minnie_here(self):
+		return 'minnie' in self.contactPointers
+
+	def martina_here(self):
+		return 'martina' in self.contactPointers
+
+	def nate_here(self):
+		return 'nate' in self.contactPointers
+
+	def nathan_here(self):
+		return 'nathan' in self.contactPointers
+
+	def tom_here(self):
+		return 'tom' in self.contactPointers
+
+	def fred_here(self):
+		return 'fred' in self.contactPointers
+
+	def larry_here(self):
+		return 'larry' in self.contactPointers
+
+	def get_mary(self):
+		if self.mary_here():
+			return self.contactPointers['mary']
+		else:
+			return None
+
+	def get_minnie(self):
+		if self.minnie_here():
+			return self.contactPointers['minnie']
+		else:
+			return None
+
+	def get_martina(self):
+		if self.martina_here():
+			return self.contactPointers['martina']
+		else:
+			return None
+
+	def get_nate(self):
+		if self.nate_here():
+			return self.contactPointers['nate']
+		else:
+			return None
+
+	def get_nathan(self):
+		if self.nathan_here():
+			return self.contactPointers['nathan']
+		else:
+			return None
+
+	def get_tom(self):
+		if self.tom_here():
+			return self.contactPointers['tom']
+		else:
+			return None
+
+	def get_fred(self):
+		if self.fred_here():
+			return self.contactPointers['fred']
+		else:
+			return None
+
+	def get_larry(self):
+		if self.larry_here():
+			return self.contactPointers['larry']
+		else:
+			return None
 
 
 	@staticmethod
 	def commonParent(A,B):
 		#step 1 A to B's Parents
-	    bParents = B.find_parents()
+		bParents = B.find_parents()
 		if A in bParents:
-	    	return A
+			return A
 
 		#step 2 B to A's Parents
 		aParents = A.find_parents()
 		if B in aParents:
-	    	return B
+			return B
 
 		Parent_of_b = B.parents
 		Parent_of_a = A.parents
@@ -122,18 +193,18 @@ class ContactPointerFamily(object):
 		#Step 3 Find Firstof A's ancestors to match in B's
 		aFirstCommonParent = next(Parent_of_a)
 		while aFirstCommonParent not in bParents:
-	    	aFirstCommonParent = next(Parent_of_a)
+			aFirstCommonParent = next(Parent_of_a)
 
 		#Step 4 Find of First of B's ancestors to match in A's
 		bFirstCommonParent = next(Parent_of_b)
 		while bFirstCommonParent not in aParents:
-	    	bFirstCommonParent = next(Parent_of_b)
+			bFirstCommonParent = next(Parent_of_b)
 
 		#Step 5 do they match    
 		if bFirstCommonParent is aFirstCommonParent:
-	    	return bFirstCommonParent
+			return bFirstCommonParent
 		else:
-	    	return None 
+			return None 
 
 	@classmethod
 	def set_soup(cls, soup):

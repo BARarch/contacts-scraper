@@ -2,6 +2,7 @@ import pandas as pd
 import scraperModelGS as smgs
 
 import directoryManager as dm
+import contactChecker as cc
 
 def getContacts():
     """Google Sheets API Code.
