@@ -13,9 +13,11 @@ class DirectoryManager(object):
 	## The goal of this class is to manage the directory in the enviroment not to be one!
 	## the directory as well as it access and packaging functions will opporate as utility functions, these
 	## the routines of this class will call those utility functions
+	get_credentials = smgs.modelInit()
+
 	def __init__(self, orgRecords):
 	    self.orgRecords = orgRecords
-	    self.get_credentials = smgs.modelInit()
+	    #self.get_credentials = smgs.modelInit()
 	    #self.browser = webdriver.Chrome(path_to_chromedriver)
 	    
 	def findOrgRecord(self, organization):
@@ -36,7 +38,7 @@ class DirectoryManager(object):
 	def writeRecordRow(self, row, index):
 		"""Google Sheets API Code.
 		"""
-		credentials = self.get_credentials()
+		credentials = DirectoryManager.get_credentials()
 		http = credentials.authorize(smgs.httplib2.Http())
 		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
 		                'version=v4')
@@ -59,7 +61,7 @@ class DirectoryManager(object):
 	def writeRecordNote(self, note, index):
 		"""Google Sheets API Code.
 		"""
-		credentials = self.get_credentials()
+		credentials = DirectoryManager.get_credentials()
 		http = credentials.authorize(smgs.httplib2.Http())
 		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
 		                'version=v4')

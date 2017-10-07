@@ -210,4 +210,11 @@ class ContactPointerFamily(object):
 	def set_soup(cls, soup):
 		ContactPointerFamily.docSoup = soup
 
+class VerifiedPointer(ContactPointerFamily):
+	get_credentials = smgs.modelInit()
 
+
+	## Call this function first to setup sheet writing for the class
+	@classmethod
+	def init_Sheet_Writes(cls):
+		VerifiedPointer.get_credentials = smgs.modelInit()
