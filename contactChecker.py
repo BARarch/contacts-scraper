@@ -222,20 +222,19 @@ class VerifiedPointer(ContactPointerFamily):
 		self.tom = ContactPointerFamily.get_tom(self)
 		self.fred = ContactPointerFamily.get_fred(self)
 		self.larry = ContactPointerFamily.get_larry(self)
+		self.output = ContactSheetOutput('Pointer For: %s' (self.nathan if self.nathan != None else "Some Contact"))
+
 		
-
-
-
-	## Call this function first to setup sheet writing for the class
-	@classmethod
-	def init_Sheet_Writes(cls):
-		VerifiedPointer.get_credentials = smgs.modelInit()
 
 
 
 class VerificationHandler(object):
 
 	def __init__(self, org):
+		self.organization = org
+		self.records = []
+		self.pointers = []
+		self.output = ContactSheetOutput('Handler for: %s' % self.organization)
 
 class ContactSheetOutput(object):
 	get_credenitals = smgs.modelInit()
