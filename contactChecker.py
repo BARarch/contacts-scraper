@@ -211,7 +211,7 @@ class ContactPointerFamily(object):
 		ContactPointerFamily.docSoup = soup
 
 class VerifiedPointer(ContactPointerFamily):
-	get_credentials = smgs.modelInit()
+
 
 	def __init__(self, rec):
 		ContactPointerFamily.__init__(self, rec)
@@ -223,11 +223,112 @@ class VerifiedPointer(ContactPointerFamily):
 		self.tom = ContactPointerFamily.get_tom(self)
 		self.fred = ContactPointerFamily.get_fred(self)
 		self.larry = ContactPointerFamily.get_larry(self)
+
+		self.output = ContactSheetOutput('Pointer For: %s' (self.nathan if self.nathan != None else "Some Contact"))
+
+
+	
+class VerificationHandler(object):
+
+	def __init__(self, org):
+		self.organization = org
+		self.records = []
+		self.pointers = []
+		self.output = ContactSheetOutput('Handler for: %s' % self.organization)
 		
 
+class ContactSheetOutput(object):
+	get_credenitals = smgs.modelInit()
+	initialRead = read_contact_output_records()
+	initialRow = 7
+	currentRow = ContactSheetOutput.initialRow + len(ContactSheetOutput.initialRead)
+
+	def __init__(self, name):
+		self.name = name
+
+	def outputSingleRow(self, row):
+		"""Google Sheets API Code.
+		"""
+		credentials = ContactSheetOutput.get_credentials()
+		http = credentials.authorize(smgs.httplib2.Http())
+		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+		                'version=v4')
+		service = smgs.discovery.build('sheets', 'v4', http=http,
+		                          discoveryServiceUrl=discoveryUrl)
+
+		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+		value_input_option = 'RAW'
+		rangeName = 'Org Leadership Websites!F' + str(ContactSheetOutput.currentRow)
+		values = row
+		body = {
+		      'values': values
+		}
+
+		try:
+			result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
+		                                                valueInputOption=value_input_option, body=body).execute()
+		except:
+			print('Missed Row Output')
+		else:
+			ContactSheetOutput.currentRow += 1
+
+		return result 
+
+	def outputBatchRow(self, rows):
+		"""Google Sheets API Code.
+		"""
+		credentials = ContactSheetOutput.get_credentials()
+		http = credentials.authorize(smgs.httplib2.Http())
+		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+		                'version=v4')
+		service = smgs.discovery.build('sheets', 'v4', http=http,
+		                          discoveryServiceUrl=discoveryUrl)
+
+		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+		value_input_option = 'RAW'
+		rangeName = 'Org Leadership Websites!F' + str(ContactSheetOutput.currentRow)
+		values = rows
+		body = {
+		      'values': values
+		}
+
+		try:
+			result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
+		                                                valueInputOption=value_input_option, body=body).execute()
+		except:
+			print('Missed Row Output')
+		else:
+			ContactSheetOutput.currentRow += len(rows)
+
+		return result	
+
+	@staticmethod
+	def read_contact_output_records():
+	    """Google Sheets API Code.
+	    Pulls urls for all NFL Team RSS Feeds
+	    https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
+	    """
+	    credentials = get_credentials()
+	    http = credentials.authorize(smgs.httplib2.Http())
+	    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+	                    'version=v4')
+	    service = smgs.discovery.build('sheets', 'v4', http=http,
+	                              discoveryServiceUrl=discoveryUrl)
+
+	    #specify sheetID and range
+	    spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+	    rangeName = 'Samples!A' + str(ContactSheetOutput.initialRow) + ':N'
+	    result = service.spreadsheets().values().get(
+	        spreadsheetId=spreadsheetId, range=rangeName).execute()
+	    values = result.get('values', [])
+
+	    if not values:
+	        print('Record Output Ready: No Reocords')
+	    else:
+	        print('Record Output Ready')
+
+	    return values
 
 
-	## Call this function first to setup sheet writing for the class
-	@classmethod
-	def init_Sheet_Writes(cls):
-		VerifiedPointer.get_credentials = smgs.modelInit()
+
+
