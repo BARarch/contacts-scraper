@@ -164,6 +164,9 @@ if __name__ == '__main__':
 	dr = pd.DataFrame(orgRecords)
 	print('DATAFRAMES READY')
 
+	# Setup Contact Record Output
+	cc.ContactSheetOutput.set_output()
+
 
 
 

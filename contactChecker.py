@@ -235,13 +235,13 @@ class VerificationHandler(object):
 		self.records = []
 		self.pointers = []
 		self.output = ContactSheetOutput('Handler for: %s' % self.organization)
-		
+
 
 class ContactSheetOutput(object):
-	get_credenitals = smgs.modelInit()
-	initialRead = read_contact_output_records()
+	get_credentials = smgs.modelInit()   
+	initialRead = ""
 	initialRow = 7
-	currentRow = ContactSheetOutput.initialRow + len(ContactSheetOutput.initialRead)
+	currentRow = 7
 
 	def __init__(self, name):
 		self.name = name
@@ -302,13 +302,13 @@ class ContactSheetOutput(object):
 
 		return result	
 
-	@staticmethod
-	def read_contact_output_records():
+	@classmethod
+	def set_output(cls):
 	    """Google Sheets API Code.
 	    Pulls urls for all NFL Team RSS Feeds
 	    https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
 	    """
-	    credentials = get_credentials()
+	    credentials = ContactSheetOutput.get_credentials()
 	    http = credentials.authorize(smgs.httplib2.Http())
 	    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
 	                    'version=v4')
@@ -323,11 +323,13 @@ class ContactSheetOutput(object):
 	    values = result.get('values', [])
 
 	    if not values:
-	        print('Record Output Ready: No Reocords')
+	        print('RECORD OUTPUT READY: No Reocords')
 	    else:
-	        print('Record Output Ready')
+	        print('RECORD OUTPUT READY')
+	        ContactSheetOutput.initialRead = values
+	        ContactSheetOutput.currentRow = ContactSheetOutput.initialRow + len(values)
 
-	    return values
+	    
 
 
 
