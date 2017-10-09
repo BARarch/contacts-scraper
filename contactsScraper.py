@@ -165,7 +165,7 @@ if __name__ == '__main__':
 	print('DATAFRAMES READY')
 
 	# Setup Contact Record Output
-	cc.ContactSheetOutput.set_output()
+	cc.ContactSheetOutput.set_output(contactKeys)
 
 
 

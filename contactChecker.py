@@ -69,6 +69,7 @@ class ContactPointerFamily(object):
 			# print(t+': '+str(reggies))
 
 		reggieMax = list(reggieCounts.keys())[0]
+		self.noReggies = len(list(reggieCounts.keys()))
 
 		for reggie in reggieCounts:
 			if reggieCounts[reggie] > reggieCounts[reggieMax]:
@@ -212,7 +213,6 @@ class ContactPointerFamily(object):
 
 class VerifiedPointer(ContactPointerFamily):
 
-
 	def __init__(self, rec):
 		ContactPointerFamily.__init__(self, rec)
 		self.mary = ContactPointerFamily.get_mary(self)
@@ -224,8 +224,23 @@ class VerifiedPointer(ContactPointerFamily):
 		self.fred = ContactPointerFamily.get_fred(self)
 		self.larry = ContactPointerFamily.get_larry(self)
 
-		self.output = ContactSheetOutput('Pointer For: %s' (self.nathan if self.nathan != None else "Some Contact"))
+		self.output = ContactSheetOutput('Pointer For: %s' % self.nathan if self.nathan != None else "Some Contact")
 
+	def get_output_row(self):
+		rec = [self.rec[x].to_string(index=False) for x in self.output.get_contact_keys()]
+		scrape = ['Fred' if self.fred_here() else 'None',
+				 'Larry' if self.larry_here() else 'None',
+				 'Nathan' if self.nathan_here() else 'Nate' if self.nate_here else 'None',
+				 self.noReggies,
+				 'Tom' if self.tom_here() else 'None',
+				 'Mary' if self.mary_here() else 'Minnie' if self.minnie_here() else 'Martina' if self.martina_here() else 'None',
+				 'Not Checked']
+		rec.extend(scrape)
+		return rec
+
+	def write_output_row(self):
+		return self.output.output_single_row(self.get_output_row())
+				
 
 	
 class VerificationHandler(object):
@@ -238,7 +253,8 @@ class VerificationHandler(object):
 
 
 class ContactSheetOutput(object):
-	get_credentials = smgs.modelInit()   
+	get_credentials = smgs.modelInit()
+	contactKeys = []   
 	initialRead = ""
 	initialRow = 7
 	currentRow = 7
@@ -246,7 +262,7 @@ class ContactSheetOutput(object):
 	def __init__(self, name):
 		self.name = name
 
-	def outputSingleRow(self, row):
+	def output_single_row(self, row):
 		"""Google Sheets API Code.
 		"""
 		credentials = ContactSheetOutput.get_credentials()
@@ -258,8 +274,8 @@ class ContactSheetOutput(object):
 
 		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
 		value_input_option = 'RAW'
-		rangeName = 'Org Leadership Websites!F' + str(ContactSheetOutput.currentRow)
-		values = row
+		rangeName = 'Samples!A' + str(ContactSheetOutput.currentRow)
+		values = [row]
 		body = {
 		      'values': values
 		}
@@ -267,14 +283,15 @@ class ContactSheetOutput(object):
 		try:
 			result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
 		                                                valueInputOption=value_input_option, body=body).execute()
-		except:
+		except BaseException as e:
 			print('Missed Row Output')
+			result = e
 		else:
 			ContactSheetOutput.currentRow += 1
 
 		return result 
 
-	def outputBatchRow(self, rows):
+	def output_batch_row(self, rows):
 		"""Google Sheets API Code.
 		"""
 		credentials = ContactSheetOutput.get_credentials()
@@ -286,7 +303,7 @@ class ContactSheetOutput(object):
 
 		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
 		value_input_option = 'RAW'
-		rangeName = 'Org Leadership Websites!F' + str(ContactSheetOutput.currentRow)
+		rangeName = 'Samples!A' + str(ContactSheetOutput.currentRow)
 		values = rows
 		body = {
 		      'values': values
@@ -300,10 +317,13 @@ class ContactSheetOutput(object):
 		else:
 			ContactSheetOutput.currentRow += len(rows)
 
-		return result	
+		return result
+
+	def get_contact_keys(self):
+		return ContactSheetOutput.contactKeys	
 
 	@classmethod
-	def set_output(cls):
+	def set_output(cls, keys):
 	    """Google Sheets API Code.
 	    Pulls urls for all NFL Team RSS Feeds
 	    https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
@@ -328,6 +348,8 @@ class ContactSheetOutput(object):
 	        print('RECORD OUTPUT READY')
 	        ContactSheetOutput.initialRead = values
 	        ContactSheetOutput.currentRow = ContactSheetOutput.initialRow + len(values)
+
+	    ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
 
 	    
 
