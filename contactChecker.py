@@ -32,6 +32,7 @@ class ContactPointerFamily(object):
 	def __init__(self, rec):
 		self.rec = rec
 		self.contactPointers = {}
+		self.noReggies = 0
 
 		# Set Regex for First Name, Last Name, and Title
 		self.firstNameReg = re.compile('^.*%s.*$' % self.rec['First Name'].to_string(index=False))
@@ -46,11 +47,13 @@ class ContactPointerFamily(object):
 			self.contactPointers['fred'] = fred[0]
 		except:
 			print('No Fred')
+			return
 
 		try:
 			self.contactPointers['larry'] = larry[0]
 		except:
 			print('No Larry')
+			return
 
 		# Evaluate a bunch of Reggies to find the one that is Tom.  This code matches elements Word for Word to 
 		# identify the title element
@@ -67,8 +70,12 @@ class ContactPointerFamily(object):
 				else:
 					reggieCounts[reggie] = 1
 			# print(t+': '+str(reggies))
+		try:	
+			reggieMax = list(reggieCounts.keys())[0]
+		except IndexError:
+			print("No Reggies") 
+			return
 
-		reggieMax = list(reggieCounts.keys())[0]
 		self.noReggies = len(list(reggieCounts.keys()))
 
 		for reggie in reggieCounts:
@@ -230,7 +237,7 @@ class VerifiedPointer(ContactPointerFamily):
 		rec = [self.rec[x].to_string(index=False) for x in self.output.get_contact_keys()]
 		scrape = ['Fred' if self.fred_here() else 'None',
 				 'Larry' if self.larry_here() else 'None',
-				 'Nathan' if self.nathan_here() else 'Nate' if self.nate_here else 'None',
+				 'Nathan' if self.nathan_here() else 'Nate' if self.nate_here() else 'None',
 				 self.noReggies,
 				 'Tom' if self.tom_here() else 'None',
 				 'Mary' if self.mary_here() else 'Minnie' if self.minnie_here() else 'Martina' if self.martina_here() else 'None',
@@ -271,17 +278,21 @@ class VerificationHandler(object):
 		self.pointers = [VerifiedPointer(rec) for rec in recs]
 		self.output = ContactSheetOutput('Handler for: %s' % self.organization)
 
+	def write_contact_pointers(self):
+		# batch = [cp.get_output_row() for cp in self.pointers]
+		self.output.output_batch_row([cp.get_output_row() for cp in self.pointers])
+
 	@classmethod
 	def set_orgRecords(cls, orgRecs):
 		VerificationHandler.orgRecords = orgRecs
 
 	@classmethod
-	def set_contactRecords(self, contactRecs):
+	def set_contactRecords(cls, contactRecs):
 		VerificationHandler.cr = contactRecs
 
 	@classmethod
-	def close_browser(self, contactRecs):
-		orgRecords.close_session_browser()
+	def close_browser(cls):
+		VerificationHandler.orgRecords.close_session_browser()
 
 
 
