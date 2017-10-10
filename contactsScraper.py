@@ -164,8 +164,21 @@ if __name__ == '__main__':
 	dr = pd.DataFrame(orgRecords)
 	print('DATAFRAMES READY')
 
+	## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
+
 	# Setup Contact Record Output
 	cc.ContactSheetOutput.set_output(contactKeys)
+
+	# For this scrape session Give the Verification Handler class an Orgsession with Organization Records
+	cc.VerificationHandler.set_orgRecords(dm.OrgSession(orgRecords))
+
+	# For this scrape session Give the Verification Handler class the contact record data
+	cc.VerificationHandler.set_contactRecords(cr)
+	print('CONTACT CHECKER READY')
+
+
+	
+
 
 
 

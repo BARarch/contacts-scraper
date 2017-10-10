@@ -176,6 +176,9 @@ class OrgSession(DirectoryManager):
 		index = DirectoryManager.orgRecordIndex(self, orgRecord)
 		return DirectoryManager.writeRecordNote(self, note, index)
 
+	def close_session_browser(self):
+		self.sessionBrowser.close()
+
 class BatchSessionPing(OrgSession):
 	def __init__(self, orgRecords):
 		OrgSession.__init__(self, orgRecords)

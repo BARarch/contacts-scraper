@@ -242,14 +242,52 @@ class VerifiedPointer(ContactPointerFamily):
 		return self.output.output_single_row(self.get_output_row())
 				
 
+
+
+
+
+
+
 	
 class VerificationHandler(object):
 
+	orgRecords = None				## Will be set to an orgsession Object at initalization
+	cr = None						## Will be set to dataFrame at class initialization
+
 	def __init__(self, org):
 		self.organization = org
-		self.records = []
-		self.pointers = []
+		
+		# Collect Records from contact Records
+		self.records = VerificationHandler.cr[VerificationHandler.cr["Account Name"] == self.organization]
+		
+		# Call the website of the orgnization and set the soup for all Verification Pointers in this Handler
+		self.orgQueries = VerificationHandler.orgRecords.processSession(self.organization)
+		self.orgSoup = self.orgQueries[0].get_soup()
+
+		ContactPointerFamily.set_soup(self.orgSoup)
+
+		# Take the data and the soup and get contact pointers
+		recs = [self.records.iloc[[ind]] for ind in range(len(self.records))]
+		self.pointers = [VerifiedPointer(rec) for rec in recs]
 		self.output = ContactSheetOutput('Handler for: %s' % self.organization)
+
+	@classmethod
+	def set_orgRecords(cls, orgRecs):
+		VerificationHandler.orgRecords = orgRecs
+
+	@classmethod
+	def set_contactRecords(self, contactRecs):
+		VerificationHandler.cr = contactRecs
+
+	@classmethod
+	def close_browser(self, contactRecs):
+		orgRecords.close_session_browser()
+
+
+
+
+
+
 
 
 class ContactSheetOutput(object):
