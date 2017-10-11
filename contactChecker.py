@@ -32,6 +32,7 @@ class ContactPointerFamily(object):
 	def __init__(self, rec):
 		self.rec = rec
 		self.contactPointers = {}
+		self.reggieCounts = {}
 		self.noReggies = 0
 
 		# Set Regex for First Name, Last Name, and Title
@@ -57,29 +58,29 @@ class ContactPointerFamily(object):
 
 		# Evaluate a bunch of Reggies to find the one that is Tom.  This code matches elements Word for Word to 
 		# identify the title element
-		titleWords = self.rec['Title'].to_string(index=False).split()
+		self.titleWords = self.rec['Title'].to_string(index=False).split()
 
-		reggieCounts = {}
+		
 
-		for t in titleWords:
+		for t in self.titleWords:
 			wordReg = re.compile('^.*%s.*$' % t)
 			reggies = ContactPointerFamily.docSoup.findAll(text=wordReg)
 			for reggie in reggies:
-				if reggie in reggieCounts:
-					reggieCounts[reggie] += 1
+				if reggie in self.reggieCounts:
+					self.reggieCounts[reggie] += 1
 				else:
-					reggieCounts[reggie] = 1
+					self.reggieCounts[reggie] = 1
 			# print(t+': '+str(reggies))
 		try:	
-			reggieMax = list(reggieCounts.keys())[0]
+			reggieMax = list(self.reggieCounts.keys())[0]
 		except IndexError:
 			print("No Reggies") 
 			return
 
-		self.noReggies = len(list(reggieCounts.keys()))
+		self.noReggies = len(list(self.reggieCounts.keys()))
 
-		for reggie in reggieCounts:
-			if reggieCounts[reggie] > reggieCounts[reggieMax]:
+		for reggie in self.reggieCounts:
+			if self.reggieCounts[reggie] > self.reggieCounts[reggieMax]:
 				reggieMax = reggie
 
 		self.contactPointers['tom'] = reggieMax
@@ -241,7 +242,7 @@ class VerifiedPointer(ContactPointerFamily):
 				 self.noReggies,
 				 'Tom' if self.tom_here() else 'None',
 				 'Mary' if self.mary_here() else 'Minnie' if self.minnie_here() else 'Martina' if self.martina_here() else 'None',
-				 'Not Checked']
+				 'Verified' if self.mary_here() or self.minnie_here() or self.martina_here() else 'Not Verified']
 		rec.extend(scrape)
 		return rec
 
