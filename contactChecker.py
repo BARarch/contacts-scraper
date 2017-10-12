@@ -41,20 +41,36 @@ class ContactPointerFamily(object):
 		self.titleReg = re.compile('^.*%s.*$' % self.rec['Title'].to_string(index=False))
 
 		# Find Fred and Larry, Elements in tree that match text for first name and last name
-		fred = ContactPointerFamily.docSoup.findAll(text=self.firstNameReg)
-		larry = ContactPointerFamily.docSoup.findAll(text=self.lastNameReg)
+		freds = ContactPointerFamily.docSoup.findAll(text=self.firstNameReg)
+		larries = ContactPointerFamily.docSoup.findAll(text=self.lastNameReg)
 
 		try:
-			self.contactPointers['fred'] = fred[0]
+			self.contactPointers['fred'] = freds[0]
 		except:
 			print('No Fred')
 			return
 
+		# Filter out matches in Script Tags
+		for fred in freds:
+			if fred.parent.name == 'script':
+				continue
+			else:
+				self.contactPointers['fred'] = fred
+				break
+
 		try:
-			self.contactPointers['larry'] = larry[0]
+			self.contactPointers['larry'] = larries[0]
 		except:
 			print('No Larry')
 			return
+
+		# Filter out matches in Script Tags
+		for larry in larries:
+			if larry.parent.name == 'script':
+				continue
+			else:
+				self.contactPointers['larry'] = larry
+				break
 
 		# Find Nathon or Nate
 		if self.contactPointers['fred'] is self.contactPointers['larry']:
@@ -103,7 +119,7 @@ class ContactPointerFamily(object):
 				self.contactPointers['mary'] = ContactPointerFamily.commonParent(self.contactPointers['nathan'], self.contactPointers['tom'])
 
 		elif 'nate' in self.contactPointers:
-			tomsCommonParent = ContactPointerFamily.commonParent(self.contactPointers['nate'], self.contactPointer['tom'])
+			tomsCommonParent = ContactPointerFamily.commonParent(self.contactPointers['nate'], self.contactPointers['tom'])
 			if tomsCommonParent is self.contactPointers['nate']:
 				## Martina: nate is toms parent too
 				self.contactPointers['martina'] = tomsCommonParent
