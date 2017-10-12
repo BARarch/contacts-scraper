@@ -56,6 +56,14 @@ class ContactPointerFamily(object):
 			print('No Larry')
 			return
 
+		# Find Nathon or Nate
+		if self.contactPointers['fred'] is self.contactPointers['larry']:
+			## Most Name Pointers will be nathan(s) because the first and last name of a contact will be in the same element
+			self.contactPointers['nathan'] = self.contactPointers['fred']
+		else:
+			self.contactPointers['nate'] = ContactPointerFamily.commonParent(self.contactPointers['fred'], self.contactPointers['larry'])
+
+
 		# Evaluate a bunch of Reggies to find the one that is Tom.  This code matches elements Word for Word to 
 		# identify the title element
 		self.titleWords = self.rec['Title'].to_string(index=False).split()
@@ -84,13 +92,6 @@ class ContactPointerFamily(object):
 				reggieMax = reggie
 
 		self.contactPointers['tom'] = reggieMax
-
-		# Find Nathon or Nate
-		if self.contactPointers['fred'] is self.contactPointers['larry']:
-			## Most Name Pointers will be nathan(s) because the first and last name of a contact will be in the same element
-			self.contactPointers['nathan'] = self.contactPointers['fred']
-		else:
-			self.contactPointers['nate'] = ContactPointerFamily.commonParent(self.contactPointers['fred'], self.contactPointers['larry'])
 
 		## Assign Find Mother Element shes either Mindy, Martina, or the general case Mary
 		if 'nathan' in self.contactPointers:

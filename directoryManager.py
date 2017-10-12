@@ -193,6 +193,7 @@ class BatchSessionPing(OrgSession):
 
 
 class OrgQuery(object):
+	stripped_characters = ['\n', '\r', '\t', '\xa0']
 	def __init__(self, link, browser):
 		self.link = link
 		try:
@@ -212,7 +213,7 @@ class OrgQuery(object):
 			self.sourceError = False
 
 		try:
-			self.soup = BeautifulSoup(self.pageSource, 'lxml')
+			self.soup = BeautifulSoup(OrgQuery.strip_html_junk(self.pageSource), 'lxml')
 		except:
 			self.soupError = True
 		else:
@@ -246,4 +247,11 @@ class OrgQuery(object):
 
 	def soup_bad(self):
 		return self.soupError
-        
+    
+	@staticmethod
+	def strip_html_junk(str):
+		slashed = str
+		for c in OrgQuery.stripped_characters:
+			slashed = slashed.replace(c, ' ')
+
+		return slashed
