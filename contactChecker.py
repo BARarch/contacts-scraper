@@ -113,7 +113,7 @@ class ContactPointerFamily(object):
 		if 'nathan' in self.contactPointers:
 			if self.contactPointers['nathan'] is self.contactPointers['tom']:
 				## Mindy: All in one
-				self.contactPointers['mindy'] = self.contactPointers['nathan']
+				self.contactPointers['minnie'] = self.contactPointers['nathan']
 			else:
 				## Mary: the General Case
 				self.contactPointers['mary'] = ContactPointerFamily.commonParent(self.contactPointers['nathan'], self.contactPointers['tom'])
