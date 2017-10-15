@@ -265,6 +265,9 @@ class VerifiedPointer(ContactPointerFamily):
 
 	def write_output_row(self):
 		return self.output.output_single_row(self.get_output_row())
+
+	def common_parent(self, otherVP):
+		return ContactPointerFamily.commonParent(self, otherVP)
 				
 
 
@@ -295,7 +298,7 @@ class VerificationHandler(object):
 		recs = [self.records.iloc[[ind]] for ind in range(len(self.records))]
 		self.pointers = [VerifiedPointer(rec) for rec in recs]
 		self.output = ContactSheetOutput('Handler for: %s' % self.organization)
-		self.verifiedPointers = self.get_verified_pointers()
+
 
 	def get_verified_pointers(self):
 		return [pointer for pointer in self.pointers if (pointer.mary_here() or pointer.minnie_here() or pointer.martina_here())]
@@ -317,6 +320,11 @@ class VerificationHandler(object):
 		VerificationHandler.orgRecords.close_session_browser()
 
 
+class MotherSetVerifier(VerificationHandler):
+
+	def __init__(self, org):
+		VerificationHandler.__init__(self, org)
+		self.verifiedPointers = VerificationHandler.get_verified_pointers(self)
 
 
 
