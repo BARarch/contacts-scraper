@@ -268,6 +268,9 @@ class VerifiedPointer(ContactPointerFamily):
 
 	def common_parent(self, otherVP):
 		return ContactPointerFamily.commonParent(self, otherVP)
+
+	def get_mother_element(self):
+		return self.mary or self.minnie or self.martina
 				
 
 
