@@ -201,8 +201,8 @@ class ContactPointerFamily(object):
 			return None
 
 
-	@staticmethod
-	def commonParent(A,B):
+	@classmethod
+	def commonParent(cls, A, B):
 		#step 1 A to B's Parents
 		bParents = B.find_parents()
 		if A in bParents:
@@ -267,7 +267,7 @@ class VerifiedPointer(ContactPointerFamily):
 		return self.output.output_single_row(self.get_output_row())
 
 	def common_parent(self, otherVP):
-		return ContactPointerFamily.commonParent(self, otherVP)
+		return ContactPointerFamily.commonParent(self.get_mother_element(), otherVP.get_mother_element())
 
 	def get_mother_element(self):
 		return self.mary or self.minnie or self.martina or None
