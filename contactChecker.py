@@ -434,7 +434,12 @@ class ContactSheetOutput(object):
 	    ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
 
 	    
+## Contact Checker Test Environment for Jupyter Notebook
+## IMPORTANT: contactsScraper Must Be Run prior to running this here
 
-
-
+if __name__ == '__main__':
+#	print("Running Conact Checker Class Tests")
+#	ContactSheetOutput.set_output(contactKeys)
+#	VerificationHandler.set_orgRecords(dm.OrgSession(orgRecords))
+	print('Local Contact Checker Ready')
 
