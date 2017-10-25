@@ -293,6 +293,7 @@ class VerificationHandler(object):
 		
 		# Call the website of the orgnization and set the soup for all Verification Pointers in this Handler
 		self.orgQueries = VerificationHandler.orgRecords.processSession(self.organization)
+		print(VerificationHandler.orgRecords.orgSessionStatusCheck())
 		self.orgSoup = self.orgQueries[0].get_soup()
 
 		ContactPointerFamily.set_soup(self.orgSoup)
@@ -432,6 +433,7 @@ class ContactSheetOutput(object):
 	        ContactSheetOutput.currentRow = ContactSheetOutput.initialRow + len(values)
 
 	    ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
+
 
 	    
 ## Contact Checker Test Environment for Jupyter Notebook
