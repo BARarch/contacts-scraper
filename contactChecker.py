@@ -415,7 +415,7 @@ class ContactScraperVerifier(MotherSetVerifier):
 			## Extender Model Selection for Multiple GrandMothers
 			self.extenders = None
 			self.gm = None
-	        
+			
 	@staticmethod
 	def getGrandMotherElements(pointers):
 		## Identify Grandmother elements
@@ -452,7 +452,7 @@ class ContactScraperVerifier(MotherSetVerifier):
 			return False
 		else:
 			return ContactScraperVerifier.distinct_gm(gm, pts[1:])
-	    
+		
 	@classmethod
 	def new_browser(cls):
 		VerificationHandler.orgRecords.new_Browser()
@@ -467,7 +467,7 @@ class ContactScraperVerifier(MotherSetVerifier):
 		ContactScraperVerifier.noBrowserPings += 1
 		if ContactScraperVerifier.noBrowserPings >= ContactScraperVerifier.browserPingLimit:
 			ContactScraperVerifier.new_browser()
-	        
+			
 	@classmethod
 	def set_current_org_name(cls, org):
 		ContactScraperVerifier.currentOrgName = org
@@ -491,7 +491,7 @@ class ContactScraperVerifier(MotherSetVerifier):
 	def add_to_extracted_dict(cls, numRecords):
 		ContactScraperVerifier.extracted[ContactScraperVerifier.currentOrgName] = numRecords
 		ContactScraperVerifier.remove_all_others('extracted')
-	    
+		
 	@classmethod
 	def remove_all_others(cls, listAdded):
 		if (listAdded != 'nothing_passed_merge') and (ContactScraperVerifier.currentOrgName in ContactScraperVerifier.nothing_passed_merge):
@@ -596,7 +596,7 @@ class Dorito(object):
 			self.result = self.x.get_result_set()
 		except IndexError:
 			print("No Scrapable Matches")
-	    
+		
 	def merge_result(self):
 		if self.result:
 			self.finalPointers.merge_pointers(self.result)
@@ -604,16 +604,16 @@ class Dorito(object):
 
 			if not str(self.finalPointers):  ##  TERMINAL STATE IN THIS BLOCK 
 				print("Nothing passed Merge")
-			    
+				
 				## \\** TERMINAL STATE NOTE **\\  Make note that for this org nothing passed
 				ContactScraperVerifier.add_to_nothing_passed_merge_dict(len(self.result.get_pointers()))
-			    
-			    
+				
+				
 			else:  ##  TERMINAL STATE IN THIS BLOCK -- SUCCESS!!
 				## \\** TERMINAL STATE NOTE **\\  Make note that for this org that record were collected and passed
 				ContactScraperVerifier.add_to_extracted_dict(len(self.finalPointers.get_pointers()))
-		        
-		        
+				
+				
 		else:  ##  TERMINAL STATE IN THIS BLOCK
 			print("Nothing to Merge")
 
@@ -621,7 +621,7 @@ class Dorito(object):
 			ContactScraperVerifier.add_to_nothing_passed_merge_dict('No Results to Merge')
 
 		self.report()
-	    
+		
 	def merge_result_no_report(self):
 		if self.result:
 			self.finalPointers.merge_pointers(self.result)
@@ -637,14 +637,14 @@ class Dorito(object):
 			else:  ##  TERMINAL STATE IN THIS BLOCK -- SUCCESS!!
 				## \\** TERMINAL STATE NOTE **\\  Make note that for this org that record were collected and passed
 				ContactScraperVerifier.add_to_extracted_dict(len(self.finalPointers.get_pointers()))
-		                                            
+													
 		else:  ##  TERMINAL STATE IN THIS BLOCK
 			print("Nothing to Merge")
 
 			## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there were no results to merge
 			ContactScraperVerifier.add_to_nothing_passed_merge_dict('No Results to Merge')
 
-	        
+			
 	def report(self):
 		print('Verified Pointers         \t\t\t\t\t\t%s' % len(self.verifiedPointers))
 		print('Scrape Pointers           \t\t\t\t\t\t%s' % len(self.scrapePointers))
@@ -653,7 +653,7 @@ class Dorito(object):
 			print('Start Type                \t\t\t\t%s' % self.x.startsType)
 			print('Merged (Filtered) Pointers\t\t\t\t\t\t%s' % len(self.finalPointers.get_pointers()))
 			print(self.finalPointers)
-		    
+			
 		except AttributeError:
 			print('Start Type                \t\t\t\tNO EXTRACTORS')
 
@@ -710,7 +710,7 @@ class Extender(object):
 		self.tom_shuttle = self.tom_to_element()
 
 		#self.reset_tree()
-	    
+		
 	## Tagging Functions ------------------------------------ 
 	##
 	def tag_nathans(self):
@@ -775,7 +775,7 @@ class Extender(object):
 			return 'sib' in tag.attrs
 		except AttributeError:
 			return False
-	    
+		
 	@staticmethod
 	def check_siblings(sibs, attFunc):
 		for sib in sibs:
@@ -913,13 +913,13 @@ class Extractor(Extender):
 		self.resultSet = NewPointerSet()
 		self.test_starts()
 		self.reset_tree()
-	    
+		
 	def get_starts(self):
 		return self.startBlock.get_optimal_starts()
 
 	def test_starts(self):
 		return [self.test_start(self.startsType, st) for st in self.starts]
-	    
+		
 	def test_start(self, startType, start):
 		if startType == Extractor.nathanStartType:   ## Nathan Start Case, Nathan Shuttle, Tom Rocket to 
 			np = NewPointer(start, self.nathan_shuttle, self.tom_rocket)
@@ -951,7 +951,7 @@ class ExtractorNoMother(Extractor):
 		self.startBlock = StartBlockNoMother(gm, pointer)
 		self.startsType, self.starts = self.get_starts()
 		self.reset_tree()
-	    
+		
 	def get_starts(self):
 		return self.startBlock.get_optimal_starts()
 
@@ -992,7 +992,7 @@ class StartBlock(object):
 		self.noNathanClasses = self.get_no_nathan_classes()
 		self.noTomClasses = self.get_no_tom_classes()
 		self.noMotherClasses = self.get_no_mother_classes()
-	    
+		
 	def get_no_nathan_classes(self):
 		if 'class' in self.vp.nathan.parent.attrs:
 			return len(self.vp.nathan.parent['class'])
@@ -1010,7 +1010,7 @@ class StartBlock(object):
 			return len(self.vp.get_mother_element()['class'])
 		else:
 			return 0
-	    
+		
 	def get_nathan_class_starts(self):
 		return self.gm.find_all(class_=self.vp.nathan.parent['class'])
 
@@ -1091,7 +1091,7 @@ class NewPointer(object):
 		self.tom = self.test_tom()
 
 		self.output = ContactSheetOutput('New Pointer For: %s start' % str(start))
-        
+		
 	def test_nathan(self):
 		try:
 			result = self.nathanRoute(self.start)
@@ -1101,7 +1101,7 @@ class NewPointer(object):
 			result = None
 			
 		return result
-    
+	
 	def test_tom(self):
 		try:
 			result = self.tomRoute(self.start)
@@ -1109,12 +1109,12 @@ class NewPointer(object):
 				result = None
 		except:
 			result = None
-		    
+			
 		return result
-    
+	
 	def get_tom(self):
 		return self.tom
-    
+	
 	def get_first_last_name(self):
 		passes = ['Mr', 'MR', 'Miss', 'Mrs', 'MRS', 'MS', 'Ms', 'Dr']
 		nameWords = self.nathan.split(' ')
@@ -1143,7 +1143,7 @@ class NewPointer(object):
 			return firstName, lastName
 		else:        ## Last Name was not Properly Defined result use first Name only
 			return firstName, None
-	    
+		
 	def get_clean_tom(self):
 		## Returns a cleaned up version of the title
 		tomWords = self.tom.split(' ')
@@ -1213,7 +1213,7 @@ class NewPointerSet(object):
 		return self.newPointers
 
 class MergeSet(NewPointerSet):
-    
+	
 	nathanWordLimit = 12
 	tomWordLimit = 20
 
@@ -1242,13 +1242,13 @@ class MergeSet(NewPointerSet):
 			return False
 		if self.a_match_in_set(newPointer):
 			return False
-	    
+		
 		## Add to MergeSetCase
 		self.newPointers.append(newPointer)
-	    
+		
 	def write_new_contacts(self):
 		self.output.output_batch_row([np.get_output_dict() for np in self.get_pointers()])
-	    
+		
 	@staticmethod
 	def fails_name_test(pointer):
 		firstName, lastName = pointer.get_first_last_name()
@@ -1261,7 +1261,7 @@ class MergeSet(NewPointerSet):
 		if pointer.no_tom_words() > MergeSet.tomWordLimit:
 			return True
 		return False
-	                                                
+													
 	@staticmethod
 	def is_an_email(pointerWord):
 		if '@' in pointerWord:
@@ -1342,21 +1342,21 @@ class ContactSheetOutput(object):
 		credentials = ContactSheetOutput.get_credentials()
 		http = credentials.authorize(smgs.httplib2.Http())
 		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-		                'version=v4')
+						'version=v4')
 		service = smgs.discovery.build('sheets', 'v4', http=http,
-		                          discoveryServiceUrl=discoveryUrl)
+								  discoveryServiceUrl=discoveryUrl)
 
 		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
 		value_input_option = 'RAW'
 		rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.currentRow)
 		values = [row]
 		body = {
-		      'values': values
+			  'values': values
 		}
 
 		try:
 			result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
-		                                                valueInputOption=value_input_option, body=body).execute()
+														valueInputOption=value_input_option, body=body).execute()
 		except BaseException as e:
 			print('Missed Row Output')
 			result = e
@@ -1371,21 +1371,21 @@ class ContactSheetOutput(object):
 		credentials = ContactSheetOutput.get_credentials()
 		http = credentials.authorize(smgs.httplib2.Http())
 		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-		                'version=v4')
+						'version=v4')
 		service = smgs.discovery.build('sheets', 'v4', http=http,
-		                          discoveryServiceUrl=discoveryUrl)
+								  discoveryServiceUrl=discoveryUrl)
 
 		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
 		value_input_option = 'RAW'
 		rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.currentRow)
 		values = rows
 		body = {
-		      'values': values
+			  'values': values
 		}
 
 		try:
 			result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
-		                                                valueInputOption=value_input_option, body=body).execute()
+														valueInputOption=value_input_option, body=body).execute()
 		except:
 			print('Missed Row Output')
 		else:
@@ -1398,32 +1398,38 @@ class ContactSheetOutput(object):
 
 	@classmethod
 	def set_output(cls, keys):
-	    """Google Sheets API Code.
-	    Pulls urls for all NFL Team RSS Feeds
-	    https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
-	    """
-	    credentials = ContactSheetOutput.get_credentials()
-	    http = credentials.authorize(smgs.httplib2.Http())
-	    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-	                    'version=v4')
-	    service = smgs.discovery.build('sheets', 'v4', http=http,
-	                              discoveryServiceUrl=discoveryUrl)
+		"""Google Sheets API Code.
+		Pulls urls for all NFL Team RSS Feeds
+		https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
+		"""
+		credentials = ContactSheetOutput.get_credentials()
+		http = credentials.authorize(smgs.httplib2.Http())
+		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+						'version=v4')
+		service = smgs.discovery.build('sheets', 'v4', http=http,
+								  discoveryServiceUrl=discoveryUrl)
 
-	    #specify sheetID and range
-	    spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
-	    rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.initialRow) + ':N'
-	    result = service.spreadsheets().values().get(
-	        spreadsheetId=spreadsheetId, range=rangeName).execute()
-	    values = result.get('values', [])
+		#specify sheetID and range
+		spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+		rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.initialRow) + ':N'
+		result = service.spreadsheets().values().get(
+			spreadsheetId=spreadsheetId, range=rangeName).execute()
+		values = result.get('values', [])
 
-	    if not values:
-	        print('RECORD OUTPUT READY: No Reocords')
-	    else:
-	        print('RECORD OUTPUT READY')
-	        ContactSheetOutput.initialRead = values
-	        ContactSheetOutput.currentRow = ContactSheetOutput.initialRow + len(values)
+		if not values:
+			print('RECORD OUTPUT READY: No Reocords')
+		else:
+			print('RECORD OUTPUT READY')
+			ContactSheetOutput.initialRead = values
+			ContactSheetOutput.currentRow = ContactSheetOutput.initialRow + len(values)
 
-	    ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
+		ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
+
+	@classmethod
+	def change_output_sheet_name(cls, name):
+		ContactSheetOutput.outputSheetName = name
+	   
+
 
 
 class NewContactSheetOutput(ContactSheetOutput):
@@ -1431,7 +1437,7 @@ class NewContactSheetOutput(ContactSheetOutput):
 
 	def __init__(self):
 		ContactSheetOutput.__init__(self, NewContactSheetOutput.dummyRecord['Account Name'].to_string(index=False))
-	    
+		
 	def output_batch_row(self, newContactInfo):
 		"""Google Sheets API Code.  Since we are in NewContacts Sheet Output, the batch out put function is tasked
 		   with weaving the information from the new contact with the organization information from the other columns.
@@ -1440,21 +1446,21 @@ class NewContactSheetOutput(ContactSheetOutput):
 		credentials = ContactSheetOutput.get_credentials()
 		http = credentials.authorize(smgs.httplib2.Http())
 		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-		                'version=v4')
+						'version=v4')
 		service = smgs.discovery.build('sheets', 'v4', http=http,
-		                          discoveryServiceUrl=discoveryUrl)
+								  discoveryServiceUrl=discoveryUrl)
 
 		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
 		value_input_option = 'RAW'
 		rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.currentRow)
 		values = [NewContactSheetOutput.weaveContactInfo(nci) for nci in newContactInfo]
 		body = {
-		      'values': values
+			  'values': values
 		}
 
 		try:
 			result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
-                                            valueInputOption=value_input_option, body=body).execute()
+											valueInputOption=value_input_option, body=body).execute()
 		except:
 			print('Missed Row Output')
 		else:
@@ -1501,9 +1507,9 @@ class SurrogateErrorOutput(ContactSheetOutput):
 		credentials = ContactSheetOutput.get_credentials()
 		http = credentials.authorize(smgs.httplib2.Http())
 		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-		                'version=v4')
+						'version=v4')
 		service = smgs.discovery.build('sheets', 'v4', http=http,
-		                          discoveryServiceUrl=discoveryUrl)
+								  discoveryServiceUrl=discoveryUrl)
 
 		spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
 		value_input_option = 'RAW'
@@ -1511,19 +1517,19 @@ class SurrogateErrorOutput(ContactSheetOutput):
 		#values = rows
 		values = [SurrogateErrorOutput.appendError(row, errorMessage) for row in rows]
 		body = {
-		      'values': values
+			  'values': values
 		}
 		#print(values)
 		try:
 			result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
-		                                                valueInputOption=value_input_option, body=body).execute()
+														valueInputOption=value_input_option, body=body).execute()
 		except:
 			print('Missed Row Output')
 		else:
 			ContactSheetOutput.currentRow += len(values)
 
 		return result
-	    
+		
 	@staticmethod
 	def appendError(row, em):
 		row.extend(['', '', '', '', '', '', 'Not Verified', em])
@@ -1547,18 +1553,18 @@ class SurrogateErrorOutput(ContactSheetOutput):
 
 class ScrapeSession(object):
 	orgsForToday = ['National Association for Multi-Ethnicity In Communications (NAMIC)',
-	                'Association for Women in Science',
-	                'Brain Injury Association of America',
-	                'American Society of Home Inspectors',
-	                'NAADAC, the Association for Addiction Professionals',
-	                'American Public Transportation Association',
-	                'Indiana Soybean Alliance',
-	                'Associated Builders and Contractors (ABC)',
-	                'National Association of Social Workers',
-	                'American Marketing Association (AMA)']
+					'Association for Women in Science',
+					'Brain Injury Association of America',
+					'American Society of Home Inspectors',
+					'NAADAC, the Association for Addiction Professionals',
+					'American Public Transportation Association',
+					'Indiana Soybean Alliance',
+					'Associated Builders and Contractors (ABC)',
+					'National Association of Social Workers',
+					'American Marketing Association (AMA)']
 
 	errorCases = ['Arizona School Boards Association',
-	              'American Association of Diabetes Educators']
+				  'American Association of Diabetes Educators']
 
 	baseCase = ['National Association for Multi-Ethnicity In Communications (NAMIC)']
 
@@ -1569,7 +1575,7 @@ class ScrapeSession(object):
 		self.endTime = None
 		self.numSitePings = 0
 		self.runList = []
-	    
+		
 	def run_list(self, orgList):
 		self.numSitePings = 0
 		self.runList = orgList
@@ -1584,23 +1590,23 @@ class ScrapeSession(object):
 		except:
 			self.endTime = dt.datetime.now()
 			self.get_early_termination_report()
-		    
+			
 		else:
 			self.endTime = dt.datetime.now()
 			self.get_report()
-	    
+		
 	def run_orgs_for_today(self):
 		self.run_list(ScrapeSession.orgsForToday)
-	    
+		
 	def run_all_orgs(self):
 		self.run_list(ScrapeSession.orgs)
-	    
+		
 	def run_errors(self):
 		self.run_list(ScrapeSession.errorCases)
 
 	def run_base(self):
 		self.run_list(ScrapeSession.baseCase)
-	    
+		
 	def get_report(self):
 		noNothingPassed = len(ContactScraperVerifier.nothing_passed_merge)
 		noNotExtracted = len(ContactScraperVerifier.not_extracted)
@@ -1621,14 +1627,14 @@ class ScrapeSession(object):
 		print('Organizations not \nextacted                    \t\t\t\t\t\t%s\n' % str(noNotExtracted))
 		#print('\n')
 		print('Organizations with links \nthat did not open    \t\t\t\t\t\t\t%s'   % str(noNotOpen))
-	    
+		
 	def get_early_termination_report(self):
 		print('                 *** SCRAPE TERMINATED EARLRY ***                         ')
 		print('              Attempted %s of %s organization links' % str(self.numSitePings), str(len(self.runList)))
 		print('--------------------------------------------------------------------------')
 		self.get_report()
-	    
-	    
+		
+		
 	@classmethod
 	def set_orgs(cls,orgRecs):
 		ScrapeSession.orgs = [orgRec['Organization'] for orgRec in orgRecs]
@@ -1678,7 +1684,7 @@ class ScrapeBase(ScrapeSession):
 
 
 
-	    
+		
 ## Contact Checker Test Environment for Jupyter Notebook
 ## IMPORTANT: contactsScraper Must Be Run prior to running this here
 
