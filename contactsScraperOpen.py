@@ -24,9 +24,9 @@ def getContacts():
     values = result.get('values', [])
 
     if not values:
-        print('No data found.')
+        print('No data found for Contact Records.')
     else:
-        print('Done')
+        print('Contact Records Done')
 
     return values
 
@@ -50,9 +50,9 @@ def getContactKeys():
     values = result.get('values', [])
 
     if not values:
-        print('No data found.')
+        print('No data found Contact Keys.')
     else:
-        print('Done')
+        print('Contact Keys Done')
 
     return values[0]
 
@@ -76,9 +76,9 @@ def getAgencyDir():
     values = result.get('values', [])
 
     if not values:
-        print('No data found.')
+        print('No data found for Agency Directory.')
     else:
-        print('Done')
+        print('Agency Directory Done')
 
     return values
 
@@ -102,9 +102,9 @@ def getAgencyDirKeys():
     values = result.get('values', [])
 
     if not values:
-        print('No data found.')
+        print('No data found for Directory Keys.')
     else:
-        print('Done')
+        print('Directory Keys Done')
 
     return values[0]
 
@@ -143,38 +143,45 @@ def sheetRecord(row, recordKeys):
     
     return record
 
-        
+
 
 if __name__ == '__main__':
-	# Initialize Google Sheets for Write
-	get_credentials = smgs.modelInit()
+    # Initialize Google Sheets for Write
+    get_credentials = smgs.modelInit()
 
-	# Get Headers from google sheets
-	contactKeys = getContactKeys()
-	directoryKeys = getAgencyDirKeys()
-	print('KEYS')
+    # Get Headers from google sheets
+    print('KEYS')
+    contactKeys = getContactKeys()
+    directoryKeys = getAgencyDirKeys()
+    print('')
 
-	# Get contact and orginization website data and structure with collected headings
-	contactRecords = [sheetRecord(row, contactKeys) for row in getContacts()]
-	orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir()]
-	print('RECORDS COLLECTED')
+    # Get contact and orginization website data and structure with collected headings
+    print('RECORDS')
+    contactRecords = [sheetRecord(row, contactKeys) for row in getContacts()]
+    orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir()]
+    print('')
 
-	# Create Dataframes
-	cr = pd.DataFrame(contactRecords)
-	dr = pd.DataFrame(orgRecords)
-	print('DATAFRAMES READY')
+    # Create Dataframes
+    cr = pd.DataFrame(contactRecords)
+    dr = pd.DataFrame(orgRecords)
+    print('DATAFRAMES READY')
 
-	## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
+    ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
 
-	# Setup Contact Record Output
-	#cc.ContactSheetOutput.set_output(contactKeys)
+    # Setup Contact Record Output
+    cc.ContactSheetOutput.set_output(contactKeys)
 
-	# For this scrape session Give the Verification Handler class an Orgsession with Organization Records
-	#cc.VerificationHandler.set_orgRecords(dm.OrgSession(orgRecords))
+    # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
+    cc.VerificationHandler.set_orgRecords(dm.OrgSession(orgRecords))
 
-	# For this scrape session Give the Verification Handler class the contact record data
-	#cc.VerificationHandler.set_contactRecords(cr)
-	#print('CONTACT CHECKER READY')
+    # For this scrape session Give the Verification Handler class the contact record data
+    cc.VerificationHandler.set_contactRecords(cr)
+    print('CONTACT CHECKER READY')
+
+    ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
+    	
+    print('SCRAPE SESSION OPEN')
+
 
 
 	
