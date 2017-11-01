@@ -521,43 +521,43 @@ class ContactCollector(ContactScraperVerifier):
 		print('\nScraping %s' % org)
 
 		try:
-		ContactScraperVerifier.__init__(self, org)
-		self.write_contact_pointers()
+			ContactScraperVerifier.__init__(self, org)
+			self.write_contact_pointers()
 
 
 		except:  ## TERMINAL STATE IN THIS BLOCK
-		## Link DID NOT Open
-		print("Link DID NOT Open Properly")
-		self.errorOutput = SurrogateErrorOutput(org)
+			## Link DID NOT Open
+			print("Link DID NOT Open Properly")
+			self.errorOutput = SurrogateErrorOutput(org)
 
-		## Reset Browser
-		ContactScraperVerifier.new_browser()
+			## Reset Browser
+			ContactScraperVerifier.new_browser()
 
-		x = self.errorOutput.output_batch_row([[self.records.iloc[[ind]][key].to_string(index=False) for key in self.errorOutput.get_contact_keys()] for ind in range(len(self.records))], 'Link did not open')
+			x = self.errorOutput.output_batch_row([[self.records.iloc[[ind]][key].to_string(index=False) for key in self.errorOutput.get_contact_keys()] for ind in range(len(self.records))], 'Link did not open')
 
-		## \\** TERMINAL STATE NOTE **\\  Make note that for this org that the link did not open
-		ContactScraperVerifier.add_to_link_not_open_dict('bummer')
+			## \\** TERMINAL STATE NOTE **\\  Make note that for this org that the link did not open
+			ContactScraperVerifier.add_to_link_not_open_dict('bummer')
 
 		else:
-		try:
-			if self.noGm == 1:  ## Single Grandmother Case
-				self.c = Chip(self.gm, self.vPointers)
-			elif (self.noGm == 0) and (len(self.vPointers) == 1): ## No GrandMother Single Verfied Pointer - Try this!
-				self.c = Chip(self.vPointers[0].get_mother_element().parent, self.vPointers)
+			try:
+				if self.noGm == 1:  ## Single Grandmother Case
+					self.c = Chip(self.gm, self.vPointers)
+				elif (self.noGm == 0) and (len(self.vPointers) == 1): ## No GrandMother Single Verfied Pointer - Try this!
+					self.c = Chip(self.vPointers[0].get_mother_element().parent, self.vPointers)
 
-			else: ## TERMINAL STATE IN THIS BLOCK
-				print('Not the right number of Grandmothers %s' % str(self.noGm))
-			
-				## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there were not the right number of Grandmas
-				ContactScraperVerifier.add_to_not_extracted_dict('Not the right number of Grandmothers %s' % str(self.noGm))
+				else: ## TERMINAL STATE IN THIS BLOCK
+					print('Not the right number of Grandmothers %s' % str(self.noGm))
+				
+					## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there were not the right number of Grandmas
+					ContactScraperVerifier.add_to_not_extracted_dict('Not the right number of Grandmothers %s' % str(self.noGm))
 
 
-		except: ## TERMINAL STATE IN THIS BLOCK
-			## Some Mysterious Extender/ScraperError no Need for serrogate output
-			print('Extender/Scraper Error - NO Extenders')
+			except: ## TERMINAL STATE IN THIS BLOCK
+				## Some Mysterious Extender/ScraperError no Need for serrogate output
+				print('Extender/Scraper Error - NO Extenders')
 
-			## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there was an exception in the extraction process
-			ContactScraperVerifier.add_to_not_extracted_dict('Extractor exception in extraction process')
+				## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there was an exception in the extraction process
+				ContactScraperVerifier.add_to_not_extracted_dict('Extractor exception in extraction process')
 
 
 
@@ -928,7 +928,7 @@ class Extractor(Extender):
 		if startType == Extractor.tomStartType:   ## Tom Start Case, Tom Shuttle, Nathan Rocket 
 			np = NewPointer(start, self.nathan_rocket, self.tom_shuttle)
 			self.resultSet.addPointer(np)
-		    return np
+			return np
 		if startType == Extractor.motherStartType:   ## Mother Start Case, Missile for Missle for Nathan, Missile for Tom 
 			np = NewPointer(start, self.nathan_missile, self.tom_missile)
 			self.resultSet.addPointer(np)
@@ -1656,7 +1656,7 @@ class ScrapeError(ScrapeSession):
 	def __init__(self, orgRecs):
 		ScrapeSession.__init__(self, orgRecs)
 		self.run_errors() 
-		
+
 
 class ScrapeBase(ScrapeSession):
 	def __init__(self, orgRecs):
