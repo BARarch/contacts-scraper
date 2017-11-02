@@ -157,6 +157,8 @@ class OrgSession(DirectoryManager):
 	def new_Browser(self):
 		try:								## If the browser was closed by another user this will fail
 			self.sessionBrowser.close()
+		except:
+			print('Missing Browser, We will resume')
 		finally:							## So we catch it here
 			self.sessionBrowser = webdriver.Chrome(OrgSession.chromeBrowserPath)
 			self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)

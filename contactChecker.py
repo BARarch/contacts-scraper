@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 import re
 
 import numpy as np
-import pandas as pd
 from bs4.element import NavigableString
 
 import datetime as dt
@@ -1630,7 +1629,7 @@ class ScrapeSession(object):
 		
 	def get_early_termination_report(self):
 		print('                 *** SCRAPE TERMINATED EARLRY ***                         ')
-		print('              Attempted %s of %s organization links' % str(self.numSitePings), str(len(self.runList)))
+		print('              Attempted %s of %s organization links' % (str(self.numSitePings), str(len(self.runList))))
 		print('--------------------------------------------------------------------------')
 		self.get_report()
 		
