@@ -172,6 +172,7 @@ if __name__ == '__main__':
     cc.ContactSheetOutput.set_output(contactKeys)
 
     # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
+    dm.OrgSession.set_browser_path()
     cc.VerificationHandler.set_orgRecords(dm.OrgSession(orgRecords))
 
     # For this scrape session Give the Verification Handler class the contact record data

@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 import time
 import datetime as dt
+import os
 
 
 # Company Directory Manager Classes
@@ -180,6 +181,11 @@ class OrgSession(DirectoryManager):
 
 	def close_session_browser(self):
 		self.sessionBrowser.close()
+
+	@classmethod
+	def set_browser_path(cls):
+		homeDir = os.getcwd()
+		OrgSession.chromeBrowserPath = os.path.join(homeDir, 'Drivers/chromedriver')
 
 class BatchSessionPing(OrgSession):
 	def __init__(self, orgRecords):
