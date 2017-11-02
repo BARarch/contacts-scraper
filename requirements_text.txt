@@ -4,3 +4,4 @@ httplib2==0.10.3
 selenium==3.5.0
 pandas==0.20.1
 beautifulsoup4==4.6.0
+google-api-python-client==1.6.2
