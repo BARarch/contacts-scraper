@@ -185,7 +185,8 @@ class OrgSession(DirectoryManager):
 	@classmethod
 	def set_browser_path(cls):
 		homeDir = os.getcwd()
-		OrgSession.chromeBrowserPath = os.path.join(homeDir, 'Drivers/chromedriver')
+		intDir =  os.path.join(homeDir, 'Drivers')
+		OrgSession.chromeBrowserPath = os.path.join(intDir, 'chromedriver')
 
 class BatchSessionPing(OrgSession):
 	def __init__(self, orgRecords):
