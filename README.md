@@ -41,7 +41,7 @@ when you see the 'SCRAPER OPEN' message you are ready to run all scraper routine
 
 The scraper uses a browser emulator that scrapes each site.  From this browser all existing contacts are checked and new ones are found. Below is how the process should appear with the browser, command prompt and the Contacts google sheet.
 
-![Desktop Overview] (https://github.com/BARarch/Scraper-x-202101/blob/master/Doc-Material/overview.jpg)
+![Desktop Overview](https://github.com/BARarch/Scraper-x-202101/blob/master/Doc-Material/overview.jpg)
 
 The program will process each organization by checking its contacts listed on the Contacts sheet.  You will see output for each orgnaization on the command prompts as this happens.
 
@@ -51,7 +51,7 @@ As the scraper checks sites you will see the output from the scraper on the goog
 
 When the scraper completes the sesssion you will see a report showing information about all site scraped.  In testing during development the 421 site scrape usually takes around 1 hour and 15 minutes.  Times may vary depending on processor and connection speeds.
 
-![Session Report] (https://github.com/BARarch/Scraper-x-202101/blob/master/Doc-Material/Complete.JPG)
+![Session Report](https://github.com/BARarch/Scraper-x-202101/blob/master/Doc-Material/Complete.JPG)
 
 ## III.   Contacts and Scraper Sheets
 
