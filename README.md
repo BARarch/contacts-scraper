@@ -17,6 +17,8 @@ Verifies and Updates contacts from a number of agency sites.
   
         $ python packageTest.py
         
+Here you should see that all of the packages tested are to pass.
+        
 #### 4. Run a test Scrape session
   
         $ python contactsScraperOpen.py
@@ -33,7 +35,7 @@ when you see the 'SCRAPER OPEN' message and a chrome browser pop up on the deskt
   
   
   
-## II.   Opperation and Use
+## II.   Operation and Use
 
 To scrape all organizations and update contacts navigate to the project folder and run
 
