@@ -25,6 +25,10 @@ Here you should see that all of the packages tested are to pass.
   
         $ python contactsScraperOpen.py
         
+#### Special Note: Invalid Grant Error
+
+After running this command, or any others in the project, you make get an long error trace that ends in an "Invalid Grant" message.  All this means is that google did not grant you access to the sheet and all the other googdies we use from them on the first try with the credentials they have on file.  This is fine, no big problem.  Just run the command again, complete the authentication step on the webpage that opens, and then you should be good to go!
+        
 when you see the 'SCRAPER OPEN' message and a chrome browser pop up on the desktop you are ready to run all scraper routines on your machine:
 
         $ python scrapeContacts.py
