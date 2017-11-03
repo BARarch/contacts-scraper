@@ -5,8 +5,6 @@ Verifies and Updates contacts from a number of agency sites.
 
 ## I.  Installation 
 
-
-
 1. Clone the repository into a readlity accessible folder using git clone
       
         $ git clone https://github.com/BARarch/Scraper-x-202101 [path to hosting folder]
@@ -23,7 +21,7 @@ Verifies and Updates contacts from a number of agency sites.
   
         $ python contactsScraperOpen.py
         
-when you see the 'SCRAPER OPEN' message you are ready to run all scraper routines on your machine:
+when you see the 'SCRAPER OPEN' message and a chrom browser pop up on the desktop you are ready to run all scraper routines on your machine:
 
         $ python scrapeContacts.py
         
@@ -37,11 +35,13 @@ when you see the 'SCRAPER OPEN' message you are ready to run all scraper routine
   
 ## II.   Opperation and Use
 
+To scrape all organizations and update contacts navigate to the project folder and run
+
         $ python scrapeContacts.py
 
-The scraper uses a browser emulator that scrapes each site.  From this browser all existing contacts are checked and new ones are found. Below is how the process should appear with the browser, command prompt and the Contacts google sheet.
+Gulp uses a browser emulator that scrapes each site.  From this browser all existing contacts are checked and new ones are found. Below is how the process should appear with the browser, command prompt and the Contacts google sheet.
 
-![Desktop Overview](https://github.com/BARarch/Scraper-x-202101/blob/master/Doc-Material/overview.jpg)
+![Desktop Overview](/Doc-Material/overview.jpg)
 
 The program will process each organization by checking its contacts listed on the Contacts sheet.  You will see output for each orgnaization on the command prompts as this happens.
 
@@ -51,9 +51,19 @@ As the scraper checks sites you will see the output from the scraper on the goog
 
 When the scraper completes the sesssion you will see a report showing information about all site scraped.  In testing during development the 421 site scrape usually takes around 1 hour and 15 minutes.  Times may vary depending on processor and connection speeds.
 
-![Session Report](https://github.com/BARarch/Scraper-x-202101/blob/master/Doc-Material/Complete.JPG)
+![Session Report](/Doc-Material/Complete.JPG)
 
 ## III.   Contacts and Scraper Sheets
+
+Gulp is set to output all contacts from the scrape to the sheet under the "Scraper Output" tab.  Output includes verified contacts and non verified contacts on the "Contacts" tab in addition to newly discover contacts.  The Scraper Output sheet and the Contacts sheet have the same columns.  Gulp will allways read from the Contacts sheet and output to the Scraper Output sheet.  You will be transfering the output of the scraper by negotiating between the rows on the old Contacts sheet and the new Scraper Output sheet.  Allthough this process for refreshing the contacts is upto your choosing, an ideal routine is outlined below.
+
+1.  Make a duplicate of the Scraper Output tab.
+
+2.  Rename the "Contacts" tab to "Old Contacts" or some other name.
+
+3.  Rename the "Copy of Scraper Output" tab to "Contacts"
+
+4.  Clear all rows in the Scraper Output tab so the system is ready for the next scraper run
 
   
         
