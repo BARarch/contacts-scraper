@@ -18,6 +18,8 @@ Verifies and Updates contacts from a number of agency sites.
         $ python packageTest.py
         
 Here you should see that all of the packages tested are to pass.
+
+![Package Test Report](/Doc-Material/Test.JPG)
         
 #### 4. Run a test Scrape session
   
