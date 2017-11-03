@@ -59,11 +59,17 @@ Gulp is set to output all contacts from the scrape to the sheet under the "Scrap
 
 1.  Make a duplicate of the Scraper Output tab.
 
+![Duplicate Scraper Output Sheet](/Doc-Material/duplicate.jpg)
+
 2.  Rename the "Contacts" tab to "Old Contacts" or some other name.
+
+![Rename Contacts Sheet](/Doc-Material/rename.jpg)
 
 3.  Rename the "Copy of Scraper Output" tab to "Contacts"
 
 4.  Clear all rows in the Scraper Output tab so the system is ready for the next scraper run
+
+![Clear Scraper Output](/Doc-Material/clear.jpg)
 
   
         
