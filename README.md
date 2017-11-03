@@ -5,23 +5,23 @@ Verifies and Updates contacts from a number of agency sites.
 
 ## I.  Installation 
 
-1. Clone the repository into a readlity accessible folder using git clone
+#### 1. Clone the repository into a readlity accessible folder using git clone
       
         $ git clone https://github.com/BARarch/Scraper-x-202101 [path to hosting folder]
 
-2. From the hosting folder Install packages for the Scaper using PIP
+#### 2. From the hosting folder Install packages for the Scaper using PIP
   
         $ pip install -r requirements_text.txt
         
-3. Verfify packages on system
+#### 3. Verfify packages on system
   
         $ python packageTest.py
         
-4. Run a test Scrape session
+#### 4. Run a test Scrape session
   
         $ python contactsScraperOpen.py
         
-when you see the 'SCRAPER OPEN' message and a chrom browser pop up on the desktop you are ready to run all scraper routines on your machine:
+when you see the 'SCRAPER OPEN' message and a chrome browser pop up on the desktop you are ready to run all scraper routines on your machine:
 
         $ python scrapeContacts.py
         
@@ -55,19 +55,19 @@ When the scraper completes the sesssion you will see a report showing informatio
 
 ## III.   Contacts and Scraper Sheets
 
-Gulp is set to output all contacts from the scrape to the sheet under the "Scraper Output" tab.  Output includes verified contacts and non verified contacts on the "Contacts" tab in addition to newly discover contacts.  The Scraper Output sheet and the Contacts sheet have the same columns.  Gulp will allways read from the Contacts sheet and output to the Scraper Output sheet.  You will be transfering the output of the scraper by negotiating between the rows on the old Contacts sheet and the new Scraper Output sheet.  Allthough this process for refreshing the contacts is upto your choosing, an ideal routine is outlined below.
+Gulp is set to output all contacts from the scrape to the sheet under the "Scraper Output" tab.  Output includes verified contacts and non verified contacts on the "Contacts" tab in addition to newly discover contacts.  The Scraper Output sheet and the Contacts sheet have the same columns.  Gulp will allways read from the Contacts sheet and output to the Scraper Output sheet.  You will be transfering the output of the scraper by negotiating between the rows on the old Contacts sheet and the new Scraper Output sheet.  Allthough this process for refreshing the contacts is upto your choosing, an ideal routine is outlined below.  
 
-1.  Make a duplicate of the Scraper Output tab.
+#### 1.  Make a duplicate of the Scraper Output tab.
 
 ![Duplicate Scraper Output Sheet](/Doc-Material/duplicate.jpg)
 
-2.  Rename the "Contacts" tab to "Old Contacts" or some other name.
+#### 2.  Rename the "Contacts" tab to "Old Contacts" or some other name.
 
 ![Rename Contacts Sheet](/Doc-Material/rename.jpg)
 
-3.  Rename the "Copy of Scraper Output" tab to "Contacts"
+#### 3.  Rename the "Copy of Scraper Output" tab to "Contacts"
 
-4.  Clear all rows in the Scraper Output tab so the system is ready for the next scraper run
+#### 4.  Clear all rows in the Scraper Output tab so the system is ready for the next scraper run
 
 ![Clear Scraper Output](/Doc-Material/clear.jpg)
 
