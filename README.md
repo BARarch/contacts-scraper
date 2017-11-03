@@ -1,9 +1,9 @@
 # Scraper-x-202101
 Verifies and Updates contacts from a number of agency sites.
 
-Welcome to the GULP Scraper
+# Welcome to the GULP Scraper
 
-I.  Installation 
+## I.  Installation 
 
   1. Clone the repository into a readlity accessible folder using git clone
       
@@ -33,7 +33,10 @@ I.  Installation
   
   
   
-II.   Opperation and Use
+## II.   Opperation and Use
+
+
+## III.   Contacts and Scraper Sheets
 
   
         
