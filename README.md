@@ -78,7 +78,7 @@ Gulp is set to output all contacts from the scrape to the sheet under the "Scrap
 
 # The Samples Tab
 
-![The Samples Tab](/Doc-Material/Samples.jpg)
+![The Samples Tab](/Doc-Material/Samples.JPG)
 
 This tab is were records are output from test case routines.  Running any of the following commands will output to the samples tab and not Scraper Output.  These test routines scrape no more than 10 sites each and complete in minutes.
 
