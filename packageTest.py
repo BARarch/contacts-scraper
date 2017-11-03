@@ -1,25 +1,25 @@
 print('Testing scraper package installation...')
 
 try:
-	print('\nselenium')	
+	print('selenium')	
 	import selenium
 except:
 	print('FAIL: No selenium')
 else:
-	print('PASS: Version %s \t\t-3.4.3 works best' % selenium.__version__)
+	print('PASS: Version %s \t-3.4.3 works best' % selenium.__version__)
 
 
 try:
-	print('\nbeautifulsoup4')
+	print('beautifulsoup4')
 	import bs4
 except:
 	print('FAIL: No beatifulsoup4')
 else:
-	print('PASS: Version %s \t\t-4.6.0 works best' % bs4.__version__)
+	print('PASS: Version %s \t-4.6.0 works best' % bs4.__version__)
 
 
 try:
-	print('\ntime')
+	print('time')
 	import time
 except:
 	print('FAIL: No time')
@@ -28,7 +28,7 @@ else:
 
 
 try:
-	print('\ndatetime')
+	print('datetime')
 	import datetime
 except:
 	print('FAIL: No datetime')
@@ -37,43 +37,43 @@ else:
 
 
 try:
-	print('\npandas')	
+	print('pandas')	
 	import pandas
 except:
 	print('FAIL: No pandas')
 else:
-	print('PASS: Version %s \t\t-0.20.1 works best' % pandas.__version__)
+	print('PASS: Version %s \t-0.20.1 works best' % pandas.__version__)
 
 
 
 try:
-	print('\nre')	
+	print('re')	
 	import re
 except:
 	print('FAIL: No re')
 else:
-	print('PASS: Version %s \t\t-2.2.1 works best' % re.__version__)
+	print('PASS: Version %s \t-2.2.1 works best' % re.__version__)
 
 
 try:
-	print('\nnumpy')	
+	print('numpy')	
 	import numpy
 except:
 	print('FAIL: No numpy')
 else:
-	print('PASS: Version %s \t\t-1.12.1 works best' % numpy.__version__)
+	print('PASS: Version %s \t-1.12.1 works best' % numpy.__version__)
 
 try:
-	print('\nhttplib2')	
+	print('httplib2')	
 	import httplib2
 except:
 	print('FAIL: No httplib2')
 else:
-	print('PASS: Version %s \t\t-0.10.3 works best' % httplib2.__version__)
+	print('PASS: Version %s \t-0.10.3 works best' % httplib2.__version__)
 
 
 try:
-	print('\nos')
+	print('os')
 	import os
 except:
 	print('FAIL: No os')
@@ -82,21 +82,21 @@ else:
 
 
 try:
-	print('\noauth2client')	
+	print('oauth2client')	
 	import oauth2client
 except:
 	print('FAIL: No oauth2client')
 else:
-	print('PASS: Version %s \t\t-4.1.2 works best' % oauth2client.__version__)
+	print('PASS: Version %s \t-4.1.2 works best' % oauth2client.__version__)
 
 
 try:
-	print('\napiclient')	
+	print('apiclient')	
 	import apiclient
 except:
 	print('FAIL: No apiclient')
 else:
-	print('PASS: Version %s \t\t-1.6.2 works best' % apiclient.__version__)
+	print('PASS: Version %s \t-1.6.2 works best' % apiclient.__version__)
 
-print('\nDONE')
+print('DONE')
 
