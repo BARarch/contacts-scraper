@@ -540,9 +540,9 @@ class ContactCollector(ContactScraperVerifier):
 		else:
 			try:
 				if self.noGm == 1:  ## Single Grandmother Case
-					self.c = Chip(self.gm, self.vPointers)
+					self.c = Processor(self.gm, self.vPointers)
 				elif (self.noGm == 0) and (len(self.vPointers) == 1): ## No GrandMother Single Verfied Pointer - Try this!
-					self.c = Chip(self.vPointers[0].get_mother_element().parent, self.vPointers)
+					self.c = Processor(self.vPointers[0].get_mother_element().parent, self.vPointers)
 
 				else: ## TERMINAL STATE IN THIS BLOCK
 					print('Not the right number of Grandmothers %s' % str(self.noGm))
@@ -664,6 +664,40 @@ class Dorito(object):
 		return [pointer for pointer in vps if pointer.mary_here() and pointer.nathan_here]
 
 
+class RanchDorito(Dorito):
+	def __init__(self, gm, pointers):
+		Dorito.__init__(self, gm, pointers)
+		self.nothingToMerge = True
+		self.nothingPassedMerge = True
+		self.passedAndExtracted = False
+
+	def extract(self, scrapePointer):
+	## This class will test the scrape pointer passed in
+		try:
+			self.x = Extractor(self.grandMotherElement, scrapePointer)
+			self.result = self.x.get_result_set()
+		except IndexError:
+			print("No Scrapable Matches")
+
+	def merge_result(self):
+		if self.result:
+			self.nothingToMerge = False
+			len0 = len(self.finalPointers.get_pointers())
+			self.finalPointers.merge_pointers(self.result)
+			len1 = len(self.finalPointers.get_pointers())
+
+			## Check to see if the number of final pointers increases due to this merge
+			if len0 != len1:
+				self.nothingPassedMerge = False
+				self.passedAndExtracted = True
+
+			if not str(self.finalPointers):  ##  TERMINAL STATE IN THIS BLOCK
+				print("Nothing passed Merge for this Pointer")
+  
+		else:
+			print("Nothing to Merge from this Pointer")
+
+
 
 
 
@@ -674,7 +708,47 @@ class Chip(Dorito):
 		Dorito.merge_result(self)
 		Dorito.write_contacts(self)
 
+class Processor(RanchDorito):
+	def __init__(self, gm, pointers):
+		RanchDorito.__init__(self, gm, pointers)
+		self.mergeAttempts = 0
+		for sp in self.scrapePointers:
+			## Step1: Extract
+			self.result = None
+			RanchDorito.extract(self, sp)
 
+			## Step2: Count Attepts
+			if self.result:
+				self.mergeAttempts += len(self.result.get_pointers())
+
+
+			## Step3: Merge
+			RanchDorito.merge_result(self)
+
+		## Terninal States
+		if self.nothingToMerge:
+			ContactScraperVerifier.add_to_nothing_passed_merge_dict('No Results to merge')
+
+		elif self.nothingPassedMerge:
+			ContactScraperVerifier.add_to_nothing_passed_merge_dict('No Results to merge')
+
+		elif self.passedAndExtracted:
+			ContactScraperVerifier.add_to_extracted_dict(len(self.finalPointers.get_pointers()))
+
+		self.report(self.mergeAttempts)
+		RanchDorito.write_contacts(self)
+		
+	def report(self, attempts):
+		print('Verified Pointers         \t\t\t\t\t\t%s' % len(self.verifiedPointers))
+		print('Scrape Pointers           \t\t\t\t\t\t%s' % len(self.scrapePointers))
+		print('Start Pointers            \t\t\t\t\t\t%s' % str(attempts))
+		try:
+			print('Start Type                \t\t\t\t%s' % self.x.startsType)
+			print('Merged (Filtered) Pointers\t\t\t\t\t\t%s' % len(self.finalPointers.get_pointers()))
+			print(self.finalPointers)
+			
+		except AttributeError:
+			print('Start Type                \t\t\t\tNO EXTRACTORS')
 
 
 
