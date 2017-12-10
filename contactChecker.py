@@ -664,12 +664,17 @@ class Dorito(object):
 		return [pointer for pointer in vps if pointer.mary_here() and pointer.nathan_here]
 
 
+
+
+
 class Chip(Dorito):
 	def __init__(self, gm, pointers):
 		Dorito.__init__(self, gm, pointers)
 		Dorito.extract(self)
 		Dorito.merge_result(self)
 		Dorito.write_contacts(self)
+
+
 
 
 
