@@ -183,16 +183,18 @@ class HeadlessOrgSession(OrgSession):
         OrgSession.__init__(self, orgRecords)
         self.sessionBrowser = webdriver.PhantomJS()
         self.sessionBrowser.set_window_size(1600, 1600)
+        print()
         print('Started Headless Browser')
         
     def new_browser(self):
         try:                                ## If the browser was closed by another user this will fail
-            self.sessionBrowser.close()
+            self.sessionBrowser.quit()
         except:
             print('Missing Browser, We will resume')
         finally:                            ## So we catch it here
             self.sessionBrowser = webdriver.PhantomJS()
             self.sessionBrowser.set_window_size(1600, 1600)
+            print('Started NEW Headless Browser')
             
 class HeadOrgSession(OrgSession):
     def __init__(self, orgRecords):

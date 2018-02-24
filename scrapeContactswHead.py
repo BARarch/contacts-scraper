@@ -169,11 +169,12 @@ if __name__ == '__main__':
     ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
 
     # Setup Contact Record Output
+    cc.ContactSheetOutput.change_output_sheet_name('Scraper Output')   ## Overide output sheet name for Production
     cc.ContactSheetOutput.set_output(contactKeys)
 
     # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
     dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
-    cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
+    cc.VerificationHandler.set_orgRecords(dm.HeadOrgSession(orgRecords))
 
     # For this scrape session Give the Verification Handler class the contact record data
     cc.VerificationHandler.set_contactRecords(cr)
@@ -181,7 +182,7 @@ if __name__ == '__main__':
 
     ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
 
-    e = cc.ScrapeError(orgRecords)
+    a = cc.ScrapeAll(orgRecords)
 
     try:
         cc.VerificationHandler.close_browser()

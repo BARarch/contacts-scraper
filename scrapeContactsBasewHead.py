@@ -172,8 +172,9 @@ if __name__ == '__main__':
     cc.ContactSheetOutput.set_output(contactKeys)
 
     # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
-    dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
-    cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
+    dm.OrgSession.set_browser_path()                                 
+    ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
+    cc.VerificationHandler.set_orgRecords(dm.HeadOrgSession(orgRecords))
 
     # For this scrape session Give the Verification Handler class the contact record data
     cc.VerificationHandler.set_contactRecords(cr)
@@ -181,14 +182,14 @@ if __name__ == '__main__':
 
     ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
 
-    e = cc.ScrapeError(orgRecords)
+    b = cc.ScrapeBase(orgRecords)
 
     try:
         cc.VerificationHandler.close_browser()
     except:
         print("Browser Closed")
 
-    print('\nSCRAPE SESSION COMPLETE')
+    print('SCRAPE SESSION COMPLETE')
 
 
 	
