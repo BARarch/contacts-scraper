@@ -173,7 +173,7 @@ if __name__ == '__main__':
 
     # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
     dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
-    cc.VerificationHandler.set_orgRecords(dm.OrgSession(orgRecords))
+    cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
 
     # For this scrape session Give the Verification Handler class the contact record data
     cc.VerificationHandler.set_contactRecords(cr)
