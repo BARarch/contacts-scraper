@@ -170,7 +170,7 @@ class OrgSession(DirectoryManager):
         return DirectoryManager.writeRecordNote(self, note, index)
 
     def close_session_browser(self):
-        self.sessionBrowser.close()
+        pass
 
     @classmethod
     def set_browser_path(cls):
@@ -183,17 +183,22 @@ class HeadlessOrgSession(OrgSession):
         OrgSession.__init__(self, orgRecords)
         self.sessionBrowser = webdriver.PhantomJS()
         self.sessionBrowser.set_window_size(1600, 1600)
+        print()
         print('Started Headless Browser')
         
     def new_browser(self):
         try:                                ## If the browser was closed by another user this will fail
-            self.sessionBrowser.close()
+            self.sessionBrowser.quit()
         except:
             print('Missing Browser, We will resume')
         finally:                            ## So we catch it here
             self.sessionBrowser = webdriver.PhantomJS()
             self.sessionBrowser.set_window_size(1600, 1600)
-            
+            print('Started NEW Headless Browser')
+
+    def close_session_browser(self):
+        self.sessionBrowser.quit()
+        
 class HeadOrgSession(OrgSession):
     def __init__(self, orgRecords):
         OrgSession.__init__(self, orgRecords)
@@ -210,6 +215,9 @@ class HeadOrgSession(OrgSession):
             self.sessionBrowser = webdriver.Chrome(OrgSession.browserPath)
             self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)
             self.sessionBrowser.set_script_timeout(OrgSession.ScriptLoadTimeout)
+
+        def close_session_browser(self):
+            self.sessionBrowser.close()
             
 class BatchSessionPing(HeadOrgSession):
     def __init__(self, orgRecords):
