@@ -4,6 +4,11 @@ import scraperModelGS as smgs
 import directoryManager as dm
 import contactChecker as cc
 
+import sys
+import time
+from tkinter import *
+import tkinter.ttk as ttk
+
 def getContacts():
     """Google Sheets API Code.
     Pulls urls for all NFL Team RSS Feeds
@@ -143,9 +148,44 @@ def sheetRecord(row, recordKeys):
     
     return record
 
+class Application(Frame):
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.parent = master
+        self.pack()
+        self.create_widgets()
+        
+    def create_widgets(self):
+        self.QUIT = Button(self)
+        self.QUIT['text'] = "QUIT"
+        self.QUIT['fg'] = "red"
+        self.QUIT['command'] = self.quit
+        self.QUIT.pack({"side": "left"})
+        
+        self.scrape = Button(self)
+        self.scrape['text'] = "Scrape"
+        self.scrape['fg'] = "green"
+        self.scrape['command'] = self.move_progress
+        self.scrape.pack({"side": "left"})
+        
+        self.pb = ttk.Progressbar(self, orient='horizontal', length=400, mode='determinate')
+        self.pb["maximum"] = 200
+        self.pb.pack({'side':'right'})
+        
+    def move_progress(self):
+        for i in range(20):
+            self.pb.step()
+            self.update()
+            time.sleep(.02)
 
 
 if __name__ == '__main__':
+    
+    root = Tk()
+    app = Application(master=root)
+    app.mainloop()
+    root.destroy()
+    
     # Initialize Google Sheets for Write
     get_credentials = smgs.modelInit()
 
@@ -182,6 +222,8 @@ if __name__ == '__main__':
     ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
     	
     print('SCRAPE SESSION OPEN')
+    
+    
 
 
 
