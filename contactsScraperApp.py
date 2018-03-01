@@ -9,12 +9,12 @@ import time
 from tkinter import *
 import tkinter.ttk as ttk
 
-def getContacts():
+def getContacts(get_credentials_method):
     """Google Sheets API Code.
     Pulls urls for all NFL Team RSS Feeds
     https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
     """
-    credentials = get_credentials()
+    credentials = get_credentials_method()
     http = credentials.authorize(smgs.httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
@@ -35,12 +35,12 @@ def getContacts():
 
     return values
 
-def getContactKeys():
+def getContactKeys(get_credentials_method):
     """Google Sheets API Code.
     Pulls urls for all NFL Team RSS Feeds
     https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
     """
-    credentials = get_credentials()
+    credentials = get_credentials_method()
     http = credentials.authorize(smgs.httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
@@ -61,12 +61,12 @@ def getContactKeys():
 
     return values[0]
 
-def getAgencyDir():
+def getAgencyDir(get_credentials_method):
     """Google Sheets API Code.
     Pulls urls for all NFL Team RSS Feeds
     https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
     """
-    credentials = get_credentials()
+    credentials = get_credentials_method()
     http = credentials.authorize(smgs.httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
@@ -87,12 +87,12 @@ def getAgencyDir():
 
     return values
 
-def getAgencyDirKeys():
+def getAgencyDirKeys(get_credentials_method):
     """Google Sheets API Code.
     Pulls urls for all NFL Team RSS Feeds
     https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
     """
-    credentials = get_credentials()
+    credentials = get_credentials_method()
     http = credentials.authorize(smgs.httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
@@ -178,50 +178,54 @@ class Application(Frame):
             self.update()
             time.sleep(.02)
 
+    def startup(self):
+        # Initialize Google Sheets for Write
+        get_credentials_method = smgs.modelInit()
+
+        # Get Headers from google sheets
+        print('KEYS')
+        contactKeys = getContactKeys(get_credentials_method)
+        directoryKeys = getAgencyDirKeys(get_credentials_method)
+        print('')
+
+        # Get contact and orginization website data and structure with collected headings
+        print('RECORDS')
+        contactRecords = [sheetRecord(row, contactKeys) for row in getContacts(get_credentials_method)]
+        orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
+        print('')
+
+        # Create Dataframes
+        cr = pd.DataFrame(contactRecords)
+        dr = pd.DataFrame(orgRecords)
+        print('DATAFRAMES READY')
+
+        ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
+
+        # Setup Contact Record Output
+        cc.ContactSheetOutput.set_output(contactKeys)
+
+        # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
+        dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
+        cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
+
+        # For this scrape session Give the Verification Handler class the contact record data
+        cc.VerificationHandler.set_contactRecords(cr)
+        print('CONTACT CHECKER READY')
+
+        ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
+
+        print('SCRAPE SESSION OPEN')
+        
 
 if __name__ == '__main__':
     
     root = Tk()
     app = Application(master=root)
+    app.after(500, app.startup)
     app.mainloop()
     root.destroy()
     
-    # Initialize Google Sheets for Write
-    get_credentials = smgs.modelInit()
-
-    # Get Headers from google sheets
-    print('KEYS')
-    contactKeys = getContactKeys()
-    directoryKeys = getAgencyDirKeys()
-    print('')
-
-    # Get contact and orginization website data and structure with collected headings
-    print('RECORDS')
-    contactRecords = [sheetRecord(row, contactKeys) for row in getContacts()]
-    orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir()]
-    print('')
-
-    # Create Dataframes
-    cr = pd.DataFrame(contactRecords)
-    dr = pd.DataFrame(orgRecords)
-    print('DATAFRAMES READY')
-
-    ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
-
-    # Setup Contact Record Output
-    cc.ContactSheetOutput.set_output(contactKeys)
-
-    # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
-    dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
-    cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
-
-    # For this scrape session Give the Verification Handler class the contact record data
-    cc.VerificationHandler.set_contactRecords(cr)
-    print('CONTACT CHECKER READY')
-
-    ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
-    	
-    print('SCRAPE SESSION OPEN')
+   
     
     
 
