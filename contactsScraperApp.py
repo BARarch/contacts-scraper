@@ -249,7 +249,8 @@ class Application(Frame):
         # Initiates Startup Tread Task
         self.startupQueue = queue.Queue()
         self.change_status("LOADING")
-        ScraperThread(self.startupQueue).start()
+        self.scraperProcess = ScraperThread(self.startupQueue)
+        self.scraperProcess.start()
         self.parent.after(100, self.manage_startup)
         
     def manage_startup(self):
