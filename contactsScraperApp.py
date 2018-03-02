@@ -8,6 +8,8 @@ import sys
 import time
 from tkinter import *
 import tkinter.ttk as ttk
+import queue
+import threading
 
 def getContacts(get_credentials_method):
     """Google Sheets API Code.
@@ -153,68 +155,162 @@ class Application(Frame):
         Frame.__init__(self, master)
         self.parent = master
         self.pack()
-        self.create_widgets()
         
-    def create_widgets(self):
-        self.QUIT = Button(self)
-        self.QUIT['text'] = "QUIT"
-        self.QUIT['fg'] = "red"
-        self.QUIT['command'] = self.quit
-        self.QUIT.pack({"side": "left"})
+        self.fmStartupStatus = Frame().pack(expand=True, fill=BOTH, side=TOP)
+        self.fmStatus = Frame().pack(expand=True, fill=BOTH, side=TOP)
+        self.create_startup_status(self.fmStartupStatus)
+        self.create_status(self.fmStatus)
         
-        self.scrape = Button(self)
-        self.scrape['text'] = "Scrape"
-        self.scrape['fg'] = "green"
-        self.scrape['command'] = self.move_progress
-        self.scrape.pack({"side": "left"})
+        self.fmControl = Frame().pack(side=BOTTOM)
+        self.create_widgets(self.fmControl)
         
-        self.pb = ttk.Progressbar(self, orient='horizontal', length=400, mode='determinate')
-        self.pb["maximum"] = 200
-        self.pb.pack({'side':'right'})
         
-    def move_progress(self):
-        for i in range(20):
+    def create_widgets(self, panel):
+        self.progressBarPosition = 0
+        self.QUIT = Button(panel)
+        self.QUIT.configure(command=self.quit,
+                            text='QUIT',
+                            fg='red')        
+        self.QUIT.pack(side=LEFT)
+        
+        self.SCRAPE = Button(panel)
+        self.SCRAPE.configure(command=self.quit,
+                              text='Scrape',
+                              fg='green',
+                              state='disabled')
+        self.SCRAPE.pack(side=LEFT)
+        
+        self.pb = ttk.Progressbar(panel)
+        self.pb.configure(orient='horizontal',
+                          length=400,
+                          mode='determinate',
+                          maximum=200,
+                          variable=self.progressBarPosition)
+        self.pb.pack(side=LEFT)
+        
+    def create_startup_status(self, panel):
+        self.startupStatus = Label(panel, text='STARTUP STATUS')
+        self.startupStatus.pack()
+        
+    def change_startup_status(self, msg):
+        self.startupStatus.configure(text=msg)
+        
+    def create_status(self, panel):
+        self.status = Label(panel, text='MAIN STATUS')
+        self.status.pack()
+        
+    def change_status(self, msg):
+        self.status.configure(text=msg)
+        
+    def move_progress(self, pos):
+        points = (pos * self.pb['maximum'])
+        delta = int(points - self.pb['value'])
+        
+        for i in range(delta):
             self.pb.step()
             self.update()
             time.sleep(.02)
-
+        #print(self.progressBarPosition)
+        print('Value ' + str(self.pb['value']))
+        #print('Var ' + str(self.pb['variable']))
+        
+    def move_progress_val(self, pos):
+        points = pos * self.pb['maximum'] - 1
+        
+        while self.pb['value'] < points:
+            self.pb.step()
+            self.update()
+            time.sleep(.02)
+            
+        #print('Value ' + str(self.pb['value']))
+        
     def startup(self):
+        # Initiates Startup Tread Task
+        self.startupQueue = queue.Queue()
+        self.change_status("LOADING")
+        ScraperThread(self.startupQueue).start()
+        self.parent.after(100, self.manage_startup)
+        
+    def manage_startup(self):
+        # Processes Queue shared with startup tread task
         # Initialize Google Sheets for Write
+        try:
+            packet = self.startupQueue.get(0)
+            #print(packet)
+            if 'message' in packet:
+                msg = packet['message']
+                if msg == 'SCRAPE SESSION OPEN':
+                    # Ready To Start
+                    self.change_startup_status(msg)
+                    self.change_status('')
+                    self.SCRAPE.configure(state='active', fg='green')
+                else:
+                    # Update Message and Keep Checking
+                    self.change_startup_status(msg)
+                    self.parent.after(100, self.manage_startup)
+                    
+            if 'progress' in packet:
+                pro = packet['progress']
+                self.move_progress_val(pro / 8)
+                self.parent.after(100, self.manage_startup)
+                
+        except queue.Empty:
+            self.parent.after(100, self.manage_startup)
+            
+            
+            
+class ScraperThread(threading.Thread):
+    def __init__(self, queue):
+        threading.Thread.__init__(self)
+        self.queue = queue
+        
+    def run(self):         
         get_credentials_method = smgs.modelInit()
 
         # Get Headers from google sheets
         print('KEYS')
+        self.queue.put({'message': 'KEYS'})
         contactKeys = getContactKeys(get_credentials_method)
+        self.queue.put({'progress': 1})
         directoryKeys = getAgencyDirKeys(get_credentials_method)
+        self.queue.put({'progress': 2})
         print('')
 
         # Get contact and orginization website data and structure with collected headings
         print('RECORDS')
+        self.queue.put({'message': 'RECORDS'})
         contactRecords = [sheetRecord(row, contactKeys) for row in getContacts(get_credentials_method)]
+        self.queue.put({'progress': 3})
         orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
+        self.queue.put({'progress': 4})
         print('')
 
         # Create Dataframes
         cr = pd.DataFrame(contactRecords)
         dr = pd.DataFrame(orgRecords)
-        print('DATAFRAMES READY')
-
+        print('DATAFRAMES READY') 
+        self.queue.put({'message': 'DATAFRAMES READY',
+                        'progress': 5})
         ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
 
         # Setup Contact Record Output
         cc.ContactSheetOutput.set_output(contactKeys)
-
+        self.queue.put({'progress': 6})
         # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
         dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
         cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
-
+        self.queue.put({'progress': 7})
         # For this scrape session Give the Verification Handler class the contact record data
         cc.VerificationHandler.set_contactRecords(cr)
         print('CONTACT CHECKER READY')
-
+        
+        
         ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
 
         print('SCRAPE SESSION OPEN')
+        self.queue.put({'message': 'SCRAPE SESSION OPEN',
+                        'progress': 8})
+        
         
 
 if __name__ == '__main__':
