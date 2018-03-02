@@ -150,6 +150,13 @@ def sheetRecord(row, recordKeys):
     
     return record
 
+
+
+
+
+
+
+
 class Application(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
@@ -163,6 +170,9 @@ class Application(Frame):
         
         self.fmControl = Frame().pack(side=BOTTOM)
         self.create_widgets(self.fmControl)
+        
+        ## Application Process Flags
+        self.startupFlag = False
         
         
     def create_widgets(self, panel):
@@ -214,15 +224,26 @@ class Application(Frame):
         print('Value ' + str(self.pb['value']))
         #print('Var ' + str(self.pb['variable']))
         
-    def move_progress_val(self, pos):
+    def move_progress_start(self, pos):
         points = pos * self.pb['maximum'] - 1
         
         while self.pb['value'] < points:
+            if self.startupFlag:
+                print('Halted Status Bar')
+                return
             self.pb.step()
             self.update()
             time.sleep(.02)
-            
-        #print('Value ' + str(self.pb['value']))
+        
+        print('Value ' + str(self.pb['value']))
+        
+    def complete_startup_progress(self):
+        self.startupFlag = True
+        self.pb.step()
+        self.update
+        
+        print('Value ' + str(self.pb['value']))
+        
         
     def startup(self):
         # Initiates Startup Tread Task
@@ -250,14 +271,21 @@ class Application(Frame):
                     self.parent.after(100, self.manage_startup)
                     
             if 'progress' in packet:
-                pro = packet['progress']
-                self.move_progress_val(pro / 8)
-                self.parent.after(100, self.manage_startup)
+                if packet['progress'] == 'FINNISHED':
+                    self.complete_startup_progress()
+                else:
+                    pro = packet['progress']
+                    self.move_progress_start(pro / 7)
+                    self.parent.after(100, self.manage_startup)
                 
         except queue.Empty:
             self.parent.after(100, self.manage_startup)
             
-            
+ 
+
+
+
+
             
 class ScraperThread(threading.Thread):
     def __init__(self, queue):
@@ -269,20 +297,21 @@ class ScraperThread(threading.Thread):
 
         # Get Headers from google sheets
         print('KEYS')
+        self.queue.put({'progress': 1})
         self.queue.put({'message': 'KEYS'})
         contactKeys = getContactKeys(get_credentials_method)
-        self.queue.put({'progress': 1})
-        directoryKeys = getAgencyDirKeys(get_credentials_method)
         self.queue.put({'progress': 2})
+        directoryKeys = getAgencyDirKeys(get_credentials_method)
+        self.queue.put({'progress': 3})
         print('')
 
         # Get contact and orginization website data and structure with collected headings
         print('RECORDS')
         self.queue.put({'message': 'RECORDS'})
         contactRecords = [sheetRecord(row, contactKeys) for row in getContacts(get_credentials_method)]
-        self.queue.put({'progress': 3})
-        orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
         self.queue.put({'progress': 4})
+        orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
+        self.queue.put({'progress': 5})
         print('')
 
         # Create Dataframes
@@ -290,16 +319,16 @@ class ScraperThread(threading.Thread):
         dr = pd.DataFrame(orgRecords)
         print('DATAFRAMES READY') 
         self.queue.put({'message': 'DATAFRAMES READY',
-                        'progress': 5})
+                        'progress': 6})
         ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
 
         # Setup Contact Record Output
         cc.ContactSheetOutput.set_output(contactKeys)
-        self.queue.put({'progress': 6})
+        self.queue.put({'progress': 7})
         # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
         dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
         cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
-        self.queue.put({'progress': 7})
+        #self.queue.put({'progress': 'Finishd'})
         # For this scrape session Give the Verification Handler class the contact record data
         cc.VerificationHandler.set_contactRecords(cr)
         print('CONTACT CHECKER READY')
@@ -309,10 +338,18 @@ class ScraperThread(threading.Thread):
 
         print('SCRAPE SESSION OPEN')
         self.queue.put({'message': 'SCRAPE SESSION OPEN',
-                        'progress': 8})
+                        'progress': 'FINNISHED'})
         
         
 
+        
+        
+        
+        
+        
+        
+        
+        
 if __name__ == '__main__':
     
     root = Tk()
