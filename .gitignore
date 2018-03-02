@@ -8,3 +8,4 @@ config.py
 debug.log
 venv/
 ghostdriver.log
+.ipynb_checkpoints/
