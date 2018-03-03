@@ -173,6 +173,7 @@ class Application(Frame):
         
         ## Application Process Flags
         self.startupFlag = False
+        self.scrapeFlag = False
         
         
     def create_widgets(self, panel):
@@ -197,6 +198,8 @@ class Application(Frame):
                           maximum=200,
                           variable=self.progressBarPosition)
         self.pb.pack(side=LEFT)
+
+    ## Status Bars 
         
     def create_startup_status(self, panel):
         self.startupStatus = Label(panel, text='STARTUP STATUS')
@@ -211,6 +214,10 @@ class Application(Frame):
         
     def change_status(self, msg):
         self.status.configure(text=msg)
+        
+        
+        
+    ## Progress Bar Opperations
         
     def move_progress(self, pos):
         points = (pos * self.pb['maximum'])
@@ -234,6 +241,17 @@ class Application(Frame):
             self.pb.step()
             self.update()
             time.sleep(.02)
+            
+    def move_progress_scrape(self, pos):
+        points = pos * self.pb['maximum'] - 1
+        
+        while self.pb['value'] < points:
+            if self.scrapeFlag:
+                print('Halted Status Bar')
+                return
+            self.pb.step()
+            self.update()
+            time.sleep(.02)
         
         #print('Value ' + str(self.pb['value']))
         
@@ -242,11 +260,23 @@ class Application(Frame):
         self.pb.step()
         self.update
         
+    def complete_scrape_progress(self):
+        self.scrapeFlag = True
+        self.pb.step()
+        self.update
+        
         #print('Value ' + str(self.pb['value']))
+        
+        
 
+    ## Handlers    
+        
     def handle_scrape(self):
         self.SCRAPE.config(state='disabled')
+        self.change_startup_status('SCRAPER IS RUNNING...')
         self.commandQueue.put({'scrape': 'TODAY'})
+        self.numScrapes = 0
+        self.scrapeFlag = False
         self.parent.after(100, self.manage_scrape)
         
     def handle_quit(self):
@@ -263,6 +293,10 @@ class Application(Frame):
         self.scraperProcess.start()
         self.parent.after(100, self.manage_startup)
         
+        
+    
+    ## Process Managers
+    
     def manage_startup(self):
         # Processes Queue shared with startup tread task
         # Initialize Google Sheets for Write
@@ -296,15 +330,21 @@ class Application(Frame):
         try:
             packet = self.scraperQueue.get(0)
             if 'done' in packet:
+                self.change_startup_status('SCRAPE SESSION OPEN')
+                self.change_status('Scrape Completed in --:--:--')
+                self.complete_scrape_progress()
                 self.SCRAPE.config(state='active')
                 
             else:
                 if 'scraping' in packet:
-                    pass
+                    self.numScrapes += 1
+                    self.change_status('Scraping ' + packet['scraping'] )
+                    self.move_progress_scrape(self.numScrapes / self.numOrgs)
                 if 'time' in packet:
                     pass
                 if 'numOrgs' in packet:
-                    pass
+                    self.numOrgs = packet['numOrgs']
+                    
                 if 'report' in packet:
                     pass
                 self.parent.after(100, self.manage_scrape)
@@ -343,13 +383,13 @@ class ScraperThread(threading.Thread):
         self.startupQueue.put({'message': 'RECORDS'})
         contactRecords = [sheetRecord(row, contactKeys) for row in getContacts(get_credentials_method)]
         self.startupQueue.put({'progress': 4})
-        orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
+        self.orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
         self.startupQueue.put({'progress': 5})
         print('')
 
         # Create Dataframes
         cr = pd.DataFrame(contactRecords)
-        dr = pd.DataFrame(orgRecords)
+        dr = pd.DataFrame(self.orgRecords)
         print('DATAFRAMES READY') 
         self.startupQueue.put({'message': 'DATAFRAMES READY',
                         'progress': 6})
@@ -360,25 +400,27 @@ class ScraperThread(threading.Thread):
         self.startupQueue.put({'progress': 7})
         # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
         dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
-        cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
+        cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(self.orgRecords))
         #self.queue.put({'progress': 'Finishd'})
         # For this scrape session Give the Verification Handler class the contact record data
         cc.VerificationHandler.set_contactRecords(cr)
+        cc.ScrapeSession.set_app_scraper_queue(self.scraperQueue)
         print('CONTACT CHECKER READY')
         
-        
-        ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
 
         print('SCRAPE SESSION OPEN')
         print('')
         self.startupQueue.put({'message': 'SCRAPE SESSION OPEN',
                                'progress': 'FINNISHED'})
 
+        
+         ## //////////////////        Begin Scraper Loop         \\\\\\\\\\\\\\\\\\\
         self.commandLoop = True
         
         while self.commandLoop:
             self.commandLoop = self.listen_for_cmd()
-            
+        
+        cc.VerificationHandler.close_browser()
         print('SCRAPER THREAD FINNISHED')
 
             
@@ -390,7 +432,8 @@ class ScraperThread(threading.Thread):
                 if 'scrape' in packet:
                     if packet['scrape'] == 'TODAY':
                         print('The scraper is running')
-                        time.sleep(5)
+                        t = cc.ScrapeForToday(self.orgRecords)
+                        
                         print('scraper finnished')
                         print('')
                         self.scraperQueue.put({'done':1})
