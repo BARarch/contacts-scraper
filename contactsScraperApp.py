@@ -178,13 +178,13 @@ class Application(Frame):
     def create_widgets(self, panel):
         self.progressBarPosition = 0
         self.QUIT = Button(panel)
-        self.QUIT.configure(command=self.quit,
+        self.QUIT.configure(command=self.handle_quit,
                             text='QUIT',
                             fg='red')        
         self.QUIT.pack(side=LEFT)
         
         self.SCRAPE = Button(panel)
-        self.SCRAPE.configure(command=self.quit,
+        self.SCRAPE.configure(command=self.handle_scrape,
                               text='Scrape',
                               fg='green',
                               state='disabled')
@@ -221,7 +221,7 @@ class Application(Frame):
             self.update()
             time.sleep(.02)
         #print(self.progressBarPosition)
-        print('Value ' + str(self.pb['value']))
+        #print('Value ' + str(self.pb['value']))
         #print('Var ' + str(self.pb['variable']))
         
     def move_progress_start(self, pos):
@@ -235,21 +235,31 @@ class Application(Frame):
             self.update()
             time.sleep(.02)
         
-        print('Value ' + str(self.pb['value']))
+        #print('Value ' + str(self.pb['value']))
         
     def complete_startup_progress(self):
         self.startupFlag = True
         self.pb.step()
         self.update
         
-        print('Value ' + str(self.pb['value']))
+        #print('Value ' + str(self.pb['value']))
+
+    def handle_scrape(self):
+        self.SCRAPE.config(state='disabled')
+        self.commandQueue.put({'scrape': 'TODAY'})
+        self.parent.after(100, self.manage_scrape)
         
+    def handle_quit(self):
+        self.commandQueue.put({'stop': 1})
+        self.quit()
         
     def startup(self):
         # Initiates Startup Tread Task
         self.startupQueue = queue.Queue()
+        self.commandQueue = queue.Queue()
+        self.scraperQueue = queue.Queue()
         self.change_status("LOADING")
-        self.scraperProcess = ScraperThread(self.startupQueue)
+        self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
         self.scraperProcess.start()
         self.parent.after(100, self.manage_startup)
         
@@ -281,6 +291,18 @@ class Application(Frame):
                 
         except queue.Empty:
             self.parent.after(100, self.manage_startup)
+    
+    def manage_scrape(self):
+        try:
+            packet = self.scraperQueue.get(0)
+            if 'done' in packet:
+                self.SCRAPE.config(state='active')
+                
+            else:
+                self.parent.after(100, self.manage_scrape)
+            
+        except queue.Empty:
+            self.parent.after(100, self.manage_scrape)
             
  
 
@@ -289,43 +311,45 @@ class Application(Frame):
 
             
 class ScraperThread(threading.Thread):
-    def __init__(self, queue):
+    def __init__(self, startupHandle, commandHandle, scraperHandle):
         threading.Thread.__init__(self)
-        self.queue = queue
+        self.startupQueue = startupHandle
+        self.commandQueue = commandHandle
+        self.scraperQueue = scraperHandle
         
     def run(self):         
         get_credentials_method = smgs.modelInit()
 
         # Get Headers from google sheets
         print('KEYS')
-        self.queue.put({'progress': 1})
-        self.queue.put({'message': 'KEYS'})
+        self.startupQueue.put({'progress': 1})
+        self.startupQueue.put({'message': 'KEYS'})
         contactKeys = getContactKeys(get_credentials_method)
-        self.queue.put({'progress': 2})
+        self.startupQueue.put({'progress': 2})
         directoryKeys = getAgencyDirKeys(get_credentials_method)
-        self.queue.put({'progress': 3})
+        self.startupQueue.put({'progress': 3})
         print('')
 
         # Get contact and orginization website data and structure with collected headings
         print('RECORDS')
-        self.queue.put({'message': 'RECORDS'})
+        self.startupQueue.put({'message': 'RECORDS'})
         contactRecords = [sheetRecord(row, contactKeys) for row in getContacts(get_credentials_method)]
-        self.queue.put({'progress': 4})
+        self.startupQueue.put({'progress': 4})
         orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
-        self.queue.put({'progress': 5})
+        self.startupQueue.put({'progress': 5})
         print('')
 
         # Create Dataframes
         cr = pd.DataFrame(contactRecords)
         dr = pd.DataFrame(orgRecords)
         print('DATAFRAMES READY') 
-        self.queue.put({'message': 'DATAFRAMES READY',
+        self.startupQueue.put({'message': 'DATAFRAMES READY',
                         'progress': 6})
         ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
 
         # Setup Contact Record Output
         cc.ContactSheetOutput.set_output(contactKeys)
-        self.queue.put({'progress': 7})
+        self.startupQueue.put({'progress': 7})
         # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
         dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
         cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(orgRecords))
@@ -338,9 +362,39 @@ class ScraperThread(threading.Thread):
         ## //////////////////        Scrape Base Case and Turn Off Browser         \\\\\\\\\\\\\\\\\\\
 
         print('SCRAPE SESSION OPEN')
-        self.queue.put({'message': 'SCRAPE SESSION OPEN',
-                        'progress': 'FINNISHED'})
+        print('')
+        self.startupQueue.put({'message': 'SCRAPE SESSION OPEN',
+                               'progress': 'FINNISHED'})
+
+        self.commandLoop = True
         
+        while self.commandLoop:
+            self.commandLoop = self.listen_for_cmd()
+            
+        print('SCRAPER THREAD FINNISHED')
+
+            
+    def listen_for_cmd(self):
+        while True:
+            try:
+                packet = self.commandQueue.get(0)
+                ## Scrape Events
+                if 'scrape' in packet:
+                    if packet['scrape'] == 'TODAY':
+                        print('The scraper is running')
+                        time.sleep(5)
+                        print('scraper finnished')
+                        print('')
+                        self.scraperQueue.put({'done':1})
+                    return True
+                
+                ## Stop Events
+                if 'stop' in packet:
+                    print('scraper loop done')
+                    return False
+                
+            except queue.Empty:
+                time.sleep(.2)
         
 
         
