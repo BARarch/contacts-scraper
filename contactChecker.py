@@ -12,6 +12,8 @@ from bs4.element import NavigableString
 
 import datetime as dt
 
+import queue
+
 
 
 
@@ -1645,6 +1647,8 @@ class ScrapeSession(object):
                   'American Association of Diabetes Educators']
 
     baseCase = ['National Association for Multi-Ethnicity In Communications (NAMIC)']
+    
+    appScraperQueue = None
 
     def __init__(self, orgRecs):
         self.records = orgRecs
@@ -1658,10 +1662,17 @@ class ScrapeSession(object):
         self.numSitePings = 0
         self.runList = orgList
         ContactScraperVerifier.clear_stats()
+        
+        ## ScrapeSession for APP:  Send Number of Orgs to be Scraped 'numOrgs'##
+        ScrapeSession.push_to_app_queue({'numOrgs': len(self.runList)})
 
         try:
             self.startTime = dt.datetime.now()
             for org in self.runList:
+                
+                ## ScrapeSession for APP:  Send scraping org to be Scraped 'scraping' ##
+                ScrapeSession.push_to_app_queue({'scraping': org})
+                
                 vh = ContactCollector(org)
                 self.numSitePings += 1
 
@@ -1692,6 +1703,8 @@ class ScrapeSession(object):
         noExtracted = len(ContactScraperVerifier.extracted)
         delta = self.endTime - self.startTime
         time = ScrapeSession.format_timedelta(delta)
+        
+        ## ScrapeSession for APP:  Send Report Here 'report' ##
 
         print('\n')
         print('--------------------------------------------------------------------------')
@@ -1716,6 +1729,16 @@ class ScrapeSession(object):
     @classmethod
     def set_orgs(cls,orgRecs):
         ScrapeSession.orgs = [orgRec['Organization'] for orgRec in orgRecs]
+        
+    @classmethod
+    def set_app_scraper_queue(cls, queue):
+        ScrapeSession.appScraperQueue = queue
+    
+    @classmethod
+    def push_to_app_queue(cls, packet):
+        ## Somtheing happens only if queue is set
+        if ScrapeSession.appScraperQueue:
+            ScrapeSession.appScraperQueue.put(packet)
 
     @staticmethod
     def format_timedelta(td):
