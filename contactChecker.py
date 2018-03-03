@@ -1649,6 +1649,7 @@ class ScrapeSession(object):
     baseCase = ['National Association for Multi-Ethnicity In Communications (NAMIC)']
     
     appScraperQueue = None
+    appCommandQueue = None
 
     def __init__(self, orgRecs):
         self.records = orgRecs
@@ -1670,13 +1671,22 @@ class ScrapeSession(object):
             self.startTime = dt.datetime.now()
             for org in self.runList:
                 
+                ## App for ScrapeSession: Listen For Stop or Pause Commands
+                cmd = ScrapeSession.listen_for_cmd() 
+                if cmd == 'stop':
+                    print('HALTED SCRAPE SESSION')
+                    self.endTime = dt.datetime.now()
+                    self.get_early_termination_report()
+                    return
+                       
                 ## ScrapeSession for APP:  Send scraping org to be Scraped 'scraping' ##
                 ScrapeSession.push_to_app_queue({'scraping': org})
                 
                 vh = ContactCollector(org)
                 self.numSitePings += 1
 
-        except:
+        except Exception as e:
+            print(e)
             self.endTime = dt.datetime.now()
             self.get_early_termination_report()
             
@@ -1729,7 +1739,8 @@ class ScrapeSession(object):
     @classmethod
     def set_orgs(cls,orgRecs):
         ScrapeSession.orgs = [orgRec['Organization'] for orgRec in orgRecs]
-        
+    
+    ## Scraper Queue Methods
     @classmethod
     def set_app_scraper_queue(cls, queue):
         ScrapeSession.appScraperQueue = queue
@@ -1739,7 +1750,36 @@ class ScrapeSession(object):
         ## Somtheing happens only if queue is set
         if ScrapeSession.appScraperQueue:
             ScrapeSession.appScraperQueue.put(packet)
+    
+    @classmethod
+    def set_app_command_queue(cls, queue):
+        ScrapeSession.appCommandQueue = queue
+    
+    @classmethod
+    def push_to_command_queue(cls, packet):
+        ## Somtheing happens only if queue is set
+        if ScrapeSession.appCommandQueue:
+            ScrapeSession.appCommandQueue.put(packet)
+            
+    @classmethod
+    def listen_for_cmd(cls):
+        if ScrapeSession.appCommandQueue:
+            try:
+                packet = ScrapeSession.appCommandQueue.get(0)
+                if 'stop' in packet:
+                    # The stop command has landed in scrap process
+                    # resubmit the stop so that parent class on scraper thread gets it too
+                    ScrapeSession.push_to_command_queue(packet)
+                    return 'stop'
+                if 'pause' in packet:
+                    return 'pause'
+                
+                return None
+                
+            except queue.Empty:
+                return None
 
+            
     @staticmethod
     def format_timedelta(td):
         minutes, seconds = divmod(td.seconds + td.days * 86400, 60)
