@@ -299,6 +299,14 @@ class Application(Frame):
                 self.SCRAPE.config(state='active')
                 
             else:
+                if 'scraping' in packet:
+                    pass
+                if 'time' in packet:
+                    pass
+                if 'numOrgs' in packet:
+                    pass
+                if 'report' in packet:
+                    pass
                 self.parent.after(100, self.manage_scrape)
             
         except queue.Empty:
