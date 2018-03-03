@@ -404,7 +404,9 @@ class ScraperThread(threading.Thread):
         #self.queue.put({'progress': 'Finishd'})
         # For this scrape session Give the Verification Handler class the contact record data
         cc.VerificationHandler.set_contactRecords(cr)
+        
         cc.ScrapeSession.set_app_scraper_queue(self.scraperQueue)
+        cc.ScrapeSession.set_app_command_queue(self.commandQueue)
         print('CONTACT CHECKER READY')
         
 
