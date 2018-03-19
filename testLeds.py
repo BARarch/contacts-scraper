@@ -169,6 +169,8 @@ class LED:
         if self.blink:
             self.frame.after(self.blinkrate * 1000, self.update)
 
+    
+   
 
 if __name__ == '__main__':
     class TestLEDs(Frame):
