@@ -9,3 +9,8 @@ debug.log
 venv/
 ghostdriver.log
 .ipynb_checkpoints/
+build/
+dist/
+gulp.spec
+untitled.ipynb
+phantomjs.exe
