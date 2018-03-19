@@ -196,8 +196,8 @@ if __name__ == '__main__':
                     (ROUND,  15, 15, RAISED, 1, None,        ""),
                     (SQUARE, 20, 20, SUNKEN, 1, None,        ""),
                     (SQUARE,  8,  8, FLAT,   0, None,        ""),
-                    (SQUARE,  30,  30, RAISED, 1, None,        ""),
-                    (SQUARE, 30,  30, FLAT,   1, None,        ""),
+                    (SQUARE,  8,  8, RAISED, 1, None,        ""),
+                    (SQUARE, 16,  8, FLAT,   1, None,        ""),
                     (ARROW,  14, 14, RIDGE,  1, POINT_UP,    ""),
                     (ARROW,  14, 14, RIDGE,  0, POINT_RIGHT, ""),
                     (ARROW,  14, 14, FLAT,   0, POINT_DOWN,  "white")]
