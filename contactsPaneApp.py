@@ -33,6 +33,8 @@ class Application(Frame):
 
 
 root = Tk()
+root.geometry('500x500')
+root.title('Contacts Pane')
 app = Application(master=root)
 app.mainloop()
 root.destroy()
