@@ -4,26 +4,30 @@ from tkinter import *
 import tkinter.ttk as ttk
 from testLeds import *
 
-PanelColor = '#545454'
+#PanelColor = '#545454'
 
-class LEDRow(Frame):
-    def __init__(self, master=None, name="NONE"):
-        Frame.__init__(self, master)
+class LEDRow:
+    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
+        self.frame = Frame(master, width=300, height=300) 
         self.parent = master
-        self.pack(expand=True, side=LEFT)
-        self.config(width=300, height=300, background='red')
-        self.update()
+        self.frame.pack(expand=True, side=TOP, anchor=W, fill=X)
+    
         
-        self.indicator = LED(master=self.parent, appearance=FLAT, shape=ROUND, blink=1, blinkrate=1, bd=1).frame.pack(  side=LEFT,
-                                                        expand=YES, 
-                                                        padx=5, 
-                                                        pady=1)
-        self.name = Label(self, text=name).pack(expand=True, fill=BOTH, side=LEFT)
-        self.status = Label(self, relief=SUNKEN,fg="red", text='Waiting', width=20).pack(expand=True, fill=BOTH, side=RIGHT)
-
-
-root = Tk()
-root.title('LED Row')
-app = LEDRow(master=root, name='Contact Keys')
-app.mainloop()
-root.destroy()
+        self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey').frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
+        self.name = Label(self.frame, text=name,width=30).pack(side=LEFT,  fill=BOTH, pady=5)
+        self.status = Label(self.frame, relief=SUNKEN,fg="red", text='Waiting', width=10).pack(expand=True, fill=Y, side=RIGHT,anchor=E)
+        
+if __name__ == '__main__':
+    
+    class TestLEDRow(Frame):
+         def __init__(self, master=None):
+            Frame.__init__(self)              # Do superclass init
+            self.pack()
+            LEDRow(self, name="The Test Row", blink=1)
+            LEDRow(self, name="The Second Row", blink=1, blinkrate=2)
+            LEDRow(self, name="The Third Row")
+    root = Tk()
+    root.title('LED Row')
+    app = TestLEDRow(master=root)
+    app.mainloop()
+    root.destroy()

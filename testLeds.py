@@ -50,10 +50,10 @@ class LED:
         self.onState      = None
 
         if not bg:
-            bg = Color.PANEL
+            bg = ''
 
         ## Base frame to contain light
-        self.frame=Frame(master, relief=appearance, bg=bg, bd=bd, 
+        self.frame=Frame(master, relief=appearance, bg='', bd=bd, 
                          takefocus=takefocus)
 
         basesize = width
@@ -61,14 +61,14 @@ class LED:
 
         if self.shape == SQUARE:
             self.canvas=Canvas(self.frame, height=height, width=width, 
-                               bg=bg, bd=0, highlightthickness=0)
+                                bd=0, highlightthickness=0)
 
             self.light=self.canvas.create_rectangle(0, 0, width, height,
                                                     fill=Color.ON)
         elif self.shape == ROUND:
             r = int((basesize-2)/2)
             self.canvas=Canvas(self.frame, width=width, height=width, 
-                               highlightthickness=0, bg=bg, bd=0)
+                               highlightthickness=0, bd=0)
             if bd > 0:
                 self.border=self.canvas.create_oval(center-r, center-r, 
                                                     center+r, center+r)
@@ -78,7 +78,7 @@ class LED:
                                outline=outline)
         else:  # Default is an ARROW
             self.canvas=Canvas(self.frame, width=width, height=width,
-                               highlightthickness=0, bg=bg, bd=0)
+                               highlightthickness=0, bd=0)
             x = d
             y = d
             if orient == POINT_DOWN:
