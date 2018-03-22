@@ -25,13 +25,7 @@ class InitPanel:
         self._directoryKeys = LEDRow(self.keysFrame, name="Directory Keys").off()   
         self._contactRecords = LEDRow(self.recordsFrame, name="Contact Records").off()
         self._agencyDirectory = LEDRow(self.recordsFrame, name="Agency Directory").off()
-        
-        #self._contactKeys = LEDRow(self.left, name="Contact Keys").off()
-        #self._directoryKeys = LEDRow(self.left, name="Directory Keys").off()   
-        #self._contactRecords = LEDRow(self.left, name="Contact Records").off()
-        #self._agencyDirectory = LEDRow(self.left, name="Agency Directory").off()
-        
-        
+                    
         self._data = LEDRow(self.right, name="Data").off()
         self._output = LEDRow(self.right, name="Output").off()
         self._browserDriver = LEDRowNoMsg(self.right, name="Browser/Driver").off()
