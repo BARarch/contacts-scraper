@@ -62,9 +62,9 @@ if __name__ == '__main__':
          def __init__(self, master=None):
             Frame.__init__(self)              # Do superclass init
             self.pack()
-            LEDRow(self, name="The Test Row", blink=1).active().message('hellothere').stop_blink().off()
+            LEDRow(self, name="The Test Row", blink=1).active().message('hellothere').stop_blink().off().ready().blink().waiting()
             LEDRow(self, name="The Second Row", blink=1, blinkrate=2).waiting().stop_blink()
-            LEDRow(self, name="The Third Row").ready().blink()
+            LEDRow(self, name="The Third Row").ready().blink().stop_blink()
             
     root = Tk()
     root.title('LED Row')
