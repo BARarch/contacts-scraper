@@ -10,12 +10,27 @@ class InitPanel:
         self.left = Frame(self.frame)
         self.left.pack(side=LEFT, anchor=N, expand=True)
         self.right = Frame(self.frame)
-        self.right.pack(side=RIGHT, anchor=N, expand=True)
+        self.right.pack(side=RIGHT, anchor=N, expand=True, pady=17)
+
+        self.p = ttk.Panedwindow(self.left, orient=VERTICAL)
+        # first pane, which would get widgets gridded into it:
+        self.keysFrame = ttk.Labelframe(self.left, text='KEYS')
+        self.keysFrame.pack(side=TOP, anchor=W, expand=True)
+        self.recordsFrame = ttk.Labelframe(self.left, text='RECORDS')
+        self.recordsFrame.pack(side=TOP, anchor=W, expand=True)# second pane
+        #self.p.add(self.keysFrame)
+        #self.p.add(self.recordsFrame)
         
-        self._contactKeys = LEDRow(self.left, name="Contact Keys").off()
-        self._directoryKeys = LEDRow(self.left, name="Directory Keys").off()   
-        self._contactRecords = LEDRow(self.left, name="Contact Records").off()
-        self._agencyDirectory = LEDRow(self.left, name="Agency Directory").off()
+        self._contactKeys = LEDRow(self.keysFrame, name="Contact Keys").off()
+        self._directoryKeys = LEDRow(self.keysFrame, name="Directory Keys").off()   
+        self._contactRecords = LEDRow(self.recordsFrame, name="Contact Records").off()
+        self._agencyDirectory = LEDRow(self.recordsFrame, name="Agency Directory").off()
+        
+        #self._contactKeys = LEDRow(self.left, name="Contact Keys").off()
+        #self._directoryKeys = LEDRow(self.left, name="Directory Keys").off()   
+        #self._contactRecords = LEDRow(self.left, name="Contact Records").off()
+        #self._agencyDirectory = LEDRow(self.left, name="Agency Directory").off()
+        
         
         self._data = LEDRow(self.right, name="Data").off()
         self._output = LEDRow(self.right, name="Output").off()
@@ -98,7 +113,7 @@ if __name__ == '__main__':
             InitPanel(self)
             
     root = Tk()
-    root.title('LED Row')
+    root.title('Initialization Panel Test')
     app = TestInitPanel(master=root)
     app.mainloop()
     root.destroy()
