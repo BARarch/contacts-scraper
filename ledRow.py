@@ -4,20 +4,20 @@ from tkinter import *
 import tkinter.ttk as ttk
 from testLeds import *
 
-#PanelColor = '#545454'
+StatusColor = '#BBBBBB'
 LABELWIDTH = 20
 STATUSWIDTH = 10
 
 class LEDRow:
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
-        self.frame = Frame(master, width=300, height=300) 
+        self.frame = Frame(master) 
         self.parent = master
         self.frame.pack(expand=True, side=TOP, anchor=W, fill=X)
         
         self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey')
         self.indicator.frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
         self.name = Label(self.frame, text=name, anchor=W, width=LABELWIDTH).pack(side=LEFT,  fill=BOTH, pady=5)
-        self.status = Label(self.frame, relief=SUNKEN,fg="red", text='', width=STATUSWIDTH)
+        self.status = Label(self.frame, relief=SUNKEN, bg=StatusColor, fg="red", text='', width=STATUSWIDTH)
         self.status.pack(expand=True, fill=Y, side=RIGHT,anchor=E)
         
     def waiting(self):
@@ -54,6 +54,31 @@ class LEDRow:
     def stop_blink(self):
         self.indicator.blinkoff()
         return self
+    
+    
+class LEDRowNoMsg(LEDRow):
+    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
+        LEDRow.__init__(self, master=master, name=name, blink=blink, blinkrate=blinkrate)
+        self.status.configure(relief=FLAT, bg=master["bg"], text='',)
+        
+    def waiting(self):
+        self.indicator.blinkoff()
+        self.indicator.alarm()
+        return self
+        
+    def ready(self):
+        self.indicator.blinkoff()
+        self.indicator.turnon()
+        return self
+
+    def off(self):
+        self.indicator.blinkoff()
+        self.indicator.turnoff()
+        return self
+        
+    def message(self, msg):
+        return self
+        
         
         
 if __name__ == '__main__':
