@@ -14,9 +14,47 @@ class LEDRow:
         self.parent = master
         self.frame.pack(expand=True, side=TOP, anchor=W, fill=X)
         
-        self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey').frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
+        self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey')
+        self.indicator.frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
         self.name = Label(self.frame, text=name, anchor=W, width=LABELWIDTH).pack(side=LEFT,  fill=BOTH, pady=5)
-        self.status = Label(self.frame, relief=SUNKEN,fg="red", text='Waiting', width=STATUSWIDTH).pack(expand=True, fill=Y, side=RIGHT,anchor=E)
+        self.status = Label(self.frame, relief=SUNKEN,fg="red", text='', width=STATUSWIDTH)
+        self.status.pack(expand=True, fill=Y, side=RIGHT,anchor=E)
+        
+    def waiting(self):
+        self.status.configure(fg="red", text='Waiting')
+        self.indicator.blinkoff()
+        self.indicator.alarm()
+        return self
+        
+    def ready(self):
+        self.status.configure(fg="green", text='Ready')
+        self.indicator.blinkoff()
+        self.indicator.turnon()
+        return self
+        
+    def message(self, msg):
+        self.status.configure(fg="Black", text=msg)
+        return self
+
+    def off(self):
+        self.status.configure(text='')
+        self.indicator.blinkoff()
+        self.indicator.turnoff()
+        return self
+        
+    def active(self):
+        self.indicator.blinkoff()
+        self.indicator.warn()
+        return self
+        
+    def blink(self):
+        self.indicator.blinkon()
+        return self
+    
+    def stop_blink(self):
+        self.indicator.blinkoff()
+        return self
+        
         
 if __name__ == '__main__':
     
@@ -24,9 +62,9 @@ if __name__ == '__main__':
          def __init__(self, master=None):
             Frame.__init__(self)              # Do superclass init
             self.pack()
-            LEDRow(self, name="The Test Row", blink=1)
-            LEDRow(self, name="The Second Row", blink=1, blinkrate=2)
-            LEDRow(self, name="The Third Row")
+            LEDRow(self, name="The Test Row", blink=1).active().message('hellothere').stop_blink().off()
+            LEDRow(self, name="The Second Row", blink=1, blinkrate=2).waiting().stop_blink()
+            LEDRow(self, name="The Third Row").ready().blink()
             
     root = Tk()
     root.title('LED Row')

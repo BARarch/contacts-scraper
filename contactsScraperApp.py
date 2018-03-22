@@ -215,6 +215,8 @@ class Application(Frame):
     def change_status(self, msg):
         self.status.configure(text=msg)
         
+    
+        
         
         
     ## Progress Bar Opperations
