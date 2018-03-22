@@ -20,7 +20,7 @@ class InitPanel:
         self._data = LEDRow(self.right, name="Data").off()
         self._output = LEDRow(self.right, name="Output").off()
         self._browserDriver = LEDRowNoMsg(self.right, name="Browser/Driver").off()
-        self._contactChecker = LEDRow(self.right, name="Contact Checker").off()
+        self._contactChecker = LEDRow(self.right, name="Contact Checker").off().active().blink()
         
     ## Startup Phases from Off
     def contact_keys_waiting():
