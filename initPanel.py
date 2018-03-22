@@ -86,6 +86,10 @@ class InitPanel:
         pass
 
 if __name__ == '__main__':
+    ## Get Scraper Thread
+    ## Get initalization queue
+    ## ...and Test Startup
+    
     
     class TestInitPanel(Frame):
          def __init__(self, master=None):
