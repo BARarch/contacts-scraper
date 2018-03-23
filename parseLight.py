@@ -5,7 +5,7 @@ import tkinter.ttk as ttk
 from testLeds import *
 
 class ParseLightPanel:
-    def __init__(self, master=None width=20, top=10, bottom=10):
+    def __init__(self, master=None, width=20, top=10, bottom=10):
         pass
     
     

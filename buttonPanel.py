@@ -4,7 +4,7 @@ from tkinter import *
 import tkinter.ttk as ttk
 
 class ButtonPanel:
-    def __init__(self, master=None buttonWidths=40, top=10, bottom=10):
+    def __init__(self, master=None, handler=None, buttonWidths=40, top=10, bottom=10):
         pass
     
     

@@ -5,7 +5,7 @@ import tkinter.ttk as ttk
 
 
 class ProgressPanel:
-    def __init__(self, master=None width=50, top=10, bottom=10):
+    def __init__(self, master=None, width=50, top=10, bottom=10):
         pass
     
     
