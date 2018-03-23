@@ -131,6 +131,11 @@ if __name__ == '__main__':
             self.parent = master
             self.pack()
             self.control = ScraperControl(self)
+            self.startupQueue = queue.Queue()
+            self.commandQueue = queue.Queue()
+            self.scraperQueue = queue.Queue()
+            self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
+            self.numScrapes = 0
             
         ## Handlers    
         
@@ -148,11 +153,7 @@ if __name__ == '__main__':
 
         def startup(self):
             # Initiates Startup Tread Task
-            self.startupQueue = queue.Queue()
-            self.commandQueue = queue.Queue()
-            self.scraperQueue = queue.Queue()
             self.control.change_status("LOADING")
-            self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
             self.scraperProcess.start()
             self.parent.after(100, self.manage_startup)
 
