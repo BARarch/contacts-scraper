@@ -48,20 +48,38 @@ if __name__ == '__main__':
             Frame.__init__(self)
             self.pack()
             self.scrapeSelection = StringVar(self)
-            self.scrapeSelection.trace('w', self.change_dropdown)  # Event handler function for dropdown in handler frame
+            self.scrapeSelection.trace('w', self.change_dropdown)   # Event handler function for dropdown in handler frame
             self.control = ScraperControl(self, self)
-            #self.update()
+            
+            self.scrapeMode = 'Today'
+            self.control.parse.lightOff()
+            self.control.buttons.enable_scrape()
+            self.control.buttons.disable_quit()
+            self.control.progress.set_progress_clicks(4)            # Progress Bar is reset
         
             
         ## Handlers    
         def handle_scrape(self):
-            pass
+            self.control.buttons.enable_quit()
+            self.control.buttons.disable_dropdown()
+            self.control.buttons.disable_scrape()
+            self.control.parse.lightOn()
+            self.control.progress.advance()
+            
             
         def handle_quit(self):
-            pass
+            self.control.buttons.disable_quit()
+            self.control.buttons.enable_dropdown()
+            self.control.buttons.enable_scrape()
+            if self.control.progress.done():
+                self.control.progress.message('Scrape is Done')
+            self.control.parse.lightOff()
             
         def change_dropdown(self, *args):
-            pass
+            self.scrapeMode = self.scrapeSelection.get()
+            self.control.progress.message(self.scrapeMode)
+            self.control.progress.set_progress_clicks(4)            # Progress Bar is reset
+        
             
         def startup(self):
             pass
