@@ -9,13 +9,13 @@ class ProgressPanel:
         # Has a frame
         self.frame = Frame(master)
         self.frame.pack(expand=True)
-        self.status = Label(self.frame, relief=SUNKEN, text='Progress Panel at your service!')
-        self.status.pack(expand=True, side=TOP, anchor=W, fill=X)
+        self.status = Label(self.frame, pady=4, relief=SUNKEN, text='Progress Panel at your service!')
+        self.status.pack(expand=True, pady=0 ,ipady=0 ,side=TOP, anchor=N, fill=X)
         self.progressBarPosition = 0
         self.progressBarStops = 10
         self.progressBarState = 0
         self.progress = ttk.Progressbar(self.frame, orient='horizontal', length=400, mode='determinate', maximum=200, variable=self.progressBarPosition)
-        self.progress.pack(side=TOP, expand=True, fill=X)
+        self.progress.pack(side=TOP, expand=True, fill=X, ipady=1, pady=2)
         self.inProgress = False
         
     def move_progress(self, pos):

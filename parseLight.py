@@ -10,9 +10,9 @@ class ParseLightPanel:
         self.frame = Frame(master)
         self.parent = master
         self.frame.pack()
-        Label(self.frame, text="Parse").pack(side=TOP, expand=True, fill=X)
+        Label(self.frame, text="Parse").pack(side=TOP, expand=True, fill=X, pady=1)
         self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=0, blinkrate=1, bd=0, outline='grey')
-        self.indicator.frame.pack(side=TOP, expand=YES, padx=5, pady=1)
+        self.indicator.frame.pack(side=TOP, expand=YES, padx=5, pady=5)
         
     def lightOn(self):
         self.indicator.alarm()

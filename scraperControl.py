@@ -16,21 +16,21 @@ class ScraperControl:
     def __init__(self, master=None, handler=None):
         self.frame = Frame(master)
         self.parent = master
-        self.frame.pack()
+        self.frame.pack(padx=5)
         
         self.left = Frame(self.frame)
-        self.left.pack(side=LEFT, expand=True) 
+        self.left.pack(side=LEFT, expand=True, anchor=N, pady=7) 
         self.buttonHandler = handler
         #self.scrapeSelection = StringVar(self)
         #self.scrapeSelection.trace('w', self.buttonHandler.change_dropdown)  # Event handler function for dropdown in handler object
         self.buttons = ButtonPanel(self.left, self.buttonHandler)
         
         self.center = Frame(self.frame)
-        self.center.pack(side=LEFT, expand=True)
+        self.center.pack(side=LEFT, anchor=N, expand=True, pady=10, padx=5)
         self.progress = ProgressPanel(self.center)
         
         self.right = Frame(self.frame)
-        self.right.pack(side=LEFT, expand=True)
+        self.right.pack(side=LEFT, expand=True, padx=10, pady=10, anchor=N)
         self.parse = ParseLightPanel(self.right)
         
         #self.frame.update()
