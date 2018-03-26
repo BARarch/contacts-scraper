@@ -85,7 +85,7 @@ if __name__ == '__main__':
             self.ProgressPanel.message('Loop {}'.format(str(self.loops)))
             self.ProgressPanel.set_progress_clicks(4)
             time.sleep(.5)
-            self.parent.after(1000, self.move_loop())
+            self.parent.after(200, self.move_loop())
             
             
         def move_loop(self):
@@ -97,7 +97,7 @@ if __name__ == '__main__':
             if self.ProgressPanel.done():
                 self.ProgressPanel.message('Process Done')
                 return
-            self.parent.after(1000, self.move_loop())
+            self.parent.after(200, self.move_loop())
             
             
             

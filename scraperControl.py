@@ -5,14 +5,37 @@ import tkinter.ttk as ttk
 import queue
 import threading
 
+from buttonPanel import *
+from progressPanel import *
+from parseLight import *
+
 
 
 
 class ScraperControl:
-    def __init__(self, master=None):
+    def __init__(self, master=None, handler=None):
         self.frame = Frame(master)
         self.parent = master
         self.frame.pack()
+        
+        self.left = Frame(self.frame)
+        self.left.pack(side=LEFT, expand=True) 
+        self.buttonHandler = handler
+        #self.scrapeSelection = StringVar(self)
+        #self.scrapeSelection.trace('w', self.buttonHandler.change_dropdown)  # Event handler function for dropdown in handler object
+        self.buttons = ButtonPanel(self.left, self.buttonHandler)
+        
+        self.center = Frame(self.frame)
+        self.center.pack(side=LEFT, expand=True)
+        self.progress = ProgressPanel(self.center)
+        
+        self.right = Frame(self.frame)
+        self.right.pack(side=LEFT, expand=True)
+        self.parse = ParseLightPanel(self.right)
+        
+        #self.frame.update()
+        
+        
         
         
         
@@ -22,89 +45,39 @@ if __name__ == '__main__':
     
     class TestScrapeControl(Frame):
         def __init__(self, master=None):
-            Frame.__init__(self, master)              # Do superclass init
-            self.parent = master
+            Frame.__init__(self)
             self.pack()
-            #self.control = ScraperControl(self)
-            self.startupQueue = queue.Queue()
-            self.commandQueue = queue.Queue()
-            self.scraperQueue = queue.Queue()
-            self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
-            self.numScrapes = 0
+            self.scrapeSelection = StringVar(self)
+            self.scrapeSelection.trace('w', self.change_dropdown)  # Event handler function for dropdown in handler frame
+            self.control = ScraperControl(self, self)
+            #self.update()
+        
             
         ## Handlers    
-        
         def handle_scrape(self):
+            pass
             
-            # Initiates Scrape Thread Task
-            self.commandQueue.put({'scrape': 'TODAY'})
-            self.numScrapes = 0
-            self.parent.after(100, self.manage_scrape)
-
         def handle_quit(self):
+            pass
             
-            # Ends Scraper Thread
-            self.commandQueue.put({'stop': 1})
-            self.quit()
-
+        def change_dropdown(self, *args):
+            pass
+            
         def startup(self):
+            pass
             
-            # Initiates Startup Thread Task
-            self.scraperProcess.start()
-            self.parent.after(100, self.manage_startup)
 
 
 
         ## Process Managers
 
         def manage_startup(self):
-            # Processes Queue shared with startup tread task
-            # Initialize Google Sheets for Write
-            try:
-                packet = self.startupQueue.get(0)
-                #print(packet)
-                if 'message' in packet:
-                    msg = packet['message']
-                    if msg == 'SCRAPE SESSION OPEN':
-                        # Ready To Start
-                        pass
-                    else:
-                        # Update Message and Keep Checking
-                        
-                        self.parent.after(100, self.manage_startup)
-
-                if 'progress' in packet:
-                    if packet['progress'] == 'FINNISHED':
-                        pass
-                    else:
-                        
-                        self.parent.after(100, self.manage_startup)
-
-            except queue.Empty:
-                self.parent.after(100, self.manage_startup)
+            #see mainAppControl
+            pass
 
         def manage_scrape(self):
-            try:
-                packet = self.scraperQueue.get(0)
-                if 'done' in packet:
-                    pass
-
-                else:
-                    if 'scraping' in packet:
-                        self.numScrapes += 1
-                        
-                    if 'time' in packet:
-                        pass
-                    if 'numOrgs' in packet:
-                        self.numOrgs = packet['numOrgs']
-
-                    if 'report' in packet:
-                        pass
-                    
-                    self.parent.after(100, self.manage_scrape)
-
-            except queue.Empty:
-                self.parent.after(100, self.manage_scrape)
+            #see mainAppControl
+            pass
     
     root = Tk()
     app = TestScrapeControl(master=root)
