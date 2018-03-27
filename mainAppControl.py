@@ -8,6 +8,7 @@ import threading
 from scraperThread import *
 from initPanel import *
 from scraperControl import *
+from statusBar import *
 
 
 
@@ -27,7 +28,9 @@ class MainApplication(Frame):
         self.scrapeSelection.trace('w', self.change_dropdown)
         
         self.indicators = InitPanel(self)
+        ttk.Separator(self).pack(side=TOP, fill=X, padx=2)
         self.control = ScraperControl(self, self)
+        self.statusBar = StatusBar(self)
         self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
         
         self.numScrapes = 0
