@@ -16,7 +16,7 @@ class ScraperControl:
     def __init__(self, master=None, handler=None):
         self.frame = Frame(master)
         self.parent = master
-        self.frame.pack(padx=5)
+        self.frame.pack(side=TOP, padx=5)
         
         self.left = Frame(self.frame)
         self.left.pack(side=LEFT, expand=True, anchor=N, pady=7) 
