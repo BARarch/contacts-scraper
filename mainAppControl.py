@@ -98,20 +98,25 @@ class MainApplication(Frame):
     def manage_scrape(self):
         try:
             packet = self.scraperQueue.get(0)
+            print(packet)
             if 'done' in packet:
                 self.control.buttons.enable_scrape()
 
             else:
                 if 'scraping' in packet:
                     self.numScrapes += 1
-
+                    
+                if 'complete' in packet:
+                    self.control.progress.advance()
+                    
                 if 'time' in packet:
                     pass
                 if 'numOrgs' in packet:
                     self.numOrgs = packet['numOrgs']
-
+                    self.control.progress.set_progress_clicks(self.numOrgs)
                 if 'report' in packet:
                     pass
+                
 
                 self.parent.after(100, self.manage_scrape)
 

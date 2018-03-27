@@ -1684,6 +1684,7 @@ class ScrapeSession(object):
                 
                 vh = ContactCollector(org)
                 self.numSitePings += 1
+                ScrapeSession.push_to_app_queue({'complete': org})
 
         except Exception as e:
             print(e)
