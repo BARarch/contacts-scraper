@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter.ttk as ttk
 from ledRow import *
+import time
 
 class InitPanel:
     def __init__(self, master=None):
@@ -32,67 +33,74 @@ class InitPanel:
         self._contactChecker = LEDRow(self.right, name="Contact Checker").off().active().blink()
         
     ## Startup Phases from Off
-    def contact_keys_waiting():
-        pass
-    def contact_keys_ready():
-        pass
+    def contact_keys_waiting(self):
+        self._contactKeys.waiting()
+        
+    def contact_keys_ready(self):
+        self._contactKeys.ready()
     
-    def directory_keys_waiting():
-        pass
-    def directory_keys_ready():
-        pass
+    def directory_keys_waiting(self):
+        self._directoryKeys.waiting()
+        
+    def directory_keys_ready(self):
+        self._directoryKeys.ready()
     
-    def contact_records_waiting():
-        pass
-    def contact_records_ready():
-        pass
+    def contact_records_waiting(self):
+        self._contactRecords.waiting()
+    def contact_records_ready(self):
+        self._contactRecords.ready()
     
-    def agency_directory_waiting():
-        pass
-    def agency_directory_ready():
-        pass
+    def agency_directory_waiting(self):
+        self._agencyDirectory.waiting()
+    def agency_directory_ready(self):
+        self._agencyDirectory.ready()
     
-    def data_waiting():
-        pass
-    def data_ready():
-        pass
+    def data_waiting(self):
+        self._data.waiting()
+    def data_ready(self):
+        self._data.ready()
     
-    def output_waiting():
-        pass
-    def output_ready():
-        pass
+    def output_waiting(self):
+        self._output.waiting()
+    def output_ready(self):
+        self._output.ready()
     
-    def browser_driver_waiting():
-        pass
-    def browser_driver_ready():
-        pass
+    def browser_driver_waiting(self):
+        self._browserDriver.waiting()
+    def browser_driver_ready(self):
+        self._browserDriver.ready()
     
-    def scraper_waiting():
-        pass
+    def scraper_waiting(self):
+        self._contactChecker.message('Waiting')
       
     # Contact Scraper Open
-    def scraper_open_phase():
-        pass
+    def scraper_open_phase(self):
+        self._contactRecords.off().message("")
+        self._agencyDirectory.off().message("")
+        self._data.off().message("")
+        self._output.off().message("")
+        self._browserDriver.off().message("")
+        self._contactChecker.message('Ready').indicator.alarm()
     
     # Contact Scraper Running
-    def scraper_running_phase():
-        pass
+    def scraper_running_phase(self):
+        self._contactChecker.message('Active').blink().indicator.turnon()
     
     # Contact Scrape Feedback Methods for Init Panel
-    def request_on():
-        pass
-    def request_off():
-        pass
+    def request_on(self):
+        self._browserDriver.active()
+    def request_off(self):
+        self._browserDriver.off()
     
-    def output_on():
-        pass
-    def output_off():
-        pass
+    def output_on(self):
+        self._output.active()
+    def output_off(self):
+        self._output.off()
     
-    def agency_report_on():
-        pass
-    def agency_report_off():
-        pass
+    def agency_report_on(self):
+        self._agencyDirectory.active()
+    def agency_report_off(self):
+        self._agencyDirectory.off()
 
 if __name__ == '__main__':
     ## Get Scraper Thread
@@ -101,13 +109,69 @@ if __name__ == '__main__':
     
     
     class TestInitPanel(Frame):
-         def __init__(self, master=None):
+        def __init__(self, master=None):
             Frame.__init__(self, master)              # Do superclass init
             self.pack()
-            InitPanel(self)
+            self.ip = InitPanel(self)
+            
+        def contact_keys_waiting_test(self):
+            self.ip.contact_keys_waiting()
+            time.sleep(2)
+            self.after(200, self.directory_keys_waiting_test())
+            
+        def directory_keys_waiting_test(self):
+            self.ip.contact_keys_ready()
+            self.ip.directory_keys_waiting()
+            time.sleep(2)
+            self.after(200, self.contact_records_waiting_test())
+            
+        def contact_records_waiting_test(self):
+            self.ip.directory_keys_ready()
+            self.ip.contact_records_waiting()
+            time.sleep(2)
+            self.after(200, self.agency_directory_waiting_test()) 
+            
+        def agency_directory_waiting_test(self):
+            self.ip.contact_records_ready()
+            self.ip.agency_directory_waiting()
+            time.sleep(2)
+            self.after(200, self.data_waiting_test())
+            
+        def data_waiting_test(self):
+            self.ip.agency_directory_ready()
+            self.ip.data_waiting()
+            time.sleep(2)
+            self.after(200, self.output_waiting_test())
+            
+        def output_waiting_test(self):
+            self.ip.data_ready()
+            self.ip.output_waiting()
+            time.sleep(2)
+            self.after(200, self.browser_driver_waiting_test())
+            
+        def browser_driver_waiting_test(self):
+            self.ip.output_ready()
+            self.ip.browser_driver_waiting()
+            time.sleep(2)
+            self.after(200, self.scraper_waiting_test()) 
+            
+        def scraper_waiting_test(self):
+            self.ip.browser_driver_ready()
+            self.ip.scraper_waiting()
+            time.sleep(2)
+            self.after(200, self.scraper_open_phase_test())
+            
+        def scraper_open_phase_test(self):
+            self.ip.scraper_open_phase()
+            time.sleep(.5)
+            #self.after(200, self.scraper_running_phase_test())
+            
+        def scraper_running_phase_test(self):
+            self.ip.scraper_running_phase()
             
     root = Tk()
     root.title('Initialization Panel Test')
     app = TestInitPanel(master=root)
+    app.after(200, app.contact_keys_waiting_test())
     app.mainloop()
     root.destroy()
