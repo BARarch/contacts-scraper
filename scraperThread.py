@@ -175,21 +175,21 @@ class ScraperThread(threading.Thread):
 
         # Get Headers from google sheets
         print('KEYS')
-        self.startupQueue.put({'progress': 1})
+        self.startupQueue.put({'progress': 'START'})
         self.startupQueue.put({'message': 'KEYS'})
         contactKeys = getContactKeys(get_credentials_method)
-        self.startupQueue.put({'progress': 2})
+        self.startupQueue.put({'progress': 1})
         directoryKeys = getAgencyDirKeys(get_credentials_method)
-        self.startupQueue.put({'progress': 3})
+        self.startupQueue.put({'progress': 2})
         print('')
 
         # Get contact and orginization website data and structure with collected headings
         print('RECORDS')
         self.startupQueue.put({'message': 'RECORDS'})
         contactRecords = [sheetRecord(row, contactKeys) for row in getContacts(get_credentials_method)]
-        self.startupQueue.put({'progress': 4})
+        self.startupQueue.put({'progress': 3})
         self.orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
-        self.startupQueue.put({'progress': 5})
+        self.startupQueue.put({'progress': 4})
         print('')
 
         # Create Dataframes
@@ -197,16 +197,16 @@ class ScraperThread(threading.Thread):
         dr = pd.DataFrame(self.orgRecords)
         print('DATAFRAMES READY') 
         self.startupQueue.put({'message': 'DATAFRAMES READY',
-                        'progress': 6})
+                        'progress': 5})
         ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
 
         # Setup Contact Record Output
         cc.ContactSheetOutput.set_output(contactKeys)
-        self.startupQueue.put({'progress': 7})
+        self.startupQueue.put({'progress': 6})
         # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
         dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
         cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(self.orgRecords))
-        #self.queue.put({'progress': 'Finishd'})
+        #self.startupQueue.put({'progress': 7})
         # For this scrape session Give the Verification Handler class the contact record data
         cc.VerificationHandler.set_contactRecords(cr)
         

@@ -40,8 +40,11 @@ class ProgressPanel:
                 self.progress.step()
                 self.frame.update()
                 self.inProgress = False
+                print('Progress Bar State FINAL {}'.format(str(self.progressBarState)))
             else:
                 self.move_progress((self.progressBarState + 1) / (self.progressBarStops))
+                self.frame.update()
+                print('Progress Bar State {}'.format(str(self.progressBarState)))
         else:
             print('Progress Expired')
             self.frame.update()

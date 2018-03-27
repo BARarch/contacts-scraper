@@ -58,7 +58,7 @@ class MainApplication(Frame):
 
         # Initiates Startup Thread Task
         self.scraperProcess.start()
-        self.parent.after(100, self.manage_startup)
+        self.parent.after(100, self.manage_startup())
 
 
 
@@ -69,7 +69,7 @@ class MainApplication(Frame):
         # Initialize Google Sheets for Write
         try:
             packet = self.startupQueue.get(0)
-            #print(packet)
+            print(packet)
             if 'message' in packet:
                 msg = packet['message']
                 if msg == 'SCRAPE SESSION OPEN':
@@ -80,11 +80,17 @@ class MainApplication(Frame):
                     self.parent.after(100, self.manage_startup)
 
             if 'progress' in packet:
-                if packet['progress'] == 'FINNISHED':
-                    pass
+                if packet['progress'] == 'START':
+                    self.control.progress.set_progress_clicks(7)
+                    self.parent.after(100, self.manage_startup()) 
+                elif packet['progress'] == 'FINNISHED':
+                    self.control.progress.advance()
+                    
                 else:
-
-                    self.parent.after(100, self.manage_startup)
+                    self.control.progress.advance()
+                    
+                    self.parent.after(100, self.manage_startup())
+                    
 
         except queue.Empty:
             self.parent.after(100, self.manage_startup)
