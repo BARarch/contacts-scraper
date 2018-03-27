@@ -34,6 +34,7 @@ class LEDRow:
         
     def message(self, msg):
         self.status.configure(fg="Black", text=msg)
+        self.status.update()
         return self
 
     def off(self):

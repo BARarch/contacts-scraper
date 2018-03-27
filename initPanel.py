@@ -75,12 +75,13 @@ class InitPanel:
       
     # Contact Scraper Open
     def scraper_open_phase(self):
+        self._contactChecker.message('Ready').indicator.alarm()
         self._contactRecords.off().message("")
         self._agencyDirectory.off().message("")
         self._data.off().message("")
         self._output.off().message("")
         self._browserDriver.off().message("")
-        self._contactChecker.message('Ready').indicator.alarm()
+        
     
     # Contact Scraper Running
     def scraper_running_phase(self):
@@ -164,10 +165,30 @@ if __name__ == '__main__':
         def scraper_open_phase_test(self):
             self.ip.scraper_open_phase()
             time.sleep(.5)
-            #self.after(200, self.scraper_running_phase_test())
+            self.after(200, self.scraper_running_phase_test())
             
         def scraper_running_phase_test(self):
             self.ip.scraper_running_phase()
+            time.sleep(.5)
+            self.after(200, self.request_test())
+            
+        def request_test(self):
+            self.ip.request_on()
+            time.sleep(.2)
+            self.ip.request_off()
+            self.after(200, self.output_test())
+            
+        def output_test(self):
+            self.ip.output_on()
+            time.sleep(.2)
+            self.ip.output_off()
+            self.after(200, self.agency_report_test())
+            
+        def agency_report_test(self):
+            self.ip.agency_report_on()
+            time.sleep(.2)
+            self.ip.agency_report_off()
+            self.after(200, self.scraper_running_phase_test())
             
     root = Tk()
     root.title('Initialization Panel Test')
