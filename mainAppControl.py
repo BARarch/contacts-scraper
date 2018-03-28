@@ -43,7 +43,9 @@ class MainApplication(Frame):
         # Initiates Scrape Thread Task
         self.commandQueue.put({'scrape': 'TODAY'})
         self.control.buttons.disable_scrape()
+        self.control.buttons.disable_dropdown()
         self.numScrapes = 0
+        self.statusBar.message("Scraper is running...")
         self.parent.after(100, self.manage_scrape)
 
     def handle_quit(self):
@@ -58,6 +60,9 @@ class MainApplication(Frame):
 
         # Initiates Startup Thread Task
         self.scraperProcess.start()
+        self.statusBar.message("Startup")
+        self.statusBar.stamp('--')
+        self.control.progress.message("Loading...")
         self.parent.after(100, self.manage_startup())
 
 
@@ -69,14 +74,16 @@ class MainApplication(Frame):
         # Initialize Google Sheets for Write
         try:
             packet = self.startupQueue.get(0)
-            print(packet)
+            print('__startup:', packet)
             if 'message' in packet:
                 msg = packet['message']
                 if msg == 'SCRAPE SESSION OPEN':
                     self.control.buttons.enable_scrape()
+                    self.control.buttons.enable_dropdown()
+                    self.control.progress.message("Scrape Session Open")
+                    self.statusBar.message("Ready")
                 else:
-                    # Update Message and Keep Checking
-
+                    self.statusBar.message(msg)
                     self.parent.after(100, self.manage_startup)
 
             if 'progress' in packet:
@@ -88,7 +95,6 @@ class MainApplication(Frame):
                     
                 else:
                     self.control.progress.advance()
-                    
                     self.parent.after(100, self.manage_startup())
                     
 
@@ -98,17 +104,19 @@ class MainApplication(Frame):
     def manage_scrape(self):
         try:
             packet = self.scraperQueue.get(0)
-            print(packet)
+            print('__scrape:', packet)
             if 'done' in packet:
+                self.statusBar.message("Ready")
+                self.control.progress.message("Scrape Completed In --:--:--")
                 self.control.buttons.enable_scrape()
-
+                self.control.buttons.enable_dropdown()
+                
             else:
                 if 'scraping' in packet:
                     self.numScrapes += 1
-                    
+                    self.control.progress.message("Scraping: {}".format(packet['scraping']))
                 if 'complete' in packet:
-                    self.control.progress.advance()
-                    
+                    self.control.progress.advance()         
                 if 'time' in packet:
                     pass
                 if 'numOrgs' in packet:

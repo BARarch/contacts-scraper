@@ -14,6 +14,7 @@ class ButtonPanel:
         self.dropDown = OptionMenu(self.frame, self.handler.scrapeSelection, 'All', 'Base', 'Today', 'Error')
         self.handler.scrapeSelection.set('Today') # set the default option
         self.dropDown.pack(side=TOP, anchor=W, expand=YES, fill=X)
+        self.disable_dropdown()
         
         self.bottom = Frame(self.frame)
         self.bottom.pack(side=TOP)

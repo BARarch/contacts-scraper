@@ -24,9 +24,9 @@ class StatusBar:
         self.frame.update()
         
     def stamp(self, stamp):
-        self.stamp.configure(text=stamp)
+        self.timeStatus.configure(text=stamp)
         self.frame.update()
         
     def clear_stamp(self):
-        self.stamp.configure(text="")
+        self.timeStatus.configure(text="")
         self.frame.update()
