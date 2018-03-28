@@ -42,6 +42,7 @@ class MainApplication(Frame):
 
         # Initiates Scrape Thread Task
         self.commandQueue.put({'scrape': 'TODAY'})
+        self.indicators._contactChecker.on(why='IN USE')
         self.control.buttons.disable_scrape()
         self.control.buttons.disable_dropdown()
         self.numScrapes = 0
@@ -63,6 +64,7 @@ class MainApplication(Frame):
         self.statusBar.message("Startup")
         self.statusBar.stamp('--')
         self.control.progress.message("Loading...")
+        self.control.parse.lightOff()
         self.parent.after(100, self.manage_startup())
 
 
@@ -72,6 +74,7 @@ class MainApplication(Frame):
     def manage_startup(self):
         # Processes Queue shared with startup tread task
         # Initialize Google Sheets for Write
+        comeBack = True
         try:
             packet = self.startupQueue.get(False)
             print('__startup:', packet)
@@ -84,20 +87,28 @@ class MainApplication(Frame):
                     self.statusBar.message("Ready")
                 else:
                     self.statusBar.message(msg)
-                    self.parent.after(100, self.manage_startup)
+                    
 
+            if '__waiting' in packet:
+                whosWaiting = packet['__waiting']
+                
+            if '__ready' in packet:
+                whosReady = packet['__ready']
+                
             if 'progress' in packet:
                 if packet['progress'] == 'START':
                     self.control.progress.set_progress_clicks(8)
                     self.parent.after(100, self.manage_startup()) 
                 elif packet['progress'] == 'FINNISHED':
                     self.control.progress.advance()
-                    #self.control.progress.advance()
-                    
+                    self.indicators._contactChecker.off()
+                    comeBack = False                    ## Terminate Startup Loop
                 else:
                     self.control.progress.advance()
-                    self.parent.after(100, self.manage_startup())
-                    
+            
+            if comeBack:
+                self.parent.after(100, self.manage_startup())
+                             
 
         except queue.Empty:
             self.parent.after(100, self.manage_startup)
@@ -111,6 +122,7 @@ class MainApplication(Frame):
                 self.control.progress.message("Scrape Completed In --:--:--")
                 self.control.buttons.enable_scrape()
                 self.control.buttons.enable_dropdown()
+                self.indicators._contactChecker.off()
                 
             else:
                 if 'scraping' in packet:

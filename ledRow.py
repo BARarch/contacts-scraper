@@ -42,6 +42,12 @@ class LEDRow:
         self.indicator.blinkoff()
         self.indicator.turnoff()
         return self
+    
+    def on(self, why=''):
+        self.status.configure(fg="green", text=why)
+        self.indicator.blinkoff()
+        self.indicator.turnon()
+        return self
         
     def active(self):
         self.indicator.blinkoff()

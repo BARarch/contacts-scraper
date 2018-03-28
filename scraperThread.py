@@ -152,6 +152,17 @@ def sheetRecord(row, recordKeys):
 
 
 class ScraperThread(threading.Thread):
+    
+    ContactKeysVal = 'ck'
+    DirectoryKeysVal = 'dk'
+    ContactRecordsVal = 'cr'
+    AgencyDirectoryVal = 'ad'
+    DataVal = 'd'
+    OutputVal = 'o'
+    BrowserDriverVal = 'bd'
+    ContactCheckerVal = 'cc'
+    
+    
     def __init__(self, startupHandle, commandHandle, scraperHandle):
         threading.Thread.__init__(self)
         self.startupQueue = startupHandle
@@ -176,49 +187,62 @@ class ScraperThread(threading.Thread):
         # Get Headers from google sheets
         print('KEYS')
         self.startupQueue.put({'progress': 'START'})
-        self.startupQueue.put({'message': 'KEYS'})
+        self.startupQueue.put({'message': 'KEYS',
+                               '__waiting': ScraperThread.ContactKeysVal})
         contactKeys = getContactKeys(get_credentials_method)
-        self.startupQueue.put({'progress': 1})
+        self.startupQueue.put({'progress': 1,
+                               '__ready': ScraperThread.ContactKeysVal,
+                               '__waiting': ScraperThread.DirectoryKeysVal})
         directoryKeys = getAgencyDirKeys(get_credentials_method)
-        self.startupQueue.put({'progress': 2})
+        self.startupQueue.put({'progress': 2,
+                               '__ready': ScraperThread.DirectoryKeysVal})
         print('')
 
         # Get contact and orginization website data and structure with collected headings
         print('RECORDS')
-        self.startupQueue.put({'message': 'RECORDS'})
+        self.startupQueue.put({'message': 'RECORDS',
+                               '__waiting': ScraperThread.ContactRecordsVal})
         contactRecords = [sheetRecord(row, contactKeys) for row in getContacts(get_credentials_method)]
-        self.startupQueue.put({'progress': 3})
+        self.startupQueue.put({'progress': 3,
+                               '__ready': ScraperThread.ContactRecordsVal,
+                               '__waiting': ScraperThread.AgencyDirectoryVal})
         self.orgRecords = [sheetRecord(row, directoryKeys) for row in getAgencyDir(get_credentials_method)]
-        self.startupQueue.put({'progress': 4})
+        self.startupQueue.put({'progress': 4,
+                               '__ready': ScraperThread.AgencyDirectoryVal})
         print('')
 
         # Create Dataframes
+        self.startupQueue.put({'__waiting': ScraperThread.DataVal})
         cr = pd.DataFrame(contactRecords)
         dr = pd.DataFrame(self.orgRecords)
         print('DATAFRAMES READY') 
         self.startupQueue.put({'message': 'DATAFRAMES READY',
-                        'progress': 5})
+                               'progress': 5,
+                               '__ready': ScraperThread.DataVal})
         ## //////////////////  Initialize Contact Checker Classes with Fresh Data  \\\\\\\\\\\\\\\\\\\
 
         # Setup Contact Record Output
+        self.startupQueue.put({'__waiting': ScraperThread.OutputVal})
         cc.ContactSheetOutput.set_output(contactKeys)
-        self.startupQueue.put({'progress': 6})
+        self.startupQueue.put({'progress': 6,
+                               '__ready': ScraperThread.OutputVal,
+                               '__waiting': ScraperThread.BrowserDriverVal})
         # For this scrape session Give the Verification Handler class an Orgsession with Organization Records
         dm.OrgSession.set_browser_path()                                 ## IMPORTANT STEP: The browser path must be set to the current working directory which varies for different machines
         cc.VerificationHandler.set_orgRecords(dm.HeadlessOrgSession(self.orgRecords))
-        self.startupQueue.put({'progress': 7})
+        self.startupQueue.put({'progress': 7,
+                               '__ready': ScraperThread.BrowserDriverVal,
+                               '__waiting': ScraperThread.ContactCheckerVal})
         # For this scrape session Give the Verification Handler class the contact record data
         cc.VerificationHandler.set_contactRecords(cr)
-        
         cc.ScrapeSession.set_app_scraper_queue(self.scraperQueue)
         cc.ScrapeSession.set_app_command_queue(self.commandQueue)
         print('CONTACT CHECKER READY')
-        
-
         print('SCRAPE SESSION OPEN')
         print('')
         self.startupQueue.put({'message': 'SCRAPE SESSION OPEN',
-                               'progress': 'FINNISHED'})
+                               'progress': 'FINNISHED',
+                               '__ready': ScraperThread.ContactCheckerVal})
 
             
     def listen_for_cmd(self):
