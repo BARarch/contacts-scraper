@@ -73,7 +73,7 @@ class MainApplication(Frame):
         # Processes Queue shared with startup tread task
         # Initialize Google Sheets for Write
         try:
-            packet = self.startupQueue.get(0)
+            packet = self.startupQueue.get(False)
             print('__startup:', packet)
             if 'message' in packet:
                 msg = packet['message']
@@ -88,10 +88,11 @@ class MainApplication(Frame):
 
             if 'progress' in packet:
                 if packet['progress'] == 'START':
-                    self.control.progress.set_progress_clicks(7)
+                    self.control.progress.set_progress_clicks(8)
                     self.parent.after(100, self.manage_startup()) 
                 elif packet['progress'] == 'FINNISHED':
                     self.control.progress.advance()
+                    #self.control.progress.advance()
                     
                 else:
                     self.control.progress.advance()
@@ -103,7 +104,7 @@ class MainApplication(Frame):
 
     def manage_scrape(self):
         try:
-            packet = self.scraperQueue.get(0)
+            packet = self.scraperQueue.get(False)
             print('__scrape:', packet)
             if 'done' in packet:
                 self.statusBar.message("Ready")

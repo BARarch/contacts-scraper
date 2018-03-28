@@ -20,31 +20,53 @@ class ProgressPanel:
         
     def move_progress(self, pos):
         points = pos * self.progress['maximum'] - 1
+        #print('__moveProgresstoState', pos, '__current', self.progress['value'], '__value', points)
         
         while self.progress['value'] < points:
+            if not self.inProgress:
+                #print('Progress Bar terminated mid run prior to step')
+                break
             self.progress.step()
             self.frame.update()
+            #print('__value', self.progress['value'])
             time.sleep(.01)
-            
+
         #print(self.progress['value'])
-            
+    
+    def finnishSequence(self):
+        #print('__progressWeAreFinnshing')
+        # Move Bar to End
+        self.move_progress(1/1)
+        
+        # Set Flag
+        self.inProgress = False
+        
+        # Final Step
+        self.progress.step()
+        self.frame.update()
+        
     def set_progress_clicks(self, clicks):
         self.progressBarStops = clicks
         self.restart()
         return self
     
     def advance(self):
+        ## Timing Error ## NEEDS FIXING ## Race Condition
+        ## If two calls to the advance() method occur within the time it takes for a progress bar to travel
+        ## progress bar locks until it is reset.  The advance needs to have accomodate a collistion or block calls
         if self.inProgress:
             self.progressBarState += 1
             if self.progressBarState == (self.progressBarStops):
-                self.progress.step()
-                self.frame.update()
-                self.inProgress = False
-                print('Progress Bar State FINAL {}'.format(str(self.progressBarState)))
+                #print('__progressFINALStateCall', self.progressBarState)
+                self.finnishSequence()
+                #print('Progress Bar State FINAL {}'.format(str(self.progressBarState)))
+                #print('__progressFinalValue', self.progress['value'])
             else:
+                #print('__progressStateCall', self.progressBarState)
                 self.move_progress((self.progressBarState + 1) / (self.progressBarStops))
                 self.frame.update()
-                print('Progress Bar State {}'.format(str(self.progressBarState)))
+                #print('Progress Bar State {}'.format(str(self.progressBarState)))
+                #print('__progressValue', self.progress['value'])
         else:
             print('Progress Expired')
             self.frame.update()
