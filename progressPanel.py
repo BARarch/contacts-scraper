@@ -33,7 +33,7 @@ class ProgressPanel:
 
         #print(self.progress['value'])
     
-    def finnishSequence(self):
+    def finnish_sequence(self):
         #print('__progressWeAreFinnshing')
         # Move Bar to End
         self.move_progress(1/1)
@@ -58,7 +58,7 @@ class ProgressPanel:
             self.progressBarState += 1
             if self.progressBarState == (self.progressBarStops):
                 #print('__progressFINALStateCall', self.progressBarState)
-                self.finnishSequence()
+                self.finnish_sequence()
                 #print('Progress Bar State FINAL {}'.format(str(self.progressBarState)))
                 #print('__progressFinalValue', self.progress['value'])
             else:

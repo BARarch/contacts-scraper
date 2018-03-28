@@ -94,7 +94,7 @@ class MainApplication(Frame):
                 if whosWaiting is ScraperThread.ContactKeysVal:
                     pass
                 if whosWaiting is ScraperThread.DirectoryKeysVal:
-                    pass
+                    print('Directory Keys are waiting')
                 if whosWaiting is ScraperThread.ContactRecordsVal:
                     pass
                 if whosWaiting is ScraperThread.AgencyDirectoryVal:

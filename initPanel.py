@@ -14,13 +14,10 @@ class InitPanel:
         self.right.pack(side=RIGHT, anchor=N, expand=True, pady=17)
 
         self.p = ttk.Panedwindow(self.left, orient=VERTICAL)
-        # first pane, which would get widgets gridded into it:
         self.keysFrame = ttk.Labelframe(self.left, text='KEYS')
         self.keysFrame.pack(side=TOP, anchor=W, expand=True)
         self.recordsFrame = ttk.Labelframe(self.left, text='RECORDS')
-        self.recordsFrame.pack(side=TOP, anchor=W, expand=True)# second pane
-        #self.p.add(self.keysFrame)
-        #self.p.add(self.recordsFrame)
+        self.recordsFrame.pack(side=TOP, anchor=W, expand=True)# second panes
         
         self._contactKeys = LEDRow(self.keysFrame, name="Contact Keys").off()
         self._directoryKeys = LEDRow(self.keysFrame, name="Directory Keys").off()   
