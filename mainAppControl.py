@@ -91,9 +91,41 @@ class MainApplication(Frame):
 
             if '__waiting' in packet:
                 whosWaiting = packet['__waiting']
+                if whosWaiting is ScraperThread.ContactKeysVal:
+                    pass
+                if whosWaiting is ScraperThread.DirectoryKeysVal:
+                    pass
+                if whosWaiting is ScraperThread.ContactRecordsVal:
+                    pass
+                if whosWaiting is ScraperThread.AgencyDirectoryVal:
+                    pass
+                if whosWaiting is ScraperThread.DataVal:
+                    pass
+                if whosWaiting is ScraperThread.OutputVal:
+                    pass
+                if whosWaiting is ScraperThread.BrowserDriverVal:
+                    pass
+                if whosWaiting is ScraperThread.ContactCheckerVal:
+                    pass
                 
             if '__ready' in packet:
                 whosReady = packet['__ready']
+                if whosReady is ScraperThread.ContactKeysVal:
+                    pass
+                if whosReady is ScraperThread.DirectoryKeysVal:
+                    pass
+                if whosReady is ScraperThread.ContactRecordsVal:
+                    pass
+                if whosReady is ScraperThread.AgencyDirectoryVal:
+                    pass
+                if whosReady is ScraperThread.DataVal:
+                    pass
+                if whosReady is ScraperThread.OutputVal:
+                    pass
+                if whosReady is ScraperThread.BrowserDriverVal:
+                    pass
+                if whosReady is ScraperThread.ContactCheckerVal:
+                    pass
                 
             if 'progress' in packet:
                 if packet['progress'] == 'START':
