@@ -8,6 +8,8 @@ import time
 import datetime as dt
 import os
 
+import queue
+
 
 # Company Directory Manager Classes
 class DirectoryManager(object):
@@ -15,6 +17,7 @@ class DirectoryManager(object):
     ## the directory as well as it access and packaging functions will opporate as utility functions, these
     ## the routines of this class will call those utility functions
     get_credentials = smgs.modelInit()
+    scraperQueue = None
 
     def __init__(self, orgRecords):
         self.orgRecords = orgRecords
@@ -39,6 +42,8 @@ class DirectoryManager(object):
     def writeRecordRow(self, row, index):
         """Google Sheets API Code.
         """
+        DirectoryManager.dir_on('__recordRow')
+        
         credentials = DirectoryManager.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -56,12 +61,14 @@ class DirectoryManager(object):
 
         result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
                                                         valueInputOption=value_input_option, body=body).execute()
-
+        DirectoryManager.dir_off('__recordRow')
         return result
 
     def writeRecordNote(self, note, index):
         """Google Sheets API Code.
         """
+        DirectoryManager.dir_on('__recordNote')
+
         credentials = DirectoryManager.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -79,9 +86,23 @@ class DirectoryManager(object):
 
         result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
                                                         valueInputOption=value_input_option, body=body).execute()
-
+        DirectoryManager.dir_off('__recordNote')
         return result
-    
+
+    @classmethod
+    def set_app_scraper_queue(cls, q):
+        DirectoryManager.scraperQueue = q
+
+    @classmethod
+    def dir_on(cls, place):
+        if DirectoryManager.scraperQueue:
+            DirectoryManager.scraperQueue.put({'__DIRON': place})
+
+    @classmethod
+    def dir_off(cls, place):
+        if DirectoryManager.scraperQueue:
+            DirectoryManager.scraperQueue.put({'__DIROFF': place})
+
 
 class OrgSession(DirectoryManager):
     browserPath = '/Users/Anthony/scripts/Contacts-Scraper/Drivers/chromedriver' # change path as needed 

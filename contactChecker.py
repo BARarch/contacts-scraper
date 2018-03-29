@@ -1412,6 +1412,7 @@ class ContactSheetOutput(object):
     initialRow = 7
     currentRow = 7
     outputSheetName = 'Samples'
+    scraperQueue = None
 
     def __init__(self, name):
         self.name = name
@@ -1419,6 +1420,8 @@ class ContactSheetOutput(object):
     def output_single_row(self, row):
         """Google Sheets API Code.
         """
+        ContactSheetOutput.out_on('__singleRow')
+
         credentials = ContactSheetOutput.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -1443,11 +1446,14 @@ class ContactSheetOutput(object):
         else:
             ContactSheetOutput.currentRow += 1
 
+        ContactSheetOutput.out_off('__singleRow')
         return result 
 
     def output_batch_row(self, rows):
         """Google Sheets API Code.
         """
+        ContactSheetOutput.out_on('__contacts')
+
         credentials = ContactSheetOutput.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -1471,6 +1477,7 @@ class ContactSheetOutput(object):
         else:
             ContactSheetOutput.currentRow += len(rows)
 
+        ContactSheetOutput.out_off('__contacts')
         return result
 
     def get_contact_keys(self):
@@ -1508,6 +1515,21 @@ class ContactSheetOutput(object):
     @classmethod
     def change_output_sheet_name(cls, name):
         ContactSheetOutput.outputSheetName = name
+
+    @classmethod
+    def set_app_scraper_queue(cls, q):
+        ContactSheetOutput.scraperQueue = q
+
+    @classmethod
+    def out_on(cls, place):
+        if ContactSheetOutput.scraperQueue:
+            ContactSheetOutput.scraperQueue.put({'__OUTON': place})
+
+    @classmethod
+    def out_off(cls, place):
+        if ContactSheetOutput.scraperQueue:
+            ContactSheetOutput.scraperQueue.put({'__OUTOFF': place})
+
        
 
 
@@ -1523,6 +1545,8 @@ class NewContactSheetOutput(ContactSheetOutput):
            with weaving the information from the new contact with the organization information from the other columns.
            These will be filled in to accompany First Name Last Name and Tittle for the new contacts 
         """
+        ContactSheetOutput.out_on('__newContacts')
+
         credentials = ContactSheetOutput.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -1546,6 +1570,7 @@ class NewContactSheetOutput(ContactSheetOutput):
         else:
             ContactSheetOutput.currentRow += len(values)
 
+        ContactSheetOutput.out_off('__newContacts')
         return result
 
     @staticmethod
@@ -1584,6 +1609,8 @@ class SurrogateErrorOutput(ContactSheetOutput):
     def output_batch_row(self, rows, errorMessage):
         """Google Sheets API Code. Here at SurrogateErrorOutput we append the error message information to the end of each row 
         """
+        ContactSheetOutput.out_on('__error')
+
         credentials = ContactSheetOutput.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -1608,6 +1635,8 @@ class SurrogateErrorOutput(ContactSheetOutput):
         else:
             ContactSheetOutput.currentRow += len(values)
 
+
+        ContactSheetOutput.out_off('__error')
         return result
         
     @staticmethod

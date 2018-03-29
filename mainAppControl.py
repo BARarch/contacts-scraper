@@ -150,6 +150,7 @@ class MainApplication(Frame):
 
     def manage_scrape(self):
         try:
+            comeBack = True
             packet = self.scraperQueue.get(False)
             print('__scrape:', packet)
             if 'done' in packet:
@@ -158,22 +159,29 @@ class MainApplication(Frame):
                 self.control.buttons.enable_scrape()
                 self.control.buttons.enable_dropdown()
                 self.indicators._contactChecker.off()
-                
-            else:
-                if 'scraping' in packet:
-                    self.numScrapes += 1
-                    self.control.progress.message("Scraping: {}".format(packet['scraping']))
-                if 'complete' in packet:
-                    self.control.progress.advance()         
-                if 'time' in packet:
-                    pass
-                if 'numOrgs' in packet:
-                    self.numOrgs = packet['numOrgs']
-                    self.control.progress.set_progress_clicks(self.numOrgs)
-                if 'report' in packet:
-                    pass
-                
+                comeBack = False    
+            if 'scraping' in packet:
+                self.numScrapes += 1
+                self.control.progress.message("Scraping: {}".format(packet['scraping']))
+            if 'complete' in packet:
+                self.control.progress.advance()         
+            if 'time' in packet:
+                pass
+            if 'numOrgs' in packet:
+                self.numOrgs = packet['numOrgs']
+                self.control.progress.set_progress_clicks(self.numOrgs)
+            if 'report' in packet:
+                pass
+            if '__DIRON' in packet:
+                self.indicators.agency_report_on()
+            if '__DIROFF' in packet:
+                self.indicators.agency_report_off()
+            if '__OUTON' in packet:
+                self.indicators.output_on()
+            if '__OUTOFF' in packet:
+                self.indicators.output_off()
 
+            if comeBack:
                 self.parent.after(100, self.manage_scrape)
 
         except queue.Empty:
