@@ -126,6 +126,7 @@ class MainApplication(Frame):
                     self.indicators.browser_driver_ready()
                 if whosReady is ScraperThread.ContactCheckerVal:
                     self.indicators.scraper_open_phase()
+                    
                 
             if 'progress' in packet:
                 if packet['progress'] == 'START':
