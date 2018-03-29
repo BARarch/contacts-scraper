@@ -80,7 +80,6 @@ class LEDRowNoMsg(LEDRow):
 
     def off(self):
         self.indicator.blinkoff()
-        print("LED with No Msg TURNOFF")
         self.indicator.turnoff()
         return self
         
