@@ -92,45 +92,44 @@ class MainApplication(Frame):
             if '__waiting' in packet:
                 whosWaiting = packet['__waiting']
                 if whosWaiting is ScraperThread.ContactKeysVal:
-                    pass
+                    self.indicators.contact_keys_waiting()
                 if whosWaiting is ScraperThread.DirectoryKeysVal:
-                    print('Directory Keys are waiting')
+                    self.indicators.directory_keys_waiting()
                 if whosWaiting is ScraperThread.ContactRecordsVal:
-                    pass
+                    self.indicators.contact_records_waiting()
                 if whosWaiting is ScraperThread.AgencyDirectoryVal:
-                    pass
+                    self.indicators.agency_directory_waiting()
                 if whosWaiting is ScraperThread.DataVal:
-                    pass
+                    self.indicators.data_waiting()
                 if whosWaiting is ScraperThread.OutputVal:
-                    pass
+                    self.indicators.output_waiting()
                 if whosWaiting is ScraperThread.BrowserDriverVal:
-                    pass
+                    self.indicators.browser_driver_waiting()
                 if whosWaiting is ScraperThread.ContactCheckerVal:
-                    pass
+                    self.indicators.scraper_waiting()
                 
             if '__ready' in packet:
                 whosReady = packet['__ready']
                 if whosReady is ScraperThread.ContactKeysVal:
-                    pass
+                    self.indicators.contact_keys_ready()
                 if whosReady is ScraperThread.DirectoryKeysVal:
-                    pass
+                    self.indicators.directory_keys_ready()
                 if whosReady is ScraperThread.ContactRecordsVal:
-                    pass
+                    self.indicators.contact_records_ready()
                 if whosReady is ScraperThread.AgencyDirectoryVal:
-                    pass
+                    self.indicators.agency_directory_ready()
                 if whosReady is ScraperThread.DataVal:
-                    pass
+                    self.indicators.data_ready()
                 if whosReady is ScraperThread.OutputVal:
-                    pass
+                    self.indicators.output_ready()
                 if whosReady is ScraperThread.BrowserDriverVal:
-                    pass
+                    self.indicators.browser_driver_ready()
                 if whosReady is ScraperThread.ContactCheckerVal:
-                    pass
+                    self.indicators.scraper_open_phase()
                 
             if 'progress' in packet:
                 if packet['progress'] == 'START':
-                    self.control.progress.set_progress_clicks(8)
-                    self.parent.after(100, self.manage_startup()) 
+                    self.control.progress.set_progress_clicks(8) 
                 elif packet['progress'] == 'FINNISHED':
                     self.control.progress.advance()
                     self.indicators._contactChecker.off()

@@ -72,17 +72,13 @@ class InitPanel:
       
     # Contact Scraper Open
     def scraper_open_phase(self):
-        self._contactChecker.message('Ready').indicator.alarm()
+        #self._contactChecker.message('Ready').indicator.alarm()
         self._contactRecords.off().message("")
         self._agencyDirectory.off().message("")
         self._data.off().message("")
         self._output.off().message("")
-        self._browserDriver.off().message("")
+        self._browserDriver.off()
         
-    
-    # Contact Scraper Running
-    def scraper_running_phase(self):
-        self._contactChecker.message('Active').blink().indicator.turnon()
     
     # Contact Scrape Feedback Methods for Init Panel
     def request_on(self):

@@ -101,10 +101,12 @@ class LED:
 
     def turnon(self):
         self.status = STATUS_ON
+        #print('TURNON')
         if not self.blink: self.update()
 
     def turnoff(self):
         self.status = STATUS_OFF
+        #print('TURNOFF')
         if not self.blink: self.update()
 
     def alarm(self):
