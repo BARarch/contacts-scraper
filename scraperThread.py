@@ -239,6 +239,7 @@ class ScraperThread(threading.Thread):
         cc.VerificationHandler.set_contactRecords(cr)
         cc.ScrapeSession.set_app_scraper_queue(self.scraperQueue)
         cc.ContactSheetOutput.set_app_scraper_queue(self.scraperQueue)
+        cc.ContactCollector.set_app_scraper_queue(self.scraperQueue)
         dm.DirectoryManager.set_app_scraper_queue(self.scraperQueue)
         dm.OrgQuery.set_app_scraper_queue(self.scraperQueue)
         cc.ScrapeSession.set_app_command_queue(self.commandQueue)
