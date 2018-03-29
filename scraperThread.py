@@ -10,6 +10,8 @@ import time
 import queue
 import threading
 
+
+
 def getContacts(get_credentials_method):
     """Google Sheets API Code.
     Pulls urls for all NFL Team RSS Feeds
