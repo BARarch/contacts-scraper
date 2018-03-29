@@ -42,7 +42,14 @@ class DirectoryManager(object):
     def writeRecordRow(self, row, index):
         """Google Sheets API Code.
         """
-        DirectoryManager.dir_on('__recordRow')
+        
+        try:
+            timeString = '{} {}'.format(str(row[0][1]), row[0][2])
+            print(timeString)
+            DirectoryManager.dir_on_with_time('__recordRow', timeString )
+        except BaseException as e:
+            print(e)
+
 
         credentials = DirectoryManager.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
@@ -62,6 +69,7 @@ class DirectoryManager(object):
         result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
                                                         valueInputOption=value_input_option, body=body).execute()
         DirectoryManager.dir_off('__recordRow')
+
         return result
 
     def writeRecordNote(self, note, index):
@@ -97,6 +105,12 @@ class DirectoryManager(object):
     def dir_on(cls, place):
         if DirectoryManager.scraperQueue:
             DirectoryManager.scraperQueue.put({'__DIRON': place})
+
+    @classmethod
+    def dir_on_with_time(cls, place, timeString):
+        if DirectoryManager.scraperQueue:
+            DirectoryManager.scraperQueue.put({'__DIRON': place,
+                                               'time': timeString})
 
     @classmethod
     def dir_off(cls, place):

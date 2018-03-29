@@ -164,9 +164,10 @@ class MainApplication(Frame):
                 self.numScrapes += 1
                 self.control.progress.message("Scraping: {}".format(packet['scraping']))
             if 'complete' in packet:
-                self.control.progress.advance()         
+                self.control.progress.advance()
+                self.statusBar.stamp('')         
             if 'time' in packet:
-                pass
+                self.statusBar.stamp(packet['time'])
             if 'numOrgs' in packet:
                 self.numOrgs = packet['numOrgs']
                 self.control.progress.set_progress_clicks(self.numOrgs)
