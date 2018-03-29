@@ -43,7 +43,7 @@ class DirectoryManager(object):
         """Google Sheets API Code.
         """
         DirectoryManager.dir_on('__recordRow')
-        
+
         credentials = DirectoryManager.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -255,16 +255,21 @@ class BatchSessionPing(HeadOrgSession):
 
 class OrgQuery(object):
     stripped_characters = ['\n', '\r', '\t', '\xa0']
+    scraperQueue = None
+
     def __init__(self, link, browser):
         self.link = link
         try:
+            OrgQuery.request_on(self.link)
             start = time.clock()
             self.query = browser.get(link)
             self.responseTime = time.clock() - start
         except TimeoutException:
             self.timeOut = True
+            OrgQuery.request_off('Timed out')
         else:
             self.timeOut = False
+            OrgQuery.request_off(self.link)
 
         try:
             self.pageSource = browser.page_source
@@ -319,5 +324,20 @@ class OrgQuery(object):
             slashed = slashed.replace(c, ' ')
 
         return slashed
+
+    @classmethod
+    def set_app_scraper_queue(cls, q):
+        OrgQuery.scraperQueue = q
+
+    @classmethod
+    def request_on(cls, place):
+        if OrgQuery.scraperQueue:
+            OrgQuery.scraperQueue.put({'__REQUESTON': place})
+
+    @classmethod
+    def request_off(cls, place):
+        if OrgQuery.scraperQueue:
+            OrgQuery.scraperQueue.put({'__REQUESTOFF': place})
+
 
     

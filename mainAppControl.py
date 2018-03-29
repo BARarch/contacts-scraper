@@ -180,6 +180,14 @@ class MainApplication(Frame):
                 self.indicators.output_on()
             if '__OUTOFF' in packet:
                 self.indicators.output_off()
+            if '__PARSEON' in packet:
+                self.control.parse.lightOn()
+            if '__PARSEOFF' in packet:
+                self.control.parse.lightOff()
+            if '__REQUESTON' in packet:
+                self.indicators.request_on()
+            if '__REQUESTOFF' in packet:
+                self.indicators.request_off()
 
             if comeBack:
                 self.parent.after(100, self.manage_scrape)

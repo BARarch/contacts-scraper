@@ -240,6 +240,7 @@ class ScraperThread(threading.Thread):
         cc.ScrapeSession.set_app_scraper_queue(self.scraperQueue)
         cc.ContactSheetOutput.set_app_scraper_queue(self.scraperQueue)
         dm.DirectoryManager.set_app_scraper_queue(self.scraperQueue)
+        dm.OrgQuery.set_app_scraper_queue(self.scraperQueue)
         cc.ScrapeSession.set_app_command_queue(self.commandQueue)
         print('CONTACT CHECKER READY')
         print('SCRAPE SESSION OPEN')
