@@ -34,6 +34,7 @@ class MainApplication(Frame):
         self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
         
         self.numScrapes = 0
+        self.report = None
         
 
     ## Handlers    
@@ -174,7 +175,8 @@ class MainApplication(Frame):
             if 'report' in packet:
                 pass
             if '__DIRON' in packet:
-                self.indicators.agency_report_on()
+                if packet['__DIRON'] == "__recordRow":
+                    self.indicators.agency_report_on()
             if '__DIROFF' in packet:
                 self.indicators.agency_report_off()
             if '__OUTON' in packet:
@@ -185,7 +187,7 @@ class MainApplication(Frame):
                 self.control.parse.lightOn()
             if '__PARSEOFF' in packet:
                 self.control.parse.lightOff()
-            if '__REQUESTON' in packet:
+            if '__REQUESTON' in packet:     
                 self.indicators.request_on()
             if '__REQUESTOFF' in packet:
                 self.indicators.request_off()

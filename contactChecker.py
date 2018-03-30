@@ -544,11 +544,12 @@ class ContactCollector(ContactScraperVerifier):
 
         else:
             try:
-                ContactCollector.parse_on()
                 if self.noGm == 1:  ## Single Grandmother Case
+                    ContactCollector.parse_on()
                     self.c = Processor(self.gm, self.vPointers)
                     ContactCollector.parse_off()
                 elif (self.noGm == 0) and (len(self.vPointers) == 1): ## No GrandMother Single Verfied Pointer - Try this!
+                    ContactCollector.parse_on()
                     self.c = Processor(self.vPointers[0].get_mother_element().parent, self.vPointers)
                     ContactCollector.parse_off()
                 else: ## TERMINAL STATE IN THIS BLOCK
@@ -556,12 +557,11 @@ class ContactCollector(ContactScraperVerifier):
                 
                     ## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there were not the right number of Grandmas
                     ContactScraperVerifier.add_to_not_extracted_dict('Not the right number of Grandmothers %s' % str(self.noGm))
-                    ContactCollector.parse_off('Not the right number of Grandmothers')
-
+                    
             except: ## TERMINAL STATE IN THIS BLOCK
                 ## Some Mysterious Extender/ScraperError no Need for serrogate output
                 print('Extender/Scraper Error - NO Extenders')
-                ContactCollector.parse_off('No Extenders')
+                
 
                 ## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there was an exception in the extraction process
                 ContactScraperVerifier.add_to_not_extracted_dict('Extractor exception in extraction process')
