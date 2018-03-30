@@ -528,9 +528,10 @@ class ContactCollector(ContactScraperVerifier):
             self.write_contact_pointers()
 
 
-        except:  ## TERMINAL STATE IN THIS BLOCK
+        except BaseException as e:  ## TERMINAL STATE IN THIS BLOCK
             ## Link DID NOT Open
             print("Link DID NOT Open Properly")
+            print(e)
             self.errorOutput = SurrogateErrorOutput(org)
 
             ## Reset Browser
@@ -1691,6 +1692,8 @@ class ScrapeSession(object):
                     'American Marketing Association (AMA)']
 
     errorCases = ['Arizona School Boards Association',
+                  'Society of Petroleum Engineers',
+                  'SSPC: the Society for Protective Coatings',
                   'American Association of Diabetes Educators']
 
     baseCase = ['National Association for Multi-Ethnicity In Communications (NAMIC)']
