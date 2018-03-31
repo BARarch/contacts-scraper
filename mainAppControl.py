@@ -40,13 +40,13 @@ class MainApplication(Frame):
     ## Handlers    
 
     def handle_scrape(self):
-
         # Initiates Scrape Thread Task
         self.commandQueue.put({'scrape': 'TODAY'})
         self.indicators._contactChecker.on(why='IN USE')
         self.control.buttons.disable_scrape()
         self.control.buttons.disable_dropdown()
         self.numScrapes = 0
+        self.report = None
         self.statusBar.message("Scraper is running...")
         self.parent.after(100, self.manage_scrape)
 
@@ -156,7 +156,10 @@ class MainApplication(Frame):
             print('__scrape:', packet)
             if 'done' in packet:
                 self.statusBar.message("Ready")
-                self.control.progress.message("Scrape Completed In --:--:--")
+                if self.report:
+                    self.control.progress.message("Scrape Completed In {}".format(self.report['time of scrape']))
+                else:
+                    self.control.progress.message("Scrape Completed In --:--:--")
                 self.control.buttons.enable_scrape()
                 self.control.buttons.enable_dropdown()
                 self.indicators._contactChecker.off()
@@ -173,7 +176,7 @@ class MainApplication(Frame):
                 self.numOrgs = packet['numOrgs']
                 self.control.progress.set_progress_clicks(self.numOrgs)
             if 'report' in packet:
-                pass
+                self.report = packet['report']
             if '__DIRON' in packet:
                 if packet['__DIRON'] == "__recordRow":
                     self.indicators.agency_report_on()

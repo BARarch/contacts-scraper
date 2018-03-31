@@ -602,6 +602,9 @@ class ContactCollector(ContactScraperVerifier):
 
 ## The Dorito and the Chip
 class Dorito(object):
+
+    scraperQueue = None
+
     def __init__(self, gm, pointers):
         self.grandMotherElement = gm
         self.verifiedPointers = pointers
@@ -683,6 +686,9 @@ class Dorito(object):
     @staticmethod
     def filterPointers(vps):
         return [pointer for pointer in vps if pointer.mary_here() and pointer.nathan_here]
+
+
+    
 
 
 class RanchDorito(Dorito):
@@ -1779,6 +1785,8 @@ class ScrapeSession(object):
         print('Organizations not \nextacted                    \t\t\t\t\t\t%s\n' % str(noNotExtracted))
         #print('\n')
         print('Organizations with links \nthat did not open    \t\t\t\t\t\t\t%s'   % str(noNotOpen))
+
+        ScrapeSession.show_report(time=time, nAttempted=self.numSitePings, nExtracted=noExtracted, nWithoutExtractions=noNothingPassed, nNotExtracted=noNotExtracted, nDidNotOpen=noNotOpen)
         
     def get_early_termination_report(self):
         print('                 *** SCRAPE TERMINATED EARLRY ***                         ')
@@ -1829,6 +1837,16 @@ class ScrapeSession(object):
                 
             except queue.Empty:
                 return None
+
+    @classmethod
+    def show_report(cls, time, nAttempted, nExtracted, nWithoutExtractions, nNotExtracted,  nDidNotOpen):
+        if ScrapeSession.appScraperQueue:
+            ScrapeSession.appScraperQueue.put({'report': {'time of scrape': str(time),
+                                                          'n sites attempted': str(nAttempted),
+                                                          'n extacted': str(nExtracted),
+                                                          'n without extractions': str(nWithoutExtractions),
+                                                          'n not extracted': str(nNotExtracted),
+                                                          'n did not open': str(nDidNotOpen)}})
 
             
     @staticmethod
