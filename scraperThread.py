@@ -257,13 +257,19 @@ class ScraperThread(threading.Thread):
                 packet = self.commandQueue.get(0)
                 ## Scrape Events
                 if 'scrape' in packet:
-                    if packet['scrape'] == 'TODAY':
-                        print('The scraper is running')
-                        t = cc.ScrapeForToday(self.orgRecords)
+                    print('The scraper is running')
+                    if packet['scrape'] == 'Today':
+                        t = cc.ScrapeForToday(self.orgRecords)        
+                    elif packet['scrape'] == 'Base':
+                        t = cc.ScrapeBase(self.orgRecords)
+                    elif packet['scrape'] == 'All':
+                        t = cc.ScrapeAll(self.orgRecords)
+                    elif packet['scrape'] == 'Error':
+                        t = cc.ScrapeError(self.orgRecords)
                         
-                        print('scraper finnished')
-                        print('')
-                        self.scraperQueue.put({'done':1})
+                    print('scraper finnished')
+                    print('')
+                    self.scraperQueue.put({'done':1})
                     return True
                 
                 ## Stop Events

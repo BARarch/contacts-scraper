@@ -41,7 +41,7 @@ class MainApplication(Frame):
 
     def handle_scrape(self):
         # Initiates Scrape Thread Task
-        self.commandQueue.put({'scrape': 'TODAY'})
+        self.commandQueue.put({'scrape': self.scrapeMode})
         self.indicators._contactChecker.on(why='IN USE')
         self.control.buttons.disable_scrape()
         self.control.buttons.disable_dropdown()
