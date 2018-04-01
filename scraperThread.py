@@ -271,6 +271,18 @@ class ScraperThread(threading.Thread):
                     print('')
                     self.scraperQueue.put({'done':1})
                     return True
+
+                if 'sheet change' in packet:
+                    print('Sheet name change for {}'.format(packet['sheet change']))
+                    if packet['sheet change'] == 'Today':
+                        cc.ContactSheetOutput.change_output_sheet_name('Samples')        
+                    elif packet['sheet change'] == 'Base':
+                        cc.ContactSheetOutput.change_output_sheet_name('Samples')
+                    elif packet['sheet change'] == 'All':
+                        cc.ContactSheetOutput.change_output_sheet_name('Scraper Output')
+                    elif packet['sheet change'] == 'Error':
+                        cc.ContactSheetOutput.change_output_sheet_name('Samples')
+
                 
                 ## Stop Events
                 if 'stop' in packet:

@@ -1529,17 +1529,20 @@ class ContactSheetOutput(object):
         values = result.get('values', [])
 
         if not values:
-            print('RECORD OUTPUT READY: No Reocords')
+            ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
+            print('RECORD OUTPUT READY: No Reocords {}'.format(str(ContactSheetOutput.currentRow)))
         else:
-            print('RECORD OUTPUT READY')
             ContactSheetOutput.initialRead = values
             ContactSheetOutput.currentRow = ContactSheetOutput.initialRow + len(values)
+            print('RECORD OUTPUT READY {}'.format(str(ContactSheetOutput.currentRow)))
 
         ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
 
     @classmethod
     def change_output_sheet_name(cls, name):
+        #Row Number code
         ContactSheetOutput.outputSheetName = name
+        ContactSheetOutput.set_output(ContactSheetOutput.contactKeys)
 
     @classmethod
     def set_app_scraper_queue(cls, q):
