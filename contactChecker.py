@@ -1585,6 +1585,14 @@ class ContactSheetOutput(object):
         ContactSheetOutput.outputSheetName = origName
 
     @classmethod
+    def clear_contacts(cls):
+        origName = ContactSheetOutput.outputSheetName
+        ContactSheetOutput.outputSheetName = 'Contacts'
+        ContactSheetOutput.clear_rows()
+        ContactSheetOutput.outputSheetName = origName
+
+
+    @classmethod
     def clear_rows(cls):
         """Google Sheets API Code.
         Pulls urls for all NFL Team RSS Feeds
@@ -1607,7 +1615,6 @@ class ContactSheetOutput(object):
         blankrow = ['' for n in ContactSheetOutput.contactKeys]
         emptybatch = [blankrow for row in values]
 
-
         if not values:
             ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
             print('No Reocords to Clear {}'.format(str(ContactSheetOutput.currentRow)))
@@ -1617,8 +1624,84 @@ class ContactSheetOutput(object):
             ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
             print('Ouput Cleared {}'.format(str(len(emptybatch))))
 
-
     
+    @classmethod
+    def transfer_contacts(cls):
+        """Google Sheets API Code.
+        Pulls urls for all NFL Team RSS Feeds
+        https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
+        """
+        credentials = ContactSheetOutput.get_credentials()
+        http = credentials.authorize(smgs.httplib2.Http())
+        discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                        'version=v4')
+        service = smgs.discovery.build('sheets', 'v4', http=http,
+                                  discoveryServiceUrl=discoveryUrl)
+
+        ## Clear Contacts First
+        ContactSheetOutput.clear_contacts()
+
+        ## Get contacts from SCRAPER OUTPUT
+        origName = ContactSheetOutput.outputSheetName
+        ContactSheetOutput.outputSheetName = 'Scraper Output' 
+
+        #specify sheetID and range
+        spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+        rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.initialRow) + ':N'
+        result = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheetId, range=rangeName).execute()
+        values = result.get('values', [])
+
+        ##  Transfer to Contacts
+        if not values:
+            print('No Reocords to Transfer')
+        else:
+            ContactSheetOutput.outputSheetName = 'Contacts'
+            ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
+            ContactSheetOutput.output_batch_row_cls(values)
+            print('Contacts Transfered {}'.format(str(len(values))))
+
+        ContactSheetOutput.outputSheetName = origName
+
+
+    @classmethod
+    def restore_contacts(cls):
+        """Google Sheets API Code.
+        Pulls urls for all NFL Team RSS Feeds
+        https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
+        """
+        credentials = ContactSheetOutput.get_credentials()
+        http = credentials.authorize(smgs.httplib2.Http())
+        discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                        'version=v4')
+        service = smgs.discovery.build('sheets', 'v4', http=http,
+                                  discoveryServiceUrl=discoveryUrl)
+
+        ## Clear Contacts First
+        ContactSheetOutput.clear_contacts()
+
+        ## Get contacts from SCRAPER OUTPUT
+        origName = ContactSheetOutput.outputSheetName
+        ContactSheetOutput.outputSheetName = 'Backup' 
+
+        #specify sheetID and range
+        spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+        rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.initialRow) + ':N'
+        result = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheetId, range=rangeName).execute()
+        values = result.get('values', [])
+
+        ##  Transfer to Contacts
+        if not values:
+            print('No Reocords to Transfer')
+        else:
+            ContactSheetOutput.outputSheetName = 'Contacts'
+            ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
+            ContactSheetOutput.output_batch_row_cls(values)
+            print('Contacts Restored {}'.format(str(len(values))))
+
+        ContactSheetOutput.outputSheetName = origName
+
 
     @classmethod
     def change_output_sheet_name(cls, name):
