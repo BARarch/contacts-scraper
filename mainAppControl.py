@@ -56,7 +56,8 @@ class MainApplication(Frame):
         self.quit()
         
     def change_dropdown(self, *args):
-        self.scrapeMode = self.scrapeSelection.get() 
+        self.scrapeMode = self.scrapeSelection.get()
+        self.commandQueue.put({'sheet change': self.scrapeMode}) 
 
     def startup(self):
 
