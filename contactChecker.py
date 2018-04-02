@@ -554,7 +554,7 @@ class ContactCollector(ContactScraperVerifier):
                     ContactCollector.parse_off()
                 else: ## TERMINAL STATE IN THIS BLOCK
                     print('Not the right number of Grandmothers %s' % str(self.noGm))
-                
+                    ContactCollector.parse_off()
                     ## \\** TERMINAL STATE NOTE **\\  Make note that for this org that there were not the right number of Grandmas
                     ContactScraperVerifier.add_to_not_extracted_dict('Not the right number of Grandmothers %s' % str(self.noGm))
                     

@@ -66,6 +66,7 @@ class MainApplication(Frame):
         self.statusBar.stamp('--')
         self.control.progress.message("Loading...")
         self.control.parse.lightOff()
+        self.scrapeMode = self.scrapeSelection.get()
         self.parent.after(100, self.manage_startup())
 
 
