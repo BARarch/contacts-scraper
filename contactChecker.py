@@ -1505,6 +1505,38 @@ class ContactSheetOutput(object):
         ContactSheetOutput.out_off('__contacts')
         return result
 
+    @classmethod
+    def output_batch_row_cls(cls, rows):
+        """Google Sheets API Code.
+        """
+        ContactSheetOutput.out_on('__contacts')
+
+        credentials = ContactSheetOutput.get_credentials()
+        http = credentials.authorize(smgs.httplib2.Http())
+        discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                        'version=v4')
+        service = smgs.discovery.build('sheets', 'v4', http=http,
+                                  discoveryServiceUrl=discoveryUrl)
+
+        spreadsheet_id = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+        value_input_option = 'RAW'
+        rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.currentRow)
+        values = rows
+        body = {
+              'values': values
+        }
+
+        try:
+            result = service.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=rangeName,
+                                                        valueInputOption=value_input_option, body=body).execute()
+        except:
+            print('Missed Row Output')
+        else:
+            ContactSheetOutput.currentRow += len(rows)
+
+        ContactSheetOutput.out_off('__contacts')
+        return result
+
     def get_contact_keys(self):
         return ContactSheetOutput.contactKeys   
 
@@ -1537,6 +1569,56 @@ class ContactSheetOutput(object):
             print('RECORD OUTPUT READY {}'.format(str(ContactSheetOutput.currentRow)))
 
         ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
+
+    @classmethod
+    def clear_scraper_output(cls):
+        origName = ContactSheetOutput.outputSheetName
+        ContactSheetOutput.outputSheetName = 'Scraper Output'
+        ContactSheetOutput.clear_rows()
+        ContactSheetOutput.outputSheetName = origName
+
+    @classmethod
+    def clear_samples(cls):
+        origName = ContactSheetOutput.outputSheetName
+        ContactSheetOutput.outputSheetName = 'Samples'
+        ContactSheetOutput.clear_rows()
+        ContactSheetOutput.outputSheetName = origName
+
+    @classmethod
+    def clear_rows(cls):
+        """Google Sheets API Code.
+        Pulls urls for all NFL Team RSS Feeds
+        https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
+        """
+        credentials = ContactSheetOutput.get_credentials()
+        http = credentials.authorize(smgs.httplib2.Http())
+        discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                        'version=v4')
+        service = smgs.discovery.build('sheets', 'v4', http=http,
+                                  discoveryServiceUrl=discoveryUrl)
+
+        #specify sheetID and range
+        spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+        rangeName = ContactSheetOutput.outputSheetName + '!A' + str(ContactSheetOutput.initialRow) + ':N'
+        result = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheetId, range=rangeName).execute()
+        values = result.get('values', [])
+
+        blankrow = ['' for n in ContactSheetOutput.contactKeys]
+        emptybatch = [blankrow for row in values]
+
+
+        if not values:
+            ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
+            print('No Reocords to Clear {}'.format(str(ContactSheetOutput.currentRow)))
+        else:
+            ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
+            ContactSheetOutput.output_batch_row_cls(emptybatch)
+            ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
+            print('Ouput Cleared {}'.format(str(len(emptybatch))))
+
+
+    
 
     @classmethod
     def change_output_sheet_name(cls, name):

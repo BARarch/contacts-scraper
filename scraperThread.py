@@ -263,8 +263,10 @@ class ScraperThread(threading.Thread):
                     elif packet['scrape'] == 'Base':
                         t = cc.ScrapeBase(self.orgRecords)
                     elif packet['scrape'] == 'All':
+                        cc.ContactSheetOutput.clear_scraper_output()
                         t = cc.ScrapeAll(self.orgRecords)
                     elif packet['scrape'] == 'Error':
+                        cc.ContactSheetOutput.clear_samples()
                         t = cc.ScrapeError(self.orgRecords)
                         
                     print('scraper finnished')
