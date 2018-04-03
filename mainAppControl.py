@@ -57,10 +57,17 @@ class MainApplication(Frame):
         
     def change_dropdown(self, *args):
         self.scrapeMode = self.scrapeSelection.get()
-        self.commandQueue.put({'sheet change': self.scrapeMode}) 
+        self.commandQueue.put({'sheet change': self.scrapeMode})
+
+    def handle_restore(self):
+        self.commandQueue.put({'restore': 1})
+        self.parent.after(100, self.manage_restore())
+
+    def handle_transfer(self):
+        self.commandQueue.put({'transfer': 1})
+        self.parent.after(100, self.manage_transfer()) 
 
     def startup(self):
-
         # Initiates Startup Thread Task
         self.scraperProcess.start()
         self.statusBar.message("Startup")
@@ -90,8 +97,6 @@ class MainApplication(Frame):
                     self.statusBar.message("Ready")
                 else:
                     self.statusBar.message(msg)
-                    
-
             if '__waiting' in packet:
                 whosWaiting = packet['__waiting']
                 if whosWaiting is ScraperThread.ContactKeysVal:
@@ -109,8 +114,7 @@ class MainApplication(Frame):
                 if whosWaiting is ScraperThread.BrowserDriverVal:
                     self.indicators.browser_driver_waiting()
                 if whosWaiting is ScraperThread.ContactCheckerVal:
-                    self.indicators.scraper_waiting()
-                
+                    self.indicators.scraper_waiting()     
             if '__ready' in packet:
                 whosReady = packet['__ready']
                 if whosReady is ScraperThread.ContactKeysVal:
@@ -129,11 +133,9 @@ class MainApplication(Frame):
                     self.indicators.browser_driver_ready()
                 if whosReady is ScraperThread.ContactCheckerVal:
                     self.indicators.scraper_open_phase()
-
-                
-
-
-                
+            if 'rowCounts' in packet:
+                ## Update Transfer Status Indicator
+                pass    
             if 'progress' in packet:
                 if packet['progress'] == 'START':
                     self.control.progress.set_progress_clicks(8) 
@@ -177,6 +179,9 @@ class MainApplication(Frame):
             if 'numOrgs' in packet:
                 self.numOrgs = packet['numOrgs']
                 self.control.progress.set_progress_clicks(self.numOrgs)
+            if 'rowCounts' in packet:
+                ## Update Transfer Status Indicator
+                pass
             if 'report' in packet:
                 self.report = packet['report']
             if '__DIRON' in packet:
@@ -202,6 +207,12 @@ class MainApplication(Frame):
 
         except queue.Empty:
             self.parent.after(100, self.manage_scrape)
+
+    def manage_transfer(self):
+        pass
+
+    def manage_restore(self):
+        pass
         
         
         

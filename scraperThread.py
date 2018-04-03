@@ -292,6 +292,13 @@ class ScraperThread(threading.Thread):
                     elif packet['sheet change'] == 'Error':
                         cc.ContactSheetOutput.change_output_sheet_name('Samples')
 
+                if 'restore' in packet:
+                    cc.ContactSheetOutput.restore_contacts()
+                    print("RESTORE COMPLETE")
+
+                if 'transfer' in packet:
+                    cc.ContactSheetOutput.transfer_contacts()
+                    print("TRANSFER COMPLETE")
                 
                 ## Stop Events
                 if 'stop' in packet:
