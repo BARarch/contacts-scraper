@@ -1571,6 +1571,57 @@ class ContactSheetOutput(object):
         ContactSheetOutput.contactKeys = keys[:14]  # Changes the 14 to alter the fields from the contacts replicated in the output
 
     @classmethod
+    def count_scraper_output_rows(cls):
+        """Google Sheets API Code.
+        Pulls urls for all NFL Team RSS Feeds
+        https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
+        """
+        credentials = ContactSheetOutput.get_credentials()
+        http = credentials.authorize(smgs.httplib2.Http())
+        discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                        'version=v4')
+        service = smgs.discovery.build('sheets', 'v4', http=http,
+                                  discoveryServiceUrl=discoveryUrl)
+
+        #specify sheetID and range
+        spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+        rangeName = 'Scraper Output' + '!A' + str(ContactSheetOutput.initialRow) + ':N'
+        result = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheetId, range=rangeName).execute()
+        values = result.get('values', [])
+
+        if not values:
+            return 0
+        else:
+            return len(values)
+
+    @classmethod
+    def count_contacts_rows(cls):
+        """Google Sheets API Code.
+        Pulls urls for all NFL Team RSS Feeds
+        https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
+        """
+        credentials = ContactSheetOutput.get_credentials()
+        http = credentials.authorize(smgs.httplib2.Http())
+        discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                        'version=v4')
+        service = smgs.discovery.build('sheets', 'v4', http=http,
+                                  discoveryServiceUrl=discoveryUrl)
+
+        #specify sheetID and range
+        spreadsheetId = '1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs'
+        rangeName = 'Contacts' + '!A' + str(ContactSheetOutput.initialRow) + ':N'
+        result = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheetId, range=rangeName).execute()
+        values = result.get('values', [])
+
+        if not values:
+            return 0
+        else:
+            return len(values)
+
+
+    @classmethod
     def clear_scraper_output(cls):
         origName = ContactSheetOutput.outputSheetName
         ContactSheetOutput.outputSheetName = 'Scraper Output'

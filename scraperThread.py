@@ -243,6 +243,10 @@ class ScraperThread(threading.Thread):
         dm.DirectoryManager.set_app_scraper_queue(self.scraperQueue)
         dm.OrgQuery.set_app_scraper_queue(self.scraperQueue)
         cc.ScrapeSession.set_app_command_queue(self.commandQueue)
+
+        ## Count Rows and Finnish up
+        self.startupQueue.put({'rowCounts': {'contact counts': cc.ContactSheetOutput.count_contacts_rows(),
+                                             'output counts': cc.ContactSheetOutput.count_scraper_output_rows()}})
         print('CONTACT CHECKER READY')
         print('SCRAPE SESSION OPEN')
         print('')
@@ -268,7 +272,10 @@ class ScraperThread(threading.Thread):
                     elif packet['scrape'] == 'Error':
                         cc.ContactSheetOutput.clear_samples()
                         t = cc.ScrapeError(self.orgRecords)
-                        
+                    
+                    ## Count Rows and Finnish up
+                    self.scraperQueue.put({'rowCounts': {'contact counts': cc.ContactSheetOutput.count_contacts_rows(),
+                                                         'output counts': cc.ContactSheetOutput.count_scraper_output_rows()}})    
                     print('scraper finnished')
                     print('')
                     self.scraperQueue.put({'done':1})
