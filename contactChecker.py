@@ -1682,6 +1682,9 @@ class ContactSheetOutput(object):
         Pulls urls for all NFL Team RSS Feeds
         https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
         """
+
+        ContactSheetOutput.out_on('__transfer')
+
         credentials = ContactSheetOutput.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -1716,6 +1719,8 @@ class ContactSheetOutput(object):
         ContactSheetOutput.outputSheetName = origName
         ContactSheetOutput.currentRow = origRow
 
+        ContactSheetOutput.out_off('__transfer')
+
 
     @classmethod
     def restore_contacts(cls):
@@ -1723,6 +1728,9 @@ class ContactSheetOutput(object):
         Pulls urls for all NFL Team RSS Feeds
         https://docs.google.com/spreadsheets/d/1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs/
         """
+
+        ContactSheetOutput.out_on('__restore')
+
         credentials = ContactSheetOutput.get_credentials()
         http = credentials.authorize(smgs.httplib2.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -1756,6 +1764,8 @@ class ContactSheetOutput(object):
 
         ContactSheetOutput.outputSheetName = origName
         ContactSheetOutput.currentRow = origRow
+
+        ContactSheetOutput.out_off('__restore')
 
 
     @classmethod

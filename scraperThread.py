@@ -294,10 +294,12 @@ class ScraperThread(threading.Thread):
 
                 if 'restore' in packet:
                     cc.ContactSheetOutput.restore_contacts()
+                    self.scraperQueue.put({'done': 1})
                     print("RESTORE COMPLETE")
 
                 if 'transfer' in packet:
                     cc.ContactSheetOutput.transfer_contacts()
+                    self.scraperQueue.put({'done': 1})
                     print("TRANSFER COMPLETE")
                 
                 ## Stop Events

@@ -61,10 +61,14 @@ class MainApplication(Frame):
 
     def handle_restore(self):
         self.commandQueue.put({'restore': 1})
+        self.control.progress.message("Restoring Contacts...")
+        self.statusBar.message("Restoring")
         self.parent.after(100, self.manage_restore())
 
     def handle_transfer(self):
         self.commandQueue.put({'transfer': 1})
+        self.control.progress.message("Transfering Contacts...")
+        self.statusBar.message("Transfering")
         self.parent.after(100, self.manage_transfer()) 
 
     def startup(self):
@@ -209,10 +213,46 @@ class MainApplication(Frame):
             self.parent.after(100, self.manage_scrape)
 
     def manage_transfer(self):
-        pass
+        try:
+            comeBack = True
+            packet = self.scraperQueue.get(False)
+            print('__transfer:', packet)
+            if 'done' in packet:
+                self.control.progress.message("Contacts Transfered")
+                self.statusBar.message("Ready")
+                comeBack = False
+            if '__OUTON' in packet:
+                self.indicators.output_on()
+            if '__OUTOFF' in packet:
+                self.indicators.output_off()
+
+            if comeBack:
+                self.parent.after(100, self.manage_transfer)
+
+        except queue.Empty:
+            self.parent.after(100, self.manage_transfer)
 
     def manage_restore(self):
-        pass
+        try:
+            comeBack = True
+            packet = self.scraperQueue.get(False)
+            print('__restore:', packet)
+            if 'done' in packet:
+                self.control.progress.message("Contacts Restored")
+                self.statusBar.message("Ready")
+                comeBack = False
+            if '__OUTON' in packet:
+                self.indicators.output_on()
+            if '__OUTOFF' in packet:
+                self.indicators.output_off()
+
+            if comeBack:
+                self.parent.after(100, self.manage_restore)
+
+        except queue.Empty:
+            self.parent.after(100, self.manage_restore)
+
+
         
         
         
