@@ -1708,11 +1708,13 @@ class ContactSheetOutput(object):
             print('No Reocords to Transfer')
         else:
             ContactSheetOutput.outputSheetName = 'Contacts'
+            origRow = ContactSheetOutput.currentRow
             ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
             ContactSheetOutput.output_batch_row_cls(values)
             print('Contacts Transfered {}'.format(str(len(values))))
 
         ContactSheetOutput.outputSheetName = origName
+        ContactSheetOutput.currentRow = origRow
 
 
     @classmethod
@@ -1744,14 +1746,16 @@ class ContactSheetOutput(object):
 
         ##  Transfer to Contacts
         if not values:
-            print('No Reocords to Transfer')
+            print('No Reocords to Restore')
         else:
             ContactSheetOutput.outputSheetName = 'Contacts'
+            origRow = ContactSheetOutput.currentRow
             ContactSheetOutput.currentRow = ContactSheetOutput.initialRow
             ContactSheetOutput.output_batch_row_cls(values)
             print('Contacts Restored {}'.format(str(len(values))))
 
         ContactSheetOutput.outputSheetName = origName
+        ContactSheetOutput.currentRow = origRow
 
 
     @classmethod
