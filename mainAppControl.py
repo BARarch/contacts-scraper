@@ -9,6 +9,7 @@ from scraperThread import *
 from initPanel import *
 from scraperControl import *
 from statusBar import *
+from spreadSheetControl import *
 
 
 
@@ -30,8 +31,12 @@ class MainApplication(Frame):
         self.indicators = InitPanel(self)
         ttk.Separator(self).pack(side=TOP, fill=X, padx=2)
         self.control = ScraperControl(self, self)
+        ttk.Separator(self).pack(side=TOP, fill=X, padx=2)
+        self.manager = SpreadSheetControl(self, self)
         self.statusBar = StatusBar(self)
         self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
+        ttk.Separator(self).pack(side=TOP, fill=X, padx=2)
+
         
         self.numScrapes = 0
         self.report = None

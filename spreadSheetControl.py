@@ -26,7 +26,7 @@ class SpreadSheetControl:
                                state='disabled')
         self.TRANSFER.pack(side=LEFT, anchor=W, expand=True, fill=Y)
         self.transferStatusFrame = ttk.Labelframe(self.transferTab, text='Transfer Status')
-        self.transferStatusFrame.pack(side=RIGHT, expand=True, fill=Y)
+        self.transferStatusFrame.pack(side=LEFT, expand=True, fill=BOTH, anchor=W)
         self.transferStatus = LEDRowDiscription(self.transferStatusFrame).bad().change_discription(SpreadSheetControl.Paragraph).good().blink()
 
         Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).pack(side=LEFT, anchor=W)
