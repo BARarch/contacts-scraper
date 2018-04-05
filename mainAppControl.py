@@ -23,6 +23,8 @@ class MainApplication(Frame):
         self.startupQueue = queue.Queue()
         self.commandQueue = queue.Queue()
         self.scraperQueue = queue.Queue()
+        self.rowCounts = {'contact counts': 0,
+                          'scraper counts': 0}
         
         self.scrapeMode = None
         self.scrapeSelection = StringVar(self)
@@ -48,8 +50,11 @@ class MainApplication(Frame):
         # Initiates Scrape Thread Task
         self.commandQueue.put({'scrape': self.scrapeMode})
         self.indicators._contactChecker.on(why='IN USE')
-        self.control.buttons.disable_scrape()
         self.control.buttons.disable_dropdown()
+        self.control.buttons.disable_scrape()
+        self.manager.disable_restore()
+        self.manager.disable_transfer()
+        self.manager.update_transfer_status()
         self.numScrapes = 0
         self.report = None
         self.statusBar.message("Scraper is running...")
@@ -68,12 +73,18 @@ class MainApplication(Frame):
         self.commandQueue.put({'restore': 1})
         self.control.progress.message("Restoring Contacts...")
         self.statusBar.message("Restoring")
+        self.control.buttons.disable_scrape()
+        self.manager.disable_restore()
+        self.manager.disable_transfer()
         self.parent.after(100, self.manage_restore())
 
     def handle_transfer(self):
         self.commandQueue.put({'transfer': 1})
         self.control.progress.message("Transfering Contacts...")
         self.statusBar.message("Transfering")
+        self.control.buttons.disable_scrape()
+        self.manager.disable_restore()
+        self.manager.disable_transfer()
         self.parent.after(100, self.manage_transfer()) 
 
     def startup(self):
@@ -104,6 +115,8 @@ class MainApplication(Frame):
                     self.control.buttons.enable_dropdown()
                     self.control.progress.message("Scrape Session Open")
                     self.statusBar.message("Ready")
+                    self.manager.enable_restore()
+                    self.manager.update_transfer_status(self.rowCounts)
                 else:
                     self.statusBar.message(msg)
             if '__waiting' in packet:
@@ -143,8 +156,7 @@ class MainApplication(Frame):
                 if whosReady is ScraperThread.ContactCheckerVal:
                     self.indicators.scraper_open_phase()
             if 'rowCounts' in packet:
-                ## Update Transfer Status Indicator
-                pass    
+                self.rowCounts = packet['rowCounts']  
             if 'progress' in packet:
                 if packet['progress'] == 'START':
                     self.control.progress.set_progress_clicks(8) 
@@ -173,8 +185,10 @@ class MainApplication(Frame):
                     self.control.progress.message("Scrape Completed In {}".format(self.report['time of scrape']))
                 else:
                     self.control.progress.message("Scrape Completed In --:--:--")
-                self.control.buttons.enable_scrape()
                 self.control.buttons.enable_dropdown()
+                self.control.buttons.enable_scrape()
+                self.manager.enable_restore()
+                self.manager.update_transfer_status(self.rowCounts)
                 self.indicators._contactChecker.off()
                 comeBack = False    
             if 'scraping' in packet:
@@ -189,8 +203,7 @@ class MainApplication(Frame):
                 self.numOrgs = packet['numOrgs']
                 self.control.progress.set_progress_clicks(self.numOrgs)
             if 'rowCounts' in packet:
-                ## Update Transfer Status Indicator
-                pass
+                self.rowCounts = packet['rowCounts']
             if 'report' in packet:
                 self.report = packet['report']
             if '__DIRON' in packet:
@@ -224,8 +237,13 @@ class MainApplication(Frame):
             print('__transfer:', packet)
             if 'done' in packet:
                 self.control.progress.message("Contacts Transfered")
+                self.control.buttons.enable_scrape()
+                self.manager.enable_restore()
+                self.manager.update_transfer_status(self.rowCounts)
                 self.statusBar.message("Ready")
                 comeBack = False
+            if 'rowCounts' in packet:
+                self.rowCounts = packet['rowCounts']
             if '__OUTON' in packet:
                 self.indicators.output_on()
             if '__OUTOFF' in packet:
@@ -244,8 +262,13 @@ class MainApplication(Frame):
             print('__restore:', packet)
             if 'done' in packet:
                 self.control.progress.message("Contacts Restored")
+                self.control.buttons.enable_scrape()
+                self.manager.enable_restore()
+                self.manager.update_transfer_status(self.rowCounts)
                 self.statusBar.message("Ready")
                 comeBack = False
+            if 'rowCounts' in packet:
+                self.rowCounts = packet['rowCounts']    
             if '__OUTON' in packet:
                 self.indicators.output_on()
             if '__OUTOFF' in packet:

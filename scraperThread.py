@@ -294,11 +294,17 @@ class ScraperThread(threading.Thread):
 
                 if 'restore' in packet:
                     cc.ContactSheetOutput.restore_contacts()
+                    ## Count Rows and Finnish up
+                    self.scraperQueue.put({'rowCounts': {'contact counts': cc.ContactSheetOutput.count_contacts_rows(),
+                                                         'output counts': cc.ContactSheetOutput.count_scraper_output_rows()}})    
                     self.scraperQueue.put({'done': 1})
                     print("RESTORE COMPLETE")
 
                 if 'transfer' in packet:
                     cc.ContactSheetOutput.transfer_contacts()
+                    ## Count Rows and Finnish up
+                    self.scraperQueue.put({'rowCounts': {'contact counts': cc.ContactSheetOutput.count_contacts_rows(),
+                                                         'output counts': cc.ContactSheetOutput.count_scraper_output_rows()}})    
                     self.scraperQueue.put({'done': 1})
                     print("TRANSFER COMPLETE")
                 
