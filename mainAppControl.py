@@ -290,7 +290,7 @@ if __name__ == '__main__':
     
     root = Tk()
     app = MainApplication(master=root)
-    app.after(500, app.startup)
+    #app.after(500, app.startup)
     app.mainloop()
     root.destroy()
     

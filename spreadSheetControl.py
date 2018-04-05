@@ -14,7 +14,8 @@ class SpreadSheetControl:
         self.frame = ttk.Notebook(master)
         self.parent = master
         self.handler = handler
-        self.frame.pack(side=TOP, expand=True, fill=X)
+        #self.frame.pack(side=TOP, expand=True, fill=X)
+        self.frame.pack(side=TOP, expand=True, anchor=W, fill=X)
 
         self.transferTab = Frame(self.frame)
         self.restoreTab = Frame(self.frame)
@@ -26,7 +27,7 @@ class SpreadSheetControl:
                                state='disabled')
         self.TRANSFER.pack(side=LEFT, anchor=W, expand=True, fill=Y)
         self.transferStatusFrame = ttk.Labelframe(self.transferTab, text='Transfer Status')
-        self.transferStatusFrame.pack(side=LEFT, expand=True, fill=BOTH, anchor=W)
+        self.transferStatusFrame.pack(side=LEFT, expand=True, fill=X, anchor=W)
         self.transferStatus = LEDRowDiscription(self.transferStatusFrame, name='Checking Transfer Status...').bad().change_discription(SpreadSheetControl.Paragraph).good().blink()
 
         Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).pack(side=LEFT, anchor=W)
