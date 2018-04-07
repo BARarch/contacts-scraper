@@ -11,6 +11,7 @@ ghostdriver.log
 .ipynb_checkpoints/
 build/
 dist/
+design/
 gulp.spec
 untitled.ipynb
 phantomjs.exe

@@ -95,13 +95,12 @@ class LEDRowDiscription(LEDRow):
         self.frame.pack_forget()
         self.status.pack_forget()
         self.frame.pack(expand=True, side=TOP, anchor=W)
-        self.bottomFrame = Frame(master, background='red')
+        self.bottomFrame = Frame(master)
         self.bottomFrame.pack(expand=True, side=TOP, fill=X, anchor=W)
         self.discription = Label(self.bottomFrame, text='This is a lot of text I want it to wrap and wrap it will',
                                                    wraplength=200,
                                                    justify=LEFT,
-                                                   anchor=W,
-                                                   background='blue')
+                                                   anchor=W)
 
         self.discription.pack(anchor=W)
 
