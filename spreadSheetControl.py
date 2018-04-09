@@ -84,7 +84,9 @@ class SpreadSheetControl:
         return self
 
 
-
+class SpreadSheetControlGD(SpreadSheetControl):
+    def __init__(self, master=None, handler=None):
+        pass
 
 
 

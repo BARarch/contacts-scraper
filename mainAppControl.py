@@ -280,7 +280,9 @@ class MainApplication(Frame):
         except queue.Empty:
             self.parent.after(100, self.manage_restore)
 
-
+class MainApplicationGD(MainApplication):
+    def __init__(self, master=None):
+        pass
         
         
         

@@ -35,7 +35,9 @@ class ScraperControl:
         
         #self.frame.update()
         
-        
+class ScraperControlGD(ScraperControl):
+    def __init__(self, master=None, handler=None):
+        pass    
         
         
         

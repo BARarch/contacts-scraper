@@ -62,6 +62,10 @@ class LEDRow:
     def stop_blink(self):
         self.indicator.blinkoff()
         return self
+
+class LEDRowGD(LEDRow):
+    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
+        pass
     
     
 class LEDRowNoMsg(LEDRow):
@@ -88,6 +92,10 @@ class LEDRowNoMsg(LEDRow):
         
     def message(self, msg):
         return self
+
+class LEDRowNoMsgGD(LEDRowNoMsg):
+    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
+        pass
 
 class LEDRowDiscription(LEDRow):
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
@@ -140,7 +148,9 @@ class LEDRowDiscription(LEDRow):
 
         #wraplength=LABELWIDTH, justify=LEFT,
 
-        
+class LEDRowDiscriptionGD(LEDRowDiscription):
+    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
+        pass      
         
         
 if __name__ == '__main__':

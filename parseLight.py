@@ -21,6 +21,10 @@ class ParseLightPanel:
     def lightOff(self):
         self.indicator.turnoff()
         return self
+
+class ParseLightPanelGD(ParseLightPanel):
+    def __init__(self, master=None, width=7, top=2, bottom=10):
+        pass
     
 if __name__ == '__main__':
     

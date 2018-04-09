@@ -53,6 +53,10 @@ class ButtonPanel:
     def disable_dropdown(self):
         self.dropDown.configure(state='disabled')
         return self
+
+class ButtonPanelGD(ButtonPanel):
+    def __init__(self, master=None, handler=None, buttonWidths=40, top=10, bottom=10):
+        pass
         
     
     

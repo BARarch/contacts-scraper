@@ -87,6 +87,10 @@ class ProgressPanel:
     def message(self, msg):
         self.status.configure(text=msg)
         return self
+
+class ProgressPanelGD(ProgressPanel):
+    def __init__(self, master=None, width=50, top=10, bottom=10):
+        pass
         
             
             

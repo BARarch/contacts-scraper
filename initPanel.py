@@ -96,6 +96,10 @@ class InitPanel:
     def agency_report_off(self):
         self._agencyDirectory.off()
 
+class InitPanelGD(InitPanel):
+    def __init__(self, master=None):
+        pass
+
 if __name__ == '__main__':
     ## Get Scraper Thread
     ## Get initalization queue
