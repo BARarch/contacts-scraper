@@ -86,7 +86,46 @@ class SpreadSheetControl:
 
 class SpreadSheetControlGD(SpreadSheetControl):
     def __init__(self, master=None, handler=None):
-        pass
+        self.frame = ttk.Notebook(master)
+        self.parent = master
+        self.handler = handler
+        
+
+        self.transferTab = Frame(self.frame)
+        self.restoreTab = Frame(self.frame)
+        
+        self.TRANSFER = Button(self.transferTab, width=12)
+        self.TRANSFER.configure(command=self.handler.handle_transfer,
+                               text='Transfer Scraped Contacts',
+                               wraplength=50,
+                               state='disabled')
+        self.TRANSFER.grid(row=0, column=0)
+        #self.TRANSFER.pack(side=LEFT, anchor=W, expand=True, fill=Y)
+        
+        self.transferStatusFrame = ttk.Labelframe(self.transferTab, text='Transfer Status')
+        self.transferStatusFrame.grid(row=0, column=1, sticky=E+W)
+        #self.transferStatusFrame.pack(side=LEFT, expand=True, fill=X, anchor=W)
+        self.transferStatus = LEDRowDiscription(self.transferStatusFrame, name='Checking Transfer Status...').bad().change_discription(SpreadSheetControl.Paragraph).good().blink()
+        self.transferTab.columnconfigure(0, weight=0)
+        self.transferTab.columnconfigure(1, weight=1)
+
+        Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).grid(row=0, column=0, sticky=E+W)#.pack(side=LEFT, anchor=W)
+        self.RESTORE = Button(self.restoreTab, width=12)
+        self.RESTORE.configure(command=self.handler.handle_restore,
+                               text='RESTORE CONTACTS',
+                               wraplength=70,
+                               state='disabled')
+        self.RESTORE.grid(row=0, column=1)
+        self.restoreTab.columnconfigure(0, weight=1)
+        self.restoreTab.columnconfigure(1, weight=0)
+        #self.RESTORE.pack(side=RIGHT, anchor=E, expand=True, fill=Y)
+
+        self.frame.add(self.transferTab, text='Transfer', compound=TOP)
+        self.frame.add(self.restoreTab, text='Restore Backup')
+
+        self.frame.grid(sticky=E+W)
+        #self.frame.pack(side=TOP, expand=True, fill=X)
+        #self.frame.pack(side=TOP, expand=True, anchor=W, fill=X)
 
 
 
@@ -98,7 +137,7 @@ if __name__ == '__main__':
             Frame.__init__(self)
             self.pack()
 
-            self.manager = SpreadSheetControl(self, self)
+            self.manager = SpreadSheetControlGD(self, self)
 
         def handle_transfer(self):
             print('TRANSFER got pressed')

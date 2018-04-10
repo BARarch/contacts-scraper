@@ -282,7 +282,34 @@ class MainApplication(Frame):
 
 class MainApplicationGD(MainApplication):
     def __init__(self, master=None):
-        pass
+        Frame.__init__(self)
+        self.parent = master
+         
+        self.startupQueue = queue.Queue()
+        self.commandQueue = queue.Queue()
+        self.scraperQueue = queue.Queue()
+        self.rowCounts = {'contact counts': 0,
+                          'scraper counts': 0}
+        
+        self.scrapeMode = None
+        self.scrapeSelection = StringVar(self)
+        self.scrapeSelection.trace('w', self.change_dropdown)
+        
+        self.indicators = InitPanelGD(self)
+        ttk.Separator(self).grid()
+        self.control = ScraperControlGD(self, self)
+        ttk.Separator(self).grid()
+        self.manager = SpreadSheetControlGD(self, self)
+        ttk.Separator(self).grid()
+        self.statusBar = StatusBarGD(self)
+        self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
+        
+
+        
+        self.numScrapes = 0
+        self.report = None
+
+        self.pack()
         
         
         
@@ -291,7 +318,7 @@ if __name__ == '__main__':
         
     
     root = Tk()
-    app = MainApplication(master=root)
+    app = MainApplicationGD(master=root)
     app.after(500, app.startup)
     app.mainloop()
     root.destroy()
