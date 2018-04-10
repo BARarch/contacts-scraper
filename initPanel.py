@@ -98,7 +98,40 @@ class InitPanel:
 
 class InitPanelGD(InitPanel):
     def __init__(self, master=None):
-        pass
+        self.frame = Frame(master)
+        self.parent = master
+        
+
+        self.left = Frame(self.frame)
+        self.left.grid()
+        #self.left.pack(side=LEFT, anchor=N, expand=True)
+
+        self.right = Frame(self.frame)
+        self.right.grid(row=0,column=1)
+        #self.right.pack(side=RIGHT, anchor=N, expand=True, pady=17)
+
+        self.keysFrame = ttk.Labelframe(self.left, text='KEYS')
+        self.recordsFrame = ttk.Labelframe(self.left, text='RECORDS')
+        
+        self._contactKeys = LEDRowGD(self.keysFrame, name="Contact Keys").off()
+        self._directoryKeys = LEDRowGD(self.keysFrame, name="Directory Keys").off()   
+        self._contactRecords = LEDRowGD(self.recordsFrame, name="Contact Records").off()
+        self._agencyDirectory = LEDRowGD(self.recordsFrame, name="Agency Directory").off()
+                    
+        self._data = LEDRowGD(self.right, name="Data").off()
+        self._output = LEDRowGD(self.right, name="Output").off()
+        self._browserDriver = LEDRowNoMsgGD(self.right, name="Browser/Driver").off()
+        self._contactChecker = LEDRowGD(self.right, name="Contact Checker").off().active().blink()
+
+
+        self.keysFrame.grid()
+        #self.keysFrame.pack(side=TOP, anchor=W, expand=True)
+
+        self.recordsFrame.grid(row=1)
+        #self.recordsFrame.pack(side=TOP, anchor=W, expand=True)# second panes
+        
+        self.frame.grid()
+        #self.frame.pack(expand=True, side=TOP, anchor=N)
 
 if __name__ == '__main__':
     ## Get Scraper Thread
@@ -110,7 +143,7 @@ if __name__ == '__main__':
         def __init__(self, master=None):
             Frame.__init__(self, master)              # Do superclass init
             self.pack()
-            self.ip = InitPanel(self)
+            self.ip = InitPanelGD(self)
             
         def contact_keys_waiting_test(self):
             self.ip.contact_keys_waiting()
@@ -165,7 +198,7 @@ if __name__ == '__main__':
             self.after(200, self.scraper_running_phase_test())
             
         def scraper_running_phase_test(self):
-            self.ip.scraper_running_phase()
+            #self.ip.scraper_running_phase()
             time.sleep(.5)
             self.after(200, self.request_test())
             
@@ -190,6 +223,6 @@ if __name__ == '__main__':
     root = Tk()
     root.title('Initialization Panel Test')
     app = TestInitPanel(master=root)
-    app.after(200, app.contact_keys_waiting_test())
+    #app.after(200, app.contact_keys_waiting_test())
     app.mainloop()
     root.destroy()

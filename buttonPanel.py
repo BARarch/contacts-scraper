@@ -56,8 +56,35 @@ class ButtonPanel:
 
 class ButtonPanelGD(ButtonPanel):
     def __init__(self, master=None, handler=None, buttonWidths=40, top=10, bottom=10):
-        pass
+        # Has a Frame
+        self.frame = Frame(master) 
+        self.parent = master
+        self.handler = handler
         
+        self.dropDown = OptionMenu(self.parent, self.handler.scrapeSelection, 'All', 'Base', 'Today', 'Error')
+        self.handler.scrapeSelection.set('Today') # set the default option
+        self.dropDown.grid(row=0, column=0, columnspan=2, sticky=W+E)
+        #self.dropDown.pack(side=TOP, anchor=W, expand=YES, fill=X)
+        self.disable_dropdown()
+        
+        
+        self.QUIT = Button(self.parent, width=7)
+        self.QUIT.configure(command=self.handler.handle_quit,
+                                text='QUIT',
+                                fg='red')
+        self.QUIT.grid(row=1, column=0)
+        #self.QUIT.pack(side=LEFT, padx=2)
+        
+        self.SCRAPE = Button(self.parent, width=7)
+        self.SCRAPE.configure(command=self.handler.handle_scrape,
+                              text='Scrape',
+                              fg='green',
+                              state='disabled')
+        self.SCRAPE.grid(row=1, column=1)
+        #self.SCRAPE.pack(side=LEFT, padx=2)
+        
+        #self.frame.grid()
+        #self.frame.pack(expand=True, fill=X, anchor=W)
     
     
 if __name__ == '__main__':
@@ -68,7 +95,7 @@ if __name__ == '__main__':
             self.pack()
             self.scrapeSelection = StringVar(self)
             self.scrapeSelection.trace('w', self.change_dropdown)
-            self.buttons = ButtonPanel(self, self)
+            self.buttons = ButtonPanelGD(self, self)
             
         def do_somthing(self):
             pass

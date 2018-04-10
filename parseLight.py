@@ -24,7 +24,18 @@ class ParseLightPanel:
 
 class ParseLightPanelGD(ParseLightPanel):
     def __init__(self, master=None, width=7, top=2, bottom=10):
-        pass
+        # Has a frame
+        self.frame = Frame(master)
+        self.parent = master
+        
+        Label(self.parent, text="Parse").grid(row=0, column=3)#.pack(side=TOP, expand=True, fill=X, pady=1)
+        
+        self.indicator = LED(master=self.parent, appearance=FLAT, shape=ROUND, blink=0, blinkrate=1, bd=0, outline='grey')
+        self.indicator.frame.grid(row=1, column=3)
+        #self.indicator.frame.pack(side=TOP, expand=YES, padx=5, pady=5)
+
+        #self.frame.grid()
+        #self.frame.pack()
     
 if __name__ == '__main__':
     
@@ -34,7 +45,7 @@ if __name__ == '__main__':
             self.parent = master
             self.pack()
             self.blinkState = False
-            self.parseLight = ParseLightPanel(self).lightOff()
+            self.parseLight = ParseLightPanelGD(self).lightOff()
             
         def blink(self):
             if self.blinkState:

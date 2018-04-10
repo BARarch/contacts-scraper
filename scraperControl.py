@@ -37,7 +37,21 @@ class ScraperControl:
         
 class ScraperControlGD(ScraperControl):
     def __init__(self, master=None, handler=None):
-        pass    
+        self.frame = Frame(master)
+        self.parent = master
+         
+        #self.left.pack(side=LEFT, expand=True, anchor=N, pady=7) 
+        self.buttonHandler = handler
+        self.buttons = ButtonPanelGD(self.frame, self.buttonHandler)
+        
+        #self.center.pack(side=LEFT, anchor=N, expand=True, pady=10, padx=5)
+        self.progress = ProgressPanelGD(self.frame)
+        
+        #self.right.pack(side=LEFT, expand=True, padx=10, pady=10, anchor=N)
+        self.parse = ParseLightPanelGD(self.frame) 
+
+        self.frame.grid()
+        #self.frame.pack(side=TOP, padx=5)  
         
         
         
@@ -51,7 +65,7 @@ if __name__ == '__main__':
             self.pack()
             self.scrapeSelection = StringVar(self)
             self.scrapeSelection.trace('w', self.change_dropdown)   # Event handler function for dropdown in handler frame
-            self.control = ScraperControl(self, self)
+            self.control = ScraperControlGD(self, self)
             
             self.scrapeMode = 'Today'
             self.control.parse.lightOff()

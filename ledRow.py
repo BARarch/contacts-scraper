@@ -7,6 +7,8 @@ from testLeds import *
 StatusColor = '#BBBBBB'
 LABELWIDTH = 20
 STATUSWIDTH = 10
+RowPadding = 5
+Height = 2
 
 class LEDRow:
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
@@ -65,7 +67,21 @@ class LEDRow:
 
 class LEDRowGD(LEDRow):
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
-        pass
+        self.frame = Frame(master) 
+        self.parent = master
+        self.frame.grid()
+        
+        self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey')
+        self.indicator.frame.grid(row=0)
+        #self.indicator.frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
+        
+        self.name = Label(self.frame, text=name, anchor=W, width=LABELWIDTH, height=Height)
+        self.name.grid(row=0, column=1)
+        #self.name.pack(side=LEFT, expand=YES, anchor=W,  fill=BOTH, pady=5)
+        
+        self.status = Label(self.frame, relief=SUNKEN, bg=StatusColor, fg="red", text='', width=STATUSWIDTH, height=Height)
+        self.status.grid(row=0, column=2)
+        #self.status.pack(expand=True, fill=Y, side=RIGHT,anchor=E)
     
     
 class LEDRowNoMsg(LEDRow):
@@ -95,7 +111,18 @@ class LEDRowNoMsg(LEDRow):
 
 class LEDRowNoMsgGD(LEDRowNoMsg):
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
-        pass
+        self.frame = Frame(master) 
+        self.parent = master
+        self.frame.grid(sticky=W)
+        
+        self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey')
+        self.indicator.frame.grid(row=0)
+        #self.indicator.frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
+        
+        self.name = Label(self.frame, text=name, anchor=W, width=LABELWIDTH, height=Height)
+        self.name.grid(row=0, column=1)
+        #self.name.pack(side=LEFT, expand=YES, anchor=W,  fill=BOTH, pady=5)
+        
 
 class LEDRowDiscription(LEDRow):
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
@@ -150,7 +177,29 @@ class LEDRowDiscription(LEDRow):
 
 class LEDRowDiscriptionGD(LEDRowDiscription):
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
-        pass      
+        self.frame = Frame(master) 
+        self.parent = master
+        self.frame.grid(sticky=W)
+        self.frame.columnconfigure(0, weight=0)
+        self.frame.columnconfigure(1, weight=1)
+        
+        self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey')
+        self.indicator.frame.grid(row=0, column=0, sticky=W)
+        
+        #self.indicator.frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
+        
+        self.name = Label(self.frame, text=name, anchor=W, width=LABELWIDTH, height=Height)
+        self.name.grid(row=0, column=1, sticky=W)
+        
+        #self.name.pack(side=LEFT, expand=YES, anchor=W,  fill=BOTH, pady=5)
+
+        self.discription = Label(self.frame, text='This is a lot of text I want it to wrap and wrap it will',
+                                                   wraplength=200,
+                                                   justify=LEFT,
+                                                   anchor=W)
+        self.discription.grid(row=2, column=0, columnspan=2)
+
+
         
         
 if __name__ == '__main__':
@@ -161,12 +210,12 @@ if __name__ == '__main__':
          def __init__(self, master=None):
             Frame.__init__(self)              # Do superclass init
             self.pack()
-            LEDRow(self, name="The Test Row", blink=1).active().message('hellothere').stop_blink().off().ready().blink().waiting()
-            LEDRow(self, name="The Second Row", blink=1, blinkrate=2).waiting()
-            LEDRow(self, name="The Third Row").ready().blink().stop_blink()
-            LEDRowNoMsg(self, name="No Msg")
-            LEDRowDiscription(self).bad().change_discription(paragraph).good().blink()
-            LEDRow(self, name="After Name Change").ready().blink().waiting()
+            LEDRowGD(self, name="The Test Row", blink=1).active().message('hellothere').stop_blink().off().ready().blink().waiting()
+            LEDRowGD(self, name="The Second Row", blink=1, blinkrate=2).waiting()
+            LEDRowGD(self, name="The Third Row").ready().blink()
+            LEDRowNoMsgGD(self, name="No Msg")
+            LEDRowDiscriptionGD(self).bad().change_discription(paragraph).good().blink()
+            LEDRowGD(self, name="After Name Change").ready().blink().waiting()
             
     root = Tk()
     root.title('LED Row')

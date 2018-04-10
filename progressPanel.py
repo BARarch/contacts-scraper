@@ -90,7 +90,25 @@ class ProgressPanel:
 
 class ProgressPanelGD(ProgressPanel):
     def __init__(self, master=None, width=50, top=10, bottom=10):
-        pass
+        # Has a frame
+        self.frame = Frame(master)
+        self.master = master
+        
+        self.status = Label(self.master, pady=4, relief=SUNKEN, text='Progress Panel at your service!')
+        self.status.grid(row=0, column= 2,  sticky=E+W)
+        #self.status.pack(expand=True, pady=0 ,ipady=0 ,side=TOP, anchor=N, fill=X)
+        
+        self.progressBarPosition = 0
+        self.progressBarStops = 10
+        self.progressBarState = 0
+        self.progress = ttk.Progressbar(self.master, orient='horizontal', length=400, mode='determinate', maximum=200, variable=self.progressBarPosition)
+        self.progress.grid(row=1, column= 2)
+        #self.progress.pack(side=TOP, expand=True, fill=X, ipady=1, pady=2)
+        
+        self.inProgress = False
+
+        #self.frame.grid()
+        #self.frame.pack(expand=True)
         
             
             
@@ -103,7 +121,7 @@ if __name__ == '__main__':
             Frame.__init__(self, master)              # Do superclass init
             self.pack()
             self.parent = master
-            self.ProgressPanel = ProgressPanel(self)
+            self.ProgressPanel = ProgressPanelGD(self)
             self.loops = 0
             
         def move(self):
