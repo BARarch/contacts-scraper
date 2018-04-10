@@ -296,11 +296,11 @@ class MainApplicationGD(MainApplication):
         self.scrapeSelection.trace('w', self.change_dropdown)
         
         self.indicators = InitPanelGD(self)
-        ttk.Separator(self).grid()
+        ttk.Separator(self).grid(sticky=E+W)
         self.control = ScraperControlGD(self, self)
-        ttk.Separator(self).grid()
+        ttk.Separator(self).grid(sticky=E+W)
         self.manager = SpreadSheetControlGD(self, self)
-        ttk.Separator(self).grid()
+        ttk.Separator(self).grid(sticky=E+W)
         self.statusBar = StatusBarGD(self)
         self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
         
