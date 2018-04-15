@@ -3,6 +3,7 @@ import time
 from tkinter import *
 import tkinter.ttk as ttk
 
+MaximumMessageLength = 50
 
 class ProgressPanel:
     def __init__(self, master=None, width=50, top=10, bottom=10):
@@ -85,7 +86,11 @@ class ProgressPanel:
         return not self.inProgress
     
     def message(self, msg):
-        self.status.configure(text=msg)
+        if len(msg) > MaximumMessageLength:
+            messageText = msg[:MaximumMessageLength] + '...'
+        else:
+            messageText = msg
+        self.status.configure(text=messageText)
         return self
 
 class ProgressPanelGD(ProgressPanel):

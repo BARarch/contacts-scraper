@@ -200,7 +200,7 @@ class LEDRowDiscriptionGD(LEDRowDiscription):
         self.frame.columnconfigure(1, weight=1)
         
         self.indicator = LED(master=self.frame, appearance=FLAT, shape=ROUND, blink=blink, blinkrate=blinkrate, bd=0, outline='grey')
-        self.indicator.frame.grid(row=0, column=0, sticky=W)
+        self.indicator.frame.grid(row=0, column=0, sticky=W, padx=8, pady=5)
         
         #self.indicator.frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
         
@@ -213,7 +213,7 @@ class LEDRowDiscriptionGD(LEDRowDiscription):
                                                    wraplength=200,
                                                    justify=LEFT,
                                                    anchor=W)
-        self.discription.grid(row=2, column=0, columnspan=2, ipadx=25)
+        self.discription.grid(row=2, column=0, columnspan=2, padx=5)
 
 
         
@@ -230,7 +230,7 @@ if __name__ == '__main__':
             LEDRowGD(self, name="The Second Row", blink=1, blinkrate=2).waiting()
             LEDRowGD(self, name="The Third Row").ready().blink()
             LEDRowNoMsgGD(self, name="No Msg")
-            LEDRowDiscriptionGD(self).bad().change_discription(paragraph).good().blink()
+            LEDRowDiscriptionGD(self, name='Checking Transfer Status...').bad().change_discription(paragraph).good().blink()
             LEDRowGD(self, name="After Name Change").ready().blink().waiting()
             
     root = Tk()
