@@ -22,9 +22,9 @@ Color  = DummyClass()
 
 Color.PANEL     = '#545454'
 Color.OFF       = '#656565'
-Color.ON        = '#00FF33'
-Color.WARN      = '#ffcc00'
-Color.ALARM     = '#ff4422'
+Color.ON        = '#11b04b' #'#00FF33'
+Color.WARN      = '#f7bc1b' #'#ffcc00'
+Color.ALARM     = '#ff3021' #ff0000' #d10202'#'#ff4422'
 
 class LED:
     def __init__(self, master=None, width=25, height=25, 
