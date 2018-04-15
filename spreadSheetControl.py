@@ -108,9 +108,11 @@ class SpreadSheetControlGD(SpreadSheetControl):
         self.transferStatusFrame.grid(row=0, column=1, sticky=E+W)
         #self.transferStatusFrame.pack(side=LEFT, expand=True, fill=X, anchor=W)
         self.transferStatus = LEDRowDiscription(self.transferStatusFrame, name='Checking Transfer Status...').bad().change_discription(SpreadSheetControl.Paragraph).good().blink()
+        Frame(self.transferTab).grid(row=0, column=2, padx=8)
         self.transferTab.columnconfigure(0, weight=0)
         self.transferTab.columnconfigure(0, pad=ScraperSidePadding)
         self.transferTab.columnconfigure(1, weight=1)
+        self.transferTab.columnconfigure(2, weight=0)
 
         Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).grid(row=0, column=0, sticky=E+W)#.pack(side=LEFT, anchor=W)
         self.RESTORE = Button(self.restoreTab, width=10)
