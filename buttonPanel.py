@@ -3,6 +3,8 @@ import time
 from tkinter import *
 import tkinter.ttk as ttk
 
+ButtonWidth = 5
+
 class ButtonPanel:
     def __init__(self, master=None, handler=None, buttonWidths=40, top=10, bottom=10):
         # Has a Frame
@@ -63,19 +65,19 @@ class ButtonPanelGD(ButtonPanel):
         
         self.dropDown = OptionMenu(self.parent, self.handler.scrapeSelection, 'All', 'Base', 'Today', 'Error')
         self.handler.scrapeSelection.set('Today') # set the default option
-        self.dropDown.grid(row=0, column=0, columnspan=2, sticky=W+E)
+        self.dropDown.grid(row=0, column=0, columnspan=2, sticky=W+E, ipadx=9)
         #self.dropDown.pack(side=TOP, anchor=W, expand=YES, fill=X)
         self.disable_dropdown()
         
         
-        self.QUIT = Button(self.parent, width=7)
+        self.QUIT = Button(self.parent, width=ButtonWidth)
         self.QUIT.configure(command=self.handler.handle_quit,
                                 text='QUIT',
                                 fg='red')
         self.QUIT.grid(row=1, column=0)
         #self.QUIT.pack(side=LEFT, padx=2)
         
-        self.SCRAPE = Button(self.parent, width=7)
+        self.SCRAPE = Button(self.parent, width=ButtonWidth)
         self.SCRAPE.configure(command=self.handler.handle_scrape,
                               text='Scrape',
                               fg='green',

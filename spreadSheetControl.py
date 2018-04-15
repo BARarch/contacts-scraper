@@ -5,6 +5,8 @@ import tkinter.ttk as ttk
 
 from ledRow import *
 
+ScraperSidePadding = 23
+
 class SpreadSheetControl:
 
     RestoreText = 'This restores all original contacts from the Backup Sheet.  If there are new contacts from the scraper they will be lost'
@@ -99,7 +101,7 @@ class SpreadSheetControlGD(SpreadSheetControl):
                                text='Transfer Scraped Contacts',
                                wraplength=50,
                                state='disabled')
-        self.TRANSFER.grid(row=0, column=0)
+        self.TRANSFER.grid(row=0, column=0, sticky=N+S, pady=8)
         #self.TRANSFER.pack(side=LEFT, anchor=W, expand=True, fill=Y)
         
         self.transferStatusFrame = ttk.Labelframe(self.transferTab, text='Transfer Status')
@@ -107,15 +109,16 @@ class SpreadSheetControlGD(SpreadSheetControl):
         #self.transferStatusFrame.pack(side=LEFT, expand=True, fill=X, anchor=W)
         self.transferStatus = LEDRowDiscription(self.transferStatusFrame, name='Checking Transfer Status...').bad().change_discription(SpreadSheetControl.Paragraph).good().blink()
         self.transferTab.columnconfigure(0, weight=0)
+        self.transferTab.columnconfigure(0, pad=ScraperSidePadding)
         self.transferTab.columnconfigure(1, weight=1)
 
         Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).grid(row=0, column=0, sticky=E+W)#.pack(side=LEFT, anchor=W)
-        self.RESTORE = Button(self.restoreTab, width=12)
+        self.RESTORE = Button(self.restoreTab, width=10)
         self.RESTORE.configure(command=self.handler.handle_restore,
                                text='RESTORE CONTACTS',
                                wraplength=70,
                                state='disabled')
-        self.RESTORE.grid(row=0, column=1)
+        self.RESTORE.grid(row=0, column=1, sticky=N+S, pady=8, padx=18)
         self.restoreTab.columnconfigure(0, weight=1)
         self.restoreTab.columnconfigure(1, weight=0)
         #self.RESTORE.pack(side=RIGHT, anchor=E, expand=True, fill=Y)

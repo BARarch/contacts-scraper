@@ -3,6 +3,13 @@ import tkinter.ttk as ttk
 from ledRow import *
 import time
 
+FramePanelHorizontalPadding = 13
+FramePanelTopPadding = 5
+FramePanelBottomPadding = 5
+FramePanelVerticalSeparation = 18
+IndicatorsLeftSidePadding = 13
+IndicatorsRightSidePadding = 21
+
 class InitPanel:
     def __init__(self, master=None):
         self.frame = Frame(master)
@@ -103,35 +110,44 @@ class InitPanelGD(InitPanel):
         
 
         self.left = Frame(self.frame)
-        self.left.grid()
+        self.left.grid(sticky=N+W, padx=IndicatorsLeftSidePadding)
         #self.left.pack(side=LEFT, anchor=N, expand=True)
 
         self.right = Frame(self.frame)
-        self.right.grid(row=0,column=1)
+        self.right.grid(row=0, column=1, sticky=E+N, padx=IndicatorsRightSidePadding)
         #self.right.pack(side=RIGHT, anchor=N, expand=True, pady=17)
 
-        self.keysFrame = ttk.Labelframe(self.left, text='KEYS')
-        self.recordsFrame = ttk.Labelframe(self.left, text='RECORDS')
+        self.keysFrame = ttk.Labelframe(self.left, text='KEYS', padding=(FramePanelHorizontalPadding ,FramePanelTopPadding, FramePanelHorizontalPadding, FramePanelBottomPadding))
+        self.recordsFrame = ttk.Labelframe(self.left, text='RECORDS', padding=(FramePanelHorizontalPadding ,FramePanelTopPadding, FramePanelHorizontalPadding, FramePanelBottomPadding))
         
         self._contactKeys = LEDRowGD(self.keysFrame, name="Contact Keys").off()
         self._directoryKeys = LEDRowGD(self.keysFrame, name="Directory Keys").off()   
         self._contactRecords = LEDRowGD(self.recordsFrame, name="Contact Records").off()
         self._agencyDirectory = LEDRowGD(self.recordsFrame, name="Agency Directory").off()
-                    
-        self._data = LEDRowGD(self.right, name="Data").off()
+        
+        LEDRowBlankGD(self.right, topPad=1)            
+        self._data = LEDRowGD(self.right, name="Data", topPad=50).off()
         self._output = LEDRowGD(self.right, name="Output").off()
         self._browserDriver = LEDRowNoMsgGD(self.right, name="Browser/Driver").off()
         self._contactChecker = LEDRowGD(self.right, name="Contact Checker").off().active().blink()
 
 
         self.keysFrame.grid()
+        
         #self.keysFrame.pack(side=TOP, anchor=W, expand=True)
 
         self.recordsFrame.grid(row=1)
         #self.recordsFrame.pack(side=TOP, anchor=W, expand=True)# second panes
         
-        self.frame.grid()
+        self.frame.grid(sticky=E+W)
+        self.left.rowconfigure(1, pad=FramePanelVerticalSeparation)
         #self.frame.pack(expand=True, side=TOP, anchor=N)
+        self.frame.columnconfigure(0, weight=1)
+        #self.left.columnconfigure(0, ipad=IndicatorsLeftSidePadding)
+        self.frame.columnconfigure(1, weight=0)
+        #self.right.columnconfigure(0, ipad=IndicatorsRightSidePadding)
+        
+        
 
 if __name__ == '__main__':
     ## Get Scraper Thread

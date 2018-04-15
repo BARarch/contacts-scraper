@@ -10,7 +10,7 @@ from progressPanel import *
 from parseLight import *
 
 
-
+ControlSidePadding = 13
 
 class ScraperControl:
     def __init__(self, master=None, handler=None):
@@ -50,7 +50,11 @@ class ScraperControlGD(ScraperControl):
         #self.right.pack(side=LEFT, expand=True, padx=10, pady=10, anchor=N)
         self.parse = ParseLightPanelGD(self.frame) 
 
-        self.frame.grid()
+        self.frame.grid(sticky=E+W, padx=ControlSidePadding)
+        self.frame.columnconfigure(2, pad=21)
+        self.frame.columnconfigure(3, pad=41)
+        Frame(self.frame).grid(row=2, pady=5)
+
         #self.frame.pack(side=TOP, padx=5)  
         
         

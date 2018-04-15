@@ -95,13 +95,13 @@ class ProgressPanelGD(ProgressPanel):
         self.master = master
         
         self.status = Label(self.master, pady=4, relief=SUNKEN, text='Progress Panel at your service!')
-        self.status.grid(row=0, column= 2,  sticky=E+W)
+        self.status.grid(row=0, column= 2,  sticky=E+W, padx=10)
         #self.status.pack(expand=True, pady=0 ,ipady=0 ,side=TOP, anchor=N, fill=X)
         
         self.progressBarPosition = 0
         self.progressBarStops = 10
         self.progressBarState = 0
-        self.progress = ttk.Progressbar(self.master, orient='horizontal', length=400, mode='determinate', maximum=200, variable=self.progressBarPosition)
+        self.progress = ttk.Progressbar(self.master, orient='horizontal', length=395, mode='determinate', maximum=200, variable=self.progressBarPosition)
         self.progress.grid(row=1, column= 2)
         #self.progress.pack(side=TOP, expand=True, fill=X, ipady=1, pady=2)
         

@@ -5,10 +5,14 @@ import tkinter.ttk as ttk
 from testLeds import *
 
 StatusColor = '#BBBBBB'
-LABELWIDTH = 20
+LABELWIDTH = 15
+DISCRIPTIONLABELWIDTH = 21
 STATUSWIDTH = 10
 RowPadding = 5
-Height = 2
+Height = 1
+StatusVerticalPadding = 3
+LabelHorizontalPadding = 20
+RowVerticalPadding = 8
 
 class LEDRow:
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
@@ -66,7 +70,7 @@ class LEDRow:
         return self
 
 class LEDRowGD(LEDRow):
-    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
+    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1, topPad=0):
         self.frame = Frame(master) 
         self.parent = master
         self.frame.grid()
@@ -79,10 +83,20 @@ class LEDRowGD(LEDRow):
         self.name.grid(row=0, column=1)
         #self.name.pack(side=LEFT, expand=YES, anchor=W,  fill=BOTH, pady=5)
         
-        self.status = Label(self.frame, relief=SUNKEN, bg=StatusColor, fg="red", text='', width=STATUSWIDTH, height=Height)
+        self.status = Label(self.frame, relief=SUNKEN, bg=StatusColor, fg="red", text='', width=STATUSWIDTH, height=Height, pady=StatusVerticalPadding)
         self.status.grid(row=0, column=2)
+        self.frame.rowconfigure(0, pad=RowVerticalPadding)
+        self.frame.columnconfigure(1, pad=LabelHorizontalPadding)
         #self.status.pack(expand=True, fill=Y, side=RIGHT,anchor=E)
-    
+
+class LEDRowBlankGD(LEDRow):
+    def __init__(self, master=None, name="NONE", blink=0, blinkrate=1, topPad=0):
+        self.frame = Frame(master) 
+        self.parent = master
+        self.frame.grid()
+        self.name = Label(self.frame, text='', anchor=W, width=LABELWIDTH, height=Height)
+        self.name.grid(row=0, column=0)
+        self.frame.rowconfigure(0, pad=topPad)   
     
 class LEDRowNoMsg(LEDRow):
     def __init__(self, master=None, name="NONE", blink=0, blinkrate=1):
@@ -121,6 +135,8 @@ class LEDRowNoMsgGD(LEDRowNoMsg):
         
         self.name = Label(self.frame, text=name, anchor=W, width=LABELWIDTH, height=Height)
         self.name.grid(row=0, column=1)
+        self.frame.rowconfigure(0, pad=RowVerticalPadding)
+        self.frame.columnconfigure(1, pad=LabelHorizontalPadding)
         #self.name.pack(side=LEFT, expand=YES, anchor=W,  fill=BOTH, pady=5)
         
 
@@ -188,7 +204,7 @@ class LEDRowDiscriptionGD(LEDRowDiscription):
         
         #self.indicator.frame.pack(side=LEFT, anchor=W, expand=YES, padx=5, pady=1)
         
-        self.name = Label(self.frame, text=name, anchor=W, width=LABELWIDTH, height=Height)
+        self.name = Label(self.frame, text=name, anchor=W, width=DISCRIPTIONLABELWIDTH, height=Height)
         self.name.grid(row=0, column=1, sticky=W)
         
         #self.name.pack(side=LEFT, expand=YES, anchor=W,  fill=BOTH, pady=5)
@@ -197,7 +213,7 @@ class LEDRowDiscriptionGD(LEDRowDiscription):
                                                    wraplength=200,
                                                    justify=LEFT,
                                                    anchor=W)
-        self.discription.grid(row=2, column=0, columnspan=2)
+        self.discription.grid(row=2, column=0, columnspan=2, ipadx=25)
 
 
         

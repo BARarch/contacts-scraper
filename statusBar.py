@@ -42,7 +42,7 @@ class StatusBarGD(StatusBar):
         self.mainStatus.grid(row=0, column=0, sticky=E+W)
         #self.mainStatus.pack(side=LEFT, anchor=W, expand=True, fill=X)
         
-        self.timeStatus = Label(self.frame, bd=1, relief=SUNKEN, width=12, text="There")
+        self.timeStatus = Label(self.frame, bd=1, relief=SUNKEN, width=13, text="There")
         self.timeStatus.grid(row=0, column=1)
         #self.timeStatus.pack(side=RIGHT, anchor=E)
 

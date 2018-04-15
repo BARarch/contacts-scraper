@@ -296,20 +296,18 @@ class MainApplicationGD(MainApplication):
         self.scrapeSelection.trace('w', self.change_dropdown)
         
         self.indicators = InitPanelGD(self)
-        ttk.Separator(self).grid(sticky=E+W)
+        ttk.Separator(self).grid(sticky=E+W, pady=5)
         self.control = ScraperControlGD(self, self)
-        ttk.Separator(self).grid(sticky=E+W)
+        ttk.Separator(self).grid(sticky=E+W, pady=5)
         self.manager = SpreadSheetControlGD(self, self)
         ttk.Separator(self).grid(sticky=E+W)
         self.statusBar = StatusBarGD(self)
         self.scraperProcess = ScraperThread(self.startupQueue, self.commandQueue, self.scraperQueue)
         
-
-        
         self.numScrapes = 0
         self.report = None
 
-        self.pack()
+        self.grid()
         
         
         
@@ -319,7 +317,7 @@ if __name__ == '__main__':
     
     root = Tk()
     app = MainApplicationGD(master=root)
-    app.after(500, app.startup)
+    #app.after(500, app.startup)
     app.mainloop()
     root.destroy()
     
