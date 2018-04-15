@@ -13,8 +13,9 @@ class ButtonPanel:
         self.parent = master
         self.handler = handler
         
+        self.handler.scrapeSelection.set('All') # set the default option
         self.dropDown = OptionMenu(self.frame, self.handler.scrapeSelection, 'All', 'Base', 'Today', 'Error')
-        self.handler.scrapeSelection.set('Today') # set the default option
+        
         self.dropDown.pack(side=TOP, anchor=W, expand=YES, fill=X)
         self.disable_dropdown()
         
@@ -64,8 +65,9 @@ class ButtonPanelGD(ButtonPanel):
         self.handler = handler
         
         self.dropDown = OptionMenu(self.parent, self.handler.scrapeSelection, 'All', 'Base', 'Today', 'Error')
-        self.handler.scrapeSelection.set('Today') # set the default option
-        self.dropDown.grid(row=0, column=0, columnspan=2, sticky=W+E, ipadx=9)
+        self.handler.scrapeSelection.set('All') # set the default option
+        self.dropDown.configure(width=8)
+        self.dropDown.grid(row=0, column=0, columnspan=2, sticky=W+E, ipadx=2)
         #self.dropDown.pack(side=TOP, anchor=W, expand=YES, fill=X)
         self.disable_dropdown()
         
