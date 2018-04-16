@@ -1309,9 +1309,10 @@ class NewPointerSet(object):
         self.newPointers.append(newPointer)
 
     def __str__(self):
-        s = ''
-        for pt in self.newPointers:
-            s += ('%s     as     %s\n' % (str(pt.get_nathan()), str(pt.get_tom())))
+        if len(self.newPointers) == 1:
+            s = '1 New Contact'
+        else:
+            s = str(len(self.newPointers)) + ' New Contacts'
         return s
 
     def get_pointers(self):

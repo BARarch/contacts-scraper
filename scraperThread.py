@@ -171,7 +171,8 @@ class ScraperThread(threading.Thread):
         self.commandQueue = commandHandle
         self.scraperQueue = scraperHandle
         
-    def run(self):         
+    def run(self):
+
         self.start_scraper()
        
         ## Scraper Loop

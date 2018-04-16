@@ -4,10 +4,14 @@ from tkinter import *
 import tkinter.ttk as ttk
 import queue
 import threading
-
+from datetime import datetime
 from mainAppControl import *
 
 if __name__ == '__main__':
+
+    sys.stdout = open('output.txt', 'w')
+    print ('Scraper started on ' + datetime.now().strftime('%a, %d %b %Y %H:%M:%S'))
+    print()
           
     root = Tk()
     root.title("Gulp Scraper")
