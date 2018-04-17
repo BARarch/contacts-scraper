@@ -363,6 +363,7 @@ class OrgQueryThread(OrgQuery):
         self.queryProcess = QueryThread(link, browser, self.responseQueue)
 
         try:
+            OrgQuery.request_on(self.link)
             self.queryProcess.start()                       # Here we start query thread
             cycles = 0
             while True:                                     # Check for response
