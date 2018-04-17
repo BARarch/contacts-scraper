@@ -9,6 +9,7 @@ import datetime as dt
 import os
 
 import queue
+from queryThread import QueryThread
 
 
 # Company Directory Manager Classes
@@ -138,7 +139,7 @@ class OrgSession(DirectoryManager):
         self.links = DirectoryManager.linkList(self, self.orgRecord)
 
         ## Retreve Queries
-        self.orgQueries = [OrgQuery(link, self.sessionBrowser) for link in self.links]
+        self.orgQueries = [OrgQueryThread(link, self.sessionBrowser) for link in self.links]
             
         ## Analyze Query Session Collect Data
         reportRow = self.orgSessionStatusCheck()
@@ -352,6 +353,63 @@ class OrgQuery(object):
     def request_off(cls, place):
         if OrgQuery.scraperQueue:
             OrgQuery.scraperQueue.put({'__REQUESTOFF': place})
+
+class OrgQueryThread(OrgQuery):
+    ThreadTimeOut = 40
+
+    def __init__(self, link, browser):
+        self.link = link
+        self.responseQueue = queue.Queue()
+        self.queryProcess = QueryThread(link, browser, self.responseQueue)
+
+        try:
+            self.queryProcess.start()                       # Here we start query thread
+            cycles = 0
+            while True:                                     # Check for response
+                try:            
+                    time.sleep(1)
+                    packet = self.responseQueue.get(False)
+                    print()
+                except queue.Empty:
+                    cycles += 1
+                    print('.', end='', flush=True)
+                    if cycles > OrgQueryThread.ThreadTimeOut:              # if there is not a timely response
+                        # Timeout Condition
+                        self.timeOut = True
+                        OrgQuery.request_off('Timed out')
+                        print('Query Thread Timeout')
+                        break
+                else:                                       #if there is a response,
+                    self.query = packet['query']
+                    self.responseTime = packet['response time']
+                    break
+
+            
+        except TimeoutException:
+            self.timeOut = True
+            OrgQuery.request_off('Timed out')
+        else:
+            self.timeOut = False
+            OrgQuery.request_off(self.link)
+
+        try:
+            self.pageSource = browser.page_source
+        except:
+            self.sourceError = True
+            print("Source Error Here")
+        else:
+            self.sourceError = False
+
+        try:
+            self.soup = BeautifulSoup(OrgQuery.strip_html_junk(self.pageSource), 'lxml')
+        except Exception as e:
+            self.soupError = True
+            print("BeautifulSoup Error Here")
+            print(e)
+        else:
+            self.soupError = False
+
+        self.callTime = dt.datetime.now()
 
 
     

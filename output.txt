@@ -1,4 +1,4 @@
-Scraper started on Mon, 16 Apr 2018 16:06:10
+Scraper started on Mon, 16 Apr 2018 21:53:18
 
 KEYS
 __startup: {'progress': 'START'}
@@ -19,7 +19,7 @@ __startup: {'progress': 4, '__ready': 'ad'}
 __startup: {'__waiting': 'd'}
 __startup: {'message': 'DATAFRAMES READY', 'progress': 5, '__ready': 'd'}
 __startup: {'__waiting': 'o'}
-RECORD OUTPUT READY 620
+RECORD OUTPUT READY 1786
 __startup: {'progress': 6, '__ready': 'o', '__waiting': 'bd'}
 
 Started Headless Browser
@@ -28,25 +28,25 @@ CONTACT CHECKER READY
 SCRAPE SESSION OPEN
 
 Sheet name change for All
-__startup: {'rowCounts': {'contact counts': 3795, 'output counts': 94}}
+__startup: {'rowCounts': {'contact counts': 3795, 'output counts': 3226}}
 __startup: {'message': 'SCRAPE SESSION OPEN', 'progress': 'FINNISHED', '__ready': 'cc'}
-RECORD OUTPUT READY 101
+RECORD OUTPUT READY 3233
 Sheet name change for Today
-RECORD OUTPUT READY 620
+RECORD OUTPUT READY 1786
 The scraper is running
 
 Scraping National Association for Multi-Ethnicity In Communications (NAMIC)
 __scrape: {'numOrgs': 10}
 __scrape: {'scraping': 'National Association for Multi-Ethnicity In Communications (NAMIC)'}
-__scrape: {'__REQUESTON': 'http://namic.com/the-team/'}
+..........
 __scrape: {'__REQUESTOFF': 'http://namic.com/the-team/'}
 __scrape: {'__DIRON': '__recordNote'}
-19.600 s
+10.535 s
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '19.600 s'}
+__scrape: {'__DIRON': '__recordRow', 'time': '10.535 s'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:06:55', '19.600', 's', 'Good']
+['Mon Apr 16, 2018  21:53:52', '10.535', 's', 'Good']
 __scrape: {'__DIROFF': '__recordNote'}
 __scrape: {'__OUTON': '__contacts'}
 Verified Pointers         						3
@@ -64,17 +64,17 @@ __scrape: {'__OUTOFF': '__newContacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'National Association for Multi-Ethnicity In Communications (NAMIC)'}
 __scrape: {'scraping': 'Association for Women in Science'}
-__scrape: {'__REQUESTON': 'https://www.awis.org/about-awis/staff/'}
+
 __scrape: {'__REQUESTOFF': 'https://www.awis.org/about-awis/staff/'}
 __scrape: {'__DIRON': '__recordNote'}
-1064 ms
+973 ms
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '1064 ms'}
+__scrape: {'__DIRON': '__recordRow', 'time': '973 ms'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:04', '1064', 'ms', 'Good']
-__scrape: {'__DIROFF': '__recordNote'}
+['Mon Apr 16, 2018  21:53:58', '973', 'ms', 'Good']
 No Fred
+__scrape: {'__DIROFF': '__recordNote'}
 __scrape: {'__OUTON': '__contacts'}
 Not the right number of Grandmothers 2
 
@@ -83,19 +83,19 @@ __scrape: {'__OUTOFF': '__contacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'Association for Women in Science'}
 __scrape: {'scraping': 'Brain Injury Association of America'}
-__scrape: {'__REQUESTON': 'http://www.biausa.org/About-Us/contact.htm'}
+.
 __scrape: {'__REQUESTOFF': 'http://www.biausa.org/About-Us/contact.htm'}
 __scrape: {'__DIRON': '__recordNote'}
-2.294 s
+1836 ms
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '2.294 s'}
+__scrape: {'__DIRON': '__recordRow', 'time': '1836 ms'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:09', '2.294', 's', 'Good']
+['Mon Apr 16, 2018  21:54:03', '1836', 'ms', 'Good']
+No Fred
+No Fred
+No Fred
 __scrape: {'__DIROFF': '__recordNote'}
-No Fred
-No Fred
-No Fred
 No Fred
 __scrape: {'__OUTON': '__contacts'}
 Not the right number of Grandmothers 0
@@ -105,15 +105,15 @@ __scrape: {'__OUTOFF': '__contacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'Brain Injury Association of America'}
 __scrape: {'scraping': 'American Society of Home Inspectors'}
-__scrape: {'__REQUESTON': 'http://www.homeinspector.org/ASHI-staff'}
+
 __scrape: {'__REQUESTOFF': 'http://www.homeinspector.org/ASHI-staff'}
 __scrape: {'__DIRON': '__recordNote'}
-1028 ms
+924 ms
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '1028 ms'}
+__scrape: {'__DIRON': '__recordRow', 'time': '924 ms'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:15', '1028', 'ms', 'Good']
+['Mon Apr 16, 2018  21:54:12', '924', 'ms', 'Good']
 __scrape: {'__DIROFF': '__recordNote'}
 __scrape: {'__OUTON': '__contacts'}
 Verified Pointers         						3
@@ -129,15 +129,15 @@ __scrape: {'__OUTOFF': '__newContacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'American Society of Home Inspectors'}
 __scrape: {'scraping': 'NAADAC, the Association for Addiction Professionals'}
-__scrape: {'__REQUESTON': 'https://www.naadac.org/staff-directory'}
+..
 __scrape: {'__REQUESTOFF': 'https://www.naadac.org/staff-directory'}
 __scrape: {'__DIRON': '__recordNote'}
-5.359 s
+2.818 s
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '5.359 s'}
+__scrape: {'__DIRON': '__recordRow', 'time': '2.818 s'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:25', '5.359', 's', 'Good']
+['Mon Apr 16, 2018  21:54:21', '2.818', 's', 'Good']
 __scrape: {'__DIROFF': '__recordNote'}
 No Fred
 No Fred
@@ -150,15 +150,15 @@ __scrape: {'__OUTOFF': '__contacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'NAADAC, the Association for Addiction Professionals'}
 __scrape: {'scraping': 'American Public Transportation Association'}
-__scrape: {'__REQUESTON': 'http://www.apta.com/about/contact/Pages/StaffbyDepartment.aspx'}
+...
 __scrape: {'__REQUESTOFF': 'http://www.apta.com/about/contact/Pages/StaffbyDepartment.aspx'}
 __scrape: {'__DIRON': '__recordNote'}
-5.007 s
+3.114 s
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '5.007 s'}
+__scrape: {'__DIRON': '__recordRow', 'time': '3.114 s'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:33', '5.007', 's', 'Good']
+['Mon Apr 16, 2018  21:54:29', '3.114', 's', 'Good']
 __scrape: {'__DIROFF': '__recordNote'}
 No Fred
 __scrape: {'__OUTON': '__contacts'}
@@ -177,20 +177,20 @@ __scrape: {'__OUTOFF': '__newContacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'American Public Transportation Association'}
 __scrape: {'scraping': 'Indiana Soybean Alliance'}
-__scrape: {'__REQUESTON': 'http://www.indianasoybean.com/about-us/staff'}
+.
 __scrape: {'__REQUESTOFF': 'http://www.indianasoybean.com/about-us/staff'}
 __scrape: {'__DIRON': '__recordNote'}
-1293 ms
+1676 ms
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '1293 ms'}
+__scrape: {'__DIRON': '__recordRow', 'time': '1676 ms'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:39', '1293', 'ms', 'Good']
-No Fred
+['Mon Apr 16, 2018  21:54:35', '1676', 'ms', 'Good']
 No Fred
 No Fred
 No Fred
 __scrape: {'__DIROFF': '__recordNote'}
+No Fred
 __scrape: {'__OUTON': '__contacts'}
 Not the right number of Grandmothers 0
 
@@ -199,15 +199,15 @@ __scrape: {'__OUTOFF': '__contacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'Indiana Soybean Alliance'}
 __scrape: {'scraping': 'Associated Builders and Contractors (ABC)'}
-__scrape: {'__REQUESTON': 'http://www.abc.org/en-us/abc/leadership.aspx'}
+...
 __scrape: {'__REQUESTOFF': 'http://www.abc.org/en-us/abc/leadership.aspx'}
 __scrape: {'__DIRON': '__recordNote'}
-1748 ms
+3.356 s
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '1748 ms'}
+__scrape: {'__DIRON': '__recordRow', 'time': '3.356 s'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:45', '1748', 'ms', 'Good']
+['Mon Apr 16, 2018  21:54:43', '3.356', 's', 'Good']
 __scrape: {'__DIROFF': '__recordNote'}
 No Fred
 No Fred
@@ -240,17 +240,17 @@ __scrape: {'__OUTOFF': '__contacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'Associated Builders and Contractors (ABC)'}
 __scrape: {'scraping': 'National Association of Social Workers'}
-__scrape: {'__REQUESTON': 'https://www.socialworkers.org/About/Governance/Board-of-Directors/Executive-Committee-Members.aspx'}
+.
 __scrape: {'__REQUESTOFF': 'https://www.socialworkers.org/About/Governance/Board-of-Directors/Executive-Committee-Members.aspx'}
 __scrape: {'__DIRON': '__recordNote'}
-1811 ms
+1186 ms
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '1811 ms'}
+__scrape: {'__DIRON': '__recordRow', 'time': '1186 ms'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:51', '1811', 'ms', 'Good']
-No Fred
+['Mon Apr 16, 2018  21:54:50', '1186', 'ms', 'Good']
 __scrape: {'__DIROFF': '__recordNote'}
+No Fred
 No Fred
 __scrape: {'__OUTON': '__contacts'}
 Verified Pointers         						2
@@ -268,17 +268,17 @@ __scrape: {'__OUTOFF': '__newContacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'National Association of Social Workers'}
 __scrape: {'scraping': 'American Marketing Association (AMA)'}
-__scrape: {'__REQUESTON': 'https://www.ama.org/AboutAMA/Pages/Staff-Directory.aspx'}
+.....
 __scrape: {'__REQUESTOFF': 'https://www.ama.org/AboutAMA/Pages/Staff-Directory.aspx'}
 __scrape: {'__DIRON': '__recordNote'}
-2.155 s
+5.276 s
 __scrape: {'__DIROFF': '__recordNote'}
-__scrape: {'__DIRON': '__recordRow', 'time': '2.155 s'}
+__scrape: {'__DIRON': '__recordRow', 'time': '5.276 s'}
 __scrape: {'__DIROFF': '__recordRow'}
 __scrape: {'__DIRON': '__recordNote'}
-['Mon Apr 16, 2018  16:07:58', '2.155', 's', 'Good']
-No Fred
+['Mon Apr 16, 2018  21:55:00', '5.276', 's', 'Good']
 __scrape: {'__DIROFF': '__recordNote'}
+No Fred
 No Reggies
 No Fred
 No Fred
@@ -297,7 +297,7 @@ __scrape: {'__OUTON': '__newContacts'}
 
 
 --------------------------------------------------------------------------
-Time of Scrape                                  		  0:01:29
+Time of Scrape                                  		  0:01:27
 Number of Sites Attempted                       			10
 
 
@@ -315,10 +315,63 @@ that did not open    							0
 __scrape: {'__OUTOFF': '__newContacts'}
 __scrape: {'__PARSEOFF': 'ContactCollector'}
 __scrape: {'complete': 'American Marketing Association (AMA)'}
-__scrape: {'report': {'time of scrape': '0:01:29', 'n sites attempted': '10', 'n extacted': '4', 'n without extractions': '1', 'n not extracted': '5', 'n did not open': '0'}}
+__scrape: {'report': {'time of scrape': '0:01:27', 'n sites attempted': '10', 'n extacted': '4', 'n without extractions': '1', 'n not extracted': '5', 'n did not open': '0'}}
 scraper finnished
 
-__scrape: {'rowCounts': {'contact counts': 3795, 'output counts': 94}}
+__scrape: {'rowCounts': {'contact counts': 3795, 'output counts': 3226}}
+__scrape: {'done': 1}
+Sheet name change for Base
+RECORD OUTPUT READY 1931
+The scraper is running
+
+Scraping National Association for Multi-Ethnicity In Communications (NAMIC)
+__scrape: {'numOrgs': 1}
+..__scrape: {'scraping': 'National Association for Multi-Ethnicity In Communications (NAMIC)'}
+..............
+__scrape: {'__REQUESTOFF': 'http://namic.com/the-team/'}
+__scrape: {'__DIRON': '__recordNote'}
+16.015 s
+__scrape: {'__DIROFF': '__recordNote'}
+__scrape: {'__DIRON': '__recordRow', 'time': '16.015 s'}
+__scrape: {'__DIROFF': '__recordRow'}
+__scrape: {'__DIRON': '__recordNote'}
+['Mon Apr 16, 2018  21:55:39', '16.015', 's', 'Good']
+__scrape: {'__DIROFF': '__recordNote'}
+__scrape: {'__OUTON': '__contacts'}
+Verified Pointers         						3
+Scrape Pointers           						3
+Start Pointers            						24
+Start Type                				__nathanStarts__
+Merged (Filtered) Pointers						5
+5 New Contacts
+__scrape: {'__OUTOFF': '__contacts'}
+__scrape: {'__PARSEON': 'ContactCollector'}
+__scrape: {'__OUTON': '__newContacts'}
+
+
+--------------------------------------------------------------------------
+Time of Scrape                                  		  0:00:20
+Number of Sites Attempted                       			1
+
+
+Organizations with 
+extracted contacts         						1
+
+Organizations without 
+verified extractions    						0
+
+Organizations not 
+extacted                    						0
+
+Organizations with links 
+that did not open    							0
+__scrape: {'__OUTOFF': '__newContacts'}
+__scrape: {'__PARSEOFF': 'ContactCollector'}
+__scrape: {'complete': 'National Association for Multi-Ethnicity In Communications (NAMIC)'}
+__scrape: {'report': {'time of scrape': '0:00:20', 'n sites attempted': '1', 'n extacted': '1', 'n without extractions': '0', 'n not extracted': '0', 'n did not open': '0'}}
+scraper finnished
+
+__scrape: {'rowCounts': {'contact counts': 3795, 'output counts': 3226}}
 __scrape: {'done': 1}
 scraper loop done
 SCRAPER THREAD FINNISHED
