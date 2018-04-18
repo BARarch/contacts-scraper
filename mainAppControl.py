@@ -92,7 +92,7 @@ class MainApplication(Frame):
 
     def handle_new_orgs(self):
         self.commandQueue.put({'backup': 1})
-        self.control.progress.message("Archiving new contacts...")
+        self.control.progress.message("Archiving Contacts...")
         self.statusBar.message("Archiving")
         self.control.buttons.disable_scrape()
         self.manager.disable_restore()
