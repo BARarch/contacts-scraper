@@ -89,8 +89,13 @@ class InitPanel:
     
     # Contact Scrape Feedback Methods for Init Panel
     def request_on(self):
-        self._browserDriver.active()
+        self._browserDriver.on()
     def request_off(self):
+        self._browserDriver.off()
+
+    def new_browser_on(self):
+        self._browserDriver.active()
+    def new_browser_off(self):
         self._browserDriver.off()
     
     def output_on(self):

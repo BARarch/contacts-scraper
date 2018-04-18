@@ -118,6 +118,15 @@ class DirectoryManager(object):
         if DirectoryManager.scraperQueue:
             DirectoryManager.scraperQueue.put({'__DIROFF': place})
 
+    @classmethod
+    def change_on(cls, place):
+        if DirectoryManager.scraperQueue:
+            DirectoryManager.scraperQueue.put({'__NEWBROWSERON': place})
+
+    @classmethod
+    def change_off(cls, place):
+        if DirectoryManager.scraperQueue:
+            DirectoryManager.scraperQueue.put({'__NEWBROWSEROFF': place})
 
 class OrgSession(DirectoryManager):
     browserPath = '/Users/Anthony/scripts/Contacts-Scraper/Drivers/chromedriver' # change path as needed 
@@ -139,7 +148,7 @@ class OrgSession(DirectoryManager):
         self.links = DirectoryManager.linkList(self, self.orgRecord)
 
         ## Retreve Queries
-        self.orgQueries = [OrgQueryThread(link, self.sessionBrowser) for link in self.links]
+        self.orgQueries = [OrgQuery(link, self.sessionBrowser) for link in self.links]
             
         ## Analyze Query Session Collect Data
         reportRow = self.orgSessionStatusCheck()
@@ -153,7 +162,8 @@ class OrgSession(DirectoryManager):
     def orgSessionStatusCheck(self):
         # Documents performance and exceptions
         if self.anyQueryTimeouts():     #There is a timeout
-            self.new_Browser()      #Get a new brower
+            print('OrgSession wants new Browser')
+            self.new_browser()      #Get a new brower
             self.serialSessionNote('We have a timeout')     #Send a Note
             self.sessionStatus = 'Bad'      #Set session Status to bad
             return[self.orgQueries[-1].get_callTimeStr(), '--', '--', self.sessionStatus]
@@ -189,8 +199,8 @@ class OrgSession(DirectoryManager):
         return False
 
 
-    def new_Browser(self):
-        pass
+    def new_browser(self):
+        print('Where is the new browser')
 
     def serialSessionNote(self, note):
         ## Write a note to the organization row of the previous session
@@ -215,21 +225,31 @@ class OrgSession(DirectoryManager):
         OrgSession.browserPath = os.path.join(intDir, 'chromedriver')
 
 class HeadlessOrgSession(OrgSession):
+    ImplicitWait = 20
+    PageLoadTimeout = 10
     def __init__(self, orgRecords):
         OrgSession.__init__(self, orgRecords)
         self.sessionBrowser = webdriver.PhantomJS()
         self.sessionBrowser.set_window_size(1600, 1600)
+        self.sessionBrowser.implicitly_wait(HeadlessOrgSession.ImplicitWait)
+        self.sessionBrowser.set_page_load_timeout(HeadlessOrgSession.PageLoadTimeout)
         print()
         print('Started Headless Browser')
         
     def new_browser(self):
-        try:                                ## If the browser was closed by another user this will fail
+        try:
+            DirectoryManager.change_on('HeadlessOrgSession')                                ## If the browser was closed by another user this will fail
             self.sessionBrowser.quit()
         except:
             print('Missing Browser, We will resume')
+        else:
+            print('HeadLess Browser Closed')
         finally:                            ## So we catch it here
             self.sessionBrowser = webdriver.PhantomJS()
             self.sessionBrowser.set_window_size(1600, 1600)
+            self.sessionBrowser.implicitly_wait(HeadlessOrgSession.ImplicitWait)
+            self.sessionBrowser.set_page_load_timeout(HeadlessOrgSession.PageLoadTimeout)
+            DirectoryManager.change_off('HeadlessOrgSession')
             print('Started NEW Headless Browser')
 
     def close_session_browser(self):
@@ -242,7 +262,7 @@ class HeadOrgSession(OrgSession):
         self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)
         self.sessionBrowser.set_script_timeout(OrgSession.ScriptLoadTimeout)
         
-    def new_Browser(self):
+    def new_browser(self):
         try:                                ## If the browser was closed by another user this will fail
             self.sessionBrowser.close()
         except:
@@ -252,7 +272,7 @@ class HeadOrgSession(OrgSession):
             self.sessionBrowser.set_page_load_timeout(OrgSession.PageLoadTimeout)
             self.sessionBrowser.set_script_timeout(OrgSession.ScriptLoadTimeout)
 
-        def close_session_browser(self):
+    def close_session_browser(self):
             self.sessionBrowser.close()
             
 class BatchSessionPing(HeadOrgSession):
@@ -263,7 +283,8 @@ class BatchSessionPing(HeadOrgSession):
                 q = OrgSession.processSession(self, org)
             except:
                 OrgSession.organizationSessionNote(self, org, "Something Happend Here")
-                OrgSession.new_Browser(self)
+                print('BatchSessionPing wants new Browser')
+                OrgSession.new_browser(self)
 
         
 

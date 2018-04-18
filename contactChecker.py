@@ -456,7 +456,8 @@ class ContactScraperVerifier(MotherSetVerifier):
         
     @classmethod
     def new_browser(cls):
-        VerificationHandler.orgRecords.new_Browser()
+        print('ContactScraperVerifier wants new Browser')
+        VerificationHandler.orgRecords.new_browser()
         ContactScraperVerifier.reset_ping_count()
 
     @classmethod
@@ -467,6 +468,8 @@ class ContactScraperVerifier(MotherSetVerifier):
     def increment_browser_pings(cls):
         ContactScraperVerifier.noBrowserPings += 1
         if ContactScraperVerifier.noBrowserPings >= ContactScraperVerifier.browserPingLimit:
+            print()
+            print('Ping Limit Reached')
             ContactScraperVerifier.new_browser()
             
     @classmethod
@@ -1664,7 +1667,7 @@ class ContactSheetOutput(object):
             spreadsheetId=spreadsheetId, range=rangeName).execute()
         values = result.get('values', [])
 
-        blankrow = ['' for n in ContactSheetOutput.contactKeys]
+        blankrow = ['' for n in range(22)]
         emptybatch = [blankrow for row in values]
 
         if not values:

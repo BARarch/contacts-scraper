@@ -223,6 +223,10 @@ class MainApplication(Frame):
                 self.indicators.request_on()
             if '__REQUESTOFF' in packet:
                 self.indicators.request_off()
+            if '__NEWBROWSERON' in packet:     
+                self.indicators.new_browser_on()
+            if '__NEWBROWSEROFF' in packet:
+                self.indicators.new_browser_off()
 
             if comeBack:
                 self.parent.after(100, self.manage_scrape)

@@ -119,6 +119,11 @@ class LEDRowNoMsg(LEDRow):
         self.indicator.blinkoff()
         self.indicator.turnoff()
         return self
+
+    def on(self):
+        self.indicator.blinkoff()
+        self.indicator.turnon()
+        return self
         
     def message(self, msg):
         return self
