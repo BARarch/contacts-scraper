@@ -318,7 +318,7 @@ class VerificationHandler(object):
         
         # Call the website of the orgnization and set the soup for all Verification Pointers in this Handler
         self.orgQueries = VerificationHandler.orgRecords.processSession(self.organization)
-        print(VerificationHandler.orgRecords.orgSessionStatusCheck())
+        #print(VerificationHandler.orgRecords.orgSessionStatusCheck())
         self.orgSoup = self.orgQueries[0].get_soup()
 
         ContactPointerFamily.set_soup(self.orgSoup)
