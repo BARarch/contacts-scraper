@@ -317,13 +317,26 @@ class MainApplicationGD(MainApplication):
         
         
 if __name__ == '__main__':
-        
+    noStart = False
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '--guis' or sys.argv[1] == '-g':
+            noStart = True
+
+    if noStart:
+        root = Tk()
+        app = MainApplicationGD(master=root)
+        #app.after(500, app.startup)
+        app.mainloop()
+        root.destroy()
+    else: 
+        root = Tk()
+        app = MainApplicationGD(master=root)
+        app.after(500, app.startup)
+        app.mainloop()
+        root.destroy()   
     
-    root = Tk()
-    app = MainApplicationGD(master=root)
-    app.after(500, app.startup)
-    app.mainloop()
-    root.destroy()
+    
     
     
     

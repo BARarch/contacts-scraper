@@ -26,7 +26,7 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=False,
+          console=True,
           icon='C:\\Users\\Anthony\\scripts\\Contacts-Scraper\\icongulppng_Qlo_icon.ico')
 coll = COLLECT(exe,
                a.binaries,
