@@ -10,6 +10,7 @@ ScraperSidePadding = 23
 class SpreadSheetControl:
 
     RestoreText = 'This restores all original contacts from the Backup Sheet.  If there are new contacts from the scraper they will be lost'
+    BackupText = 'This backs up all contacts and links from new organizations.  Backup information from new organizations so they will not be lost in when contacts are restored.'
     Paragraph = 'Welcome to the Gulp scraper.  Loading scraper output and contacts'
     
     def __init__(self, master=None, handler=None):
@@ -142,7 +143,7 @@ class SpreadSheetControlGD(SpreadSheetControl):
                                wraplength=80,
                                state='disabled')
         self.NEWORGS.grid(row=0, column=0, sticky=N+S, pady=8, ipady=9)
-
+        Label(self.newOrgTab, text=SpreadSheetControl.BackupText, wraplength=300, justify=LEFT, anchor=W).grid(row=0, column=1, sticky=N+E+W, padx=8, pady=5)
         self.newOrgTab.columnconfigure(0, weight=0)
         self.newOrgTab.columnconfigure(0, pad=ScraperSidePadding)
         self.newOrgTab.columnconfigure(1, weight=1)
@@ -150,7 +151,7 @@ class SpreadSheetControlGD(SpreadSheetControl):
 
 
 
-        Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).grid(row=0, column=0, sticky=E+W, padx=8, pady=5)#.pack(side=LEFT, anchor=W)
+        Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=300, justify=LEFT, anchor=W).grid(row=0, column=0, sticky=E+W, padx=8, pady=5)#.pack(side=LEFT, anchor=W)
         self.RESTORE = Button(self.restoreTab, width=10)
         self.RESTORE.configure(command=self.handler.handle_restore,
                                text='RESTORE CONTACTS',
