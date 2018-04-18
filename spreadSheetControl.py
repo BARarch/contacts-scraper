@@ -20,6 +20,7 @@ class SpreadSheetControl:
         self.frame.pack(side=TOP, expand=True, anchor=W, fill=X)
 
         self.transferTab = Frame(self.frame)
+        self.newOrgTab = Frame(self.frame)
         self.restoreTab = Frame(self.frame)
         
         self.TRANSFER = Button(self.transferTab, width=12)
@@ -32,6 +33,17 @@ class SpreadSheetControl:
         self.transferStatusFrame.pack(side=LEFT, expand=True, fill=X, anchor=W)
         self.transferStatus = LEDRowDiscription(self.transferStatusFrame, name='Checking Transfer Status...').bad().change_discription(SpreadSheetControl.Paragraph).good().blink()
 
+
+        self.NEWORGS = Button(self.newOrgTab, width=12)
+        self.NEWORGS.configure(command=self.handler.handle_transfer,
+                               text='Backup New Organizations',
+                               wraplength=50,
+                               state='disabled')
+        self.NEWORGS.pack(side=LEFT, anchor=W, expand=True, fill=Y)
+
+
+
+
         Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).pack(side=LEFT, anchor=W)
         self.RESTORE = Button(self.restoreTab, width=12)
         self.RESTORE.configure(command=self.handler.handle_restore,
@@ -41,6 +53,7 @@ class SpreadSheetControl:
         self.RESTORE.pack(side=RIGHT, anchor=E, expand=True, fill=Y)
 
         self.frame.add(self.transferTab, text='Transfer', compound=TOP)
+        self.frame.add(self.newOrgTab, text='New Organizations')
         self.frame.add(self.restoreTab, text='Restore Backup')
 
     def enable_transfer(self):
@@ -57,6 +70,14 @@ class SpreadSheetControl:
 
     def disable_restore(self):
         self.RESTORE.configure(state='disabled')
+        return self
+
+    def enable_new_orgs(self):
+        self.NEWORGS.configure(state='active')
+        return self
+
+    def disable_new_orgs(self):
+        self.NEWORGS.configure(state='disabled')
         return self
 
     def update_transfer_status(self, rowCounts=None):
@@ -91,9 +112,9 @@ class SpreadSheetControlGD(SpreadSheetControl):
         self.frame = ttk.Notebook(master)
         self.parent = master
         self.handler = handler
-        
 
         self.transferTab = Frame(self.frame)
+        self.newOrgTab = Frame(self.frame)
         self.restoreTab = Frame(self.frame)
         
         self.TRANSFER = Button(self.transferTab, width=12)
@@ -114,6 +135,21 @@ class SpreadSheetControlGD(SpreadSheetControl):
         self.transferTab.columnconfigure(1, weight=1)
         self.transferTab.columnconfigure(2, weight=0)
 
+        
+        self.NEWORGS = Button(self.newOrgTab, width=12)
+        self.NEWORGS.configure(command=self.handler.handle_new_orgs,
+                               text='Backup\nNew Organizations',
+                               wraplength=80,
+                               state='disabled')
+        self.NEWORGS.grid(row=0, column=0, sticky=N+S, pady=8, ipady=9)
+
+        self.newOrgTab.columnconfigure(0, weight=0)
+        self.newOrgTab.columnconfigure(0, pad=ScraperSidePadding)
+        self.newOrgTab.columnconfigure(1, weight=1)
+        self.newOrgTab.columnconfigure(2, weight=0)
+
+
+
         Label(self.restoreTab, text=SpreadSheetControl.RestoreText, wraplength=200, justify=LEFT, anchor=W).grid(row=0, column=0, sticky=E+W, padx=8, pady=5)#.pack(side=LEFT, anchor=W)
         self.RESTORE = Button(self.restoreTab, width=10)
         self.RESTORE.configure(command=self.handler.handle_restore,
@@ -126,6 +162,7 @@ class SpreadSheetControlGD(SpreadSheetControl):
         #self.RESTORE.pack(side=RIGHT, anchor=E, expand=True, fill=Y)
 
         self.frame.add(self.transferTab, text='Transfer', compound=TOP)
+        self.frame.add(self.newOrgTab, text='New Organizations')
         self.frame.add(self.restoreTab, text='Restore Backup')
 
         self.frame.grid(sticky=E+W)

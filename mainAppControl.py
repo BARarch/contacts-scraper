@@ -85,7 +85,10 @@ class MainApplication(Frame):
         self.control.buttons.disable_scrape()
         self.manager.disable_restore()
         self.manager.disable_transfer()
-        self.parent.after(100, self.manage_transfer()) 
+        self.parent.after(100, self.manage_transfer())
+
+    def handle_new_orgs(self):
+        pass 
 
     def startup(self):
         # Initiates Startup Thread Task
@@ -283,6 +286,9 @@ class MainApplication(Frame):
 
         except queue.Empty:
             self.parent.after(100, self.manage_restore)
+
+    def manage_new_orgs(self):
+        pass
 
 class MainApplicationGD(MainApplication):
     def __init__(self, master=None):
