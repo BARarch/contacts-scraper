@@ -54,6 +54,7 @@ class MainApplication(Frame):
         self.control.buttons.disable_scrape()
         self.manager.disable_restore()
         self.manager.disable_transfer()
+        self.manager.disable_new_orgs()
         self.manager.update_transfer_status()
         self.numScrapes = 0
         self.report = None
@@ -76,6 +77,7 @@ class MainApplication(Frame):
         self.control.buttons.disable_scrape()
         self.manager.disable_restore()
         self.manager.disable_transfer()
+        self.manager.disable_new_orgs()
         self.parent.after(100, self.manage_restore())
 
     def handle_transfer(self):
@@ -85,6 +87,7 @@ class MainApplication(Frame):
         self.control.buttons.disable_scrape()
         self.manager.disable_restore()
         self.manager.disable_transfer()
+        self.manager.disable_new_orgs()
         self.parent.after(100, self.manage_transfer())
 
     def handle_new_orgs(self):
@@ -119,6 +122,7 @@ class MainApplication(Frame):
                     self.control.progress.message("Scrape Session Open")
                     self.statusBar.message("Ready")
                     self.manager.enable_restore()
+                    self.manager.enable_new_orgs()
                     self.manager.update_transfer_status(self.rowCounts)
                 else:
                     self.statusBar.message(msg)
@@ -191,6 +195,7 @@ class MainApplication(Frame):
                 self.control.buttons.enable_dropdown()
                 self.control.buttons.enable_scrape()
                 self.manager.enable_restore()
+                self.manager.enable_new_orgs()
                 self.manager.update_transfer_status(self.rowCounts)
                 self.indicators._contactChecker.off()
                 comeBack = False    
@@ -246,6 +251,7 @@ class MainApplication(Frame):
                 self.control.progress.message("Contacts Transfered")
                 self.control.buttons.enable_scrape()
                 self.manager.enable_restore()
+                self.manager.enable_new_orgs()
                 self.manager.update_transfer_status(self.rowCounts)
                 self.statusBar.message("Ready")
                 comeBack = False
@@ -271,6 +277,7 @@ class MainApplication(Frame):
                 self.control.progress.message("Contacts Restored")
                 self.control.buttons.enable_scrape()
                 self.manager.enable_restore()
+                self.manager.enable_new_orgs()
                 self.manager.update_transfer_status(self.rowCounts)
                 self.statusBar.message("Ready")
                 comeBack = False
