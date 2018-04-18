@@ -91,7 +91,14 @@ class MainApplication(Frame):
         self.parent.after(100, self.manage_transfer())
 
     def handle_new_orgs(self):
-        pass 
+        self.commandQueue.put({'backup': 1})
+        self.control.progress.message("Archiving new contacts...")
+        self.statusBar.message("Archiving")
+        self.control.buttons.disable_scrape()
+        self.manager.disable_restore()
+        self.manager.disable_transfer()
+        self.manager.disable_new_orgs()
+        self.parent.after(100, self.manage_new_orgs()) 
 
     def startup(self):
         # Initiates Startup Thread Task
@@ -295,7 +302,30 @@ class MainApplication(Frame):
             self.parent.after(100, self.manage_restore)
 
     def manage_new_orgs(self):
-        pass
+        try:
+            comeBack = True
+            packet = self.scraperQueue.get(False)
+            print('__backup:', packet)
+            if 'done' in packet:
+                self.control.progress.message("Contacts Archived")
+                self.control.buttons.enable_scrape()
+                self.manager.enable_restore()
+                self.manager.enable_new_orgs()
+                self.manager.update_transfer_status(self.rowCounts)
+                self.statusBar.message("Ready")
+                comeBack = False
+            if 'rowCounts' in packet:
+                self.rowCounts = packet['rowCounts']    
+            if '__OUTON' in packet:
+                self.indicators.output_on()
+            if '__OUTOFF' in packet:
+                self.indicators.output_off()
+
+            if comeBack:
+                self.parent.after(100, self.manage_new_orgs)
+
+        except queue.Empty:
+            self.parent.after(100, self.manage_new_orgs)
 
 class MainApplicationGD(MainApplication):
     def __init__(self, master=None):

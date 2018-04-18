@@ -299,7 +299,7 @@ class ScraperThread(threading.Thread):
                     self.scraperQueue.put({'rowCounts': {'contact counts': cc.ContactSheetOutput.count_contacts_rows(),
                                                          'output counts': cc.ContactSheetOutput.count_scraper_output_rows()}})    
                     self.scraperQueue.put({'done': 1})
-                    print("RESTORE COMPLETE")
+                    print("RESTORE COMPLETE ON SCRAPER THREAD")
 
                 if 'transfer' in packet:
                     cc.ContactSheetOutput.transfer_contacts()
@@ -307,7 +307,15 @@ class ScraperThread(threading.Thread):
                     self.scraperQueue.put({'rowCounts': {'contact counts': cc.ContactSheetOutput.count_contacts_rows(),
                                                          'output counts': cc.ContactSheetOutput.count_scraper_output_rows()}})    
                     self.scraperQueue.put({'done': 1})
-                    print("TRANSFER COMPLETE")
+                    print("TRANSFER COMPLETE ON SCRAPER THREAD")
+
+                if 'backup' in packet:
+                    cc.ContactSheetOutput.backup_contacts()
+                    ## Count Rows and Finnish up
+                    self.scraperQueue.put({'rowCounts': {'contact counts': cc.ContactSheetOutput.count_contacts_rows(),
+                                                         'output counts': cc.ContactSheetOutput.count_scraper_output_rows()}})    
+                    self.scraperQueue.put({'done': 1})
+                    print("BACKUP COMPLETE ON SCRAPER THREAD")
                 
                 ## Stop Events
                 if 'stop' in packet:
