@@ -9,6 +9,9 @@ from mainAppControl import *
 
 if __name__ == '__main__':
 
+    print('\t\t This is the GULP SCRAPER APP')
+    print('\t\t   do not close this window')
+
     sys.stdout = open('output.txt', 'w')
     print ('Scraper started on ' + datetime.now().strftime('%a, %d %b %Y %H:%M:%S'))
     print()
