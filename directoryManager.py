@@ -164,7 +164,7 @@ class OrgSession(DirectoryManager):
         if self.anyQueryTimeouts():     #There is a timeout
             print('OrgSession wants new Browser')
             self.new_browser()      #Get a new brower
-            self.serialSessionNote('We have a timeout')     #Send a Note
+            self.serialSessionNote('Timed Out')     #Send a Note
             self.sessionStatus = 'Bad'      #Set session Status to bad
             return[self.orgQueries[-1].get_callTimeStr(), '--', '--', self.sessionStatus]
         elif self.anyOtherQueryExceptions():    #There are other exceptions
@@ -225,8 +225,8 @@ class OrgSession(DirectoryManager):
         OrgSession.browserPath = os.path.join(intDir, 'chromedriver')
 
 class HeadlessOrgSession(OrgSession):
-    ImplicitWait = 20
-    PageLoadTimeout = 10
+    ImplicitWait = 25
+    PageLoadTimeout = 20
     def __init__(self, orgRecords):
         OrgSession.__init__(self, orgRecords)
         self.sessionBrowser = webdriver.PhantomJS()
