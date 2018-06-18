@@ -1990,7 +1990,8 @@ class ScrapeSession(object):
                     'National Association of Social Workers',
                     'American Marketing Association (AMA)']
 
-    errorCases = ['Arizona School Boards Association',
+    errorCases = ['Sigma Chi-Miami (Ohio)',
+                  'Arizona School Boards Association',
                   'Society of Petroleum Engineers',
                   'SSPC: the Society for Protective Coatings',
                   'American Association of Diabetes Educators']

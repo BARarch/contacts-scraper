@@ -16,3 +16,4 @@ gulp.spec
 untitled.ipynb
 phantomjs.exe
 output.txt
+client_secret.json
