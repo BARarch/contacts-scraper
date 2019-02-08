@@ -1,3 +1,5 @@
+from sheetOutput import *
+
 def contact_row(accountName, contactId, firstName, lastName, title, email, contactSource):
     return {
         'Account Name': accountName,	
@@ -33,3 +35,46 @@ if __name__ == "__main__":
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Daniel', 'Morris', 'House Manager', 'morrisj20@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'John', 'Harashinski', 'Risk Reduction', 'harashinskij20@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Keith', 'Denning', 'Sentinel', 'denningk18@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
+
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'JACOB', 'SCOTT', 'EMINENT COMMANDER', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'MAX', 'VINCENT', 'LIEUTENANT COMMANDER', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'ZACH', 'MARSO', 'TREASURER', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'RESER', 'HALL', 'RECORDER', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'ZACH', 'SCHMITT', 'MARSHAL', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'BRENT', 'ALFARO', 'RUSH CHAIRMAN', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'MICHAEL', 'DAVIDSON', 'RUSH CHAIRMAN', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'LUKE', 'RATZLAFF', 'RUSH CHAIRMAN', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'WYATT', 'RUGAN', 'CHAPLAIN', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'ADAM', 'GLEASON', 'SCHOLARSHIP CHAIR', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'SAM', 'REINIG', 'ALUMNI CONTACT', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'ZACH', 'LAWRENCE', 'SOCIAL CHAIR', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'BLAKE', 'MARSEE', 'EDUCATOR', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'CAMRON', 'MYERS', 'SENTINEL', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'REID', 'BRUNSWIG', 'HOUSE MANAGER', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'COLE', 'CHALMERS', 'PHILANTHROPY CHAIR', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'EASTON', 'MONTGOMERY', 'INTRAMURAL CHAIR', '', 'http://www.kansassigmanu.com/meet.html'))
+    records.append(contact_row('Sigma Nu-University of Kansas', '', 'JOHNNY', 'RICHMOND', 'ENVIRONMENTAL CHAIR', '', 'http://www.kansassigmanu.com/meet.html'))
+
+    records.append(contact_row('Sigma Nu-University of Missouri', '', 'Solomon', 'Douglas', 'Commander', 'solomon4150@gmail.com', 'http://sigmanumu.com/contact/'))
+    records.append(contact_row('Sigma Nu-University of Missouri', '', 'Adam', 'Swehla', 'Lieutenant Commander', 'adamswehla98@gmail.com', 'http://sigmanumu.com/contact/'))
+    records.append(contact_row('Sigma Nu-University of Missouri', '', 'Logan', 'Clark', 'Treasurer', 'lmcww7@mail.missouri.edu', 'http://sigmanumu.com/contact/'))
+    records.append(contact_row('Sigma Nu-University of Missouri', '', 'Jack', 'Kleiss', 'Philanthropy Chairman', 'jrkx59@mail.missouri.edu', 'http://sigmanumu.com/contact/'))
+    records.append(contact_row('Sigma Nu-University of Missouri', '', 'Andrew', 'Huertas', 'Recruitment Chairman', 'sigmanurush@gmail.com', 'http://sigmanumu.com/contact/'))
+    records.append(contact_row('Sigma Nu-University of Missouri', '', 'Kyler', 'Bayless', 'Recruitment Chairman', 'sigmanurush@gmail.com', 'http://sigmanumu.com/contact/'))
+
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'David', 'Vitek', 'Eminent Commander', 'vitek@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Sam', 'Agnew', 'Lieutenant Commander', 'sagnewv1@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Matthew', 'Gurkin', 'Treasurer', 'mgurkin10@gmail.com', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Connor', 'Shaw', 'Recorder', 'cshaw16@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Chris', 'Batchelor', 'Alumni Relations Chair', 'cdbatch@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Ryan', 'Facer', 'House Manager', 'rdfacer@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Seth', 'Hauser', 'Social Chair', 'sethh18@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Blanton', 'Smith', 'Co-Chaplain (Brotherhood Chair)', 'blantonsmith10@gmail.com', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Eric', 'Tomlinson', 'Co-Chaplain (Brotherhood Chair)', 'ectomlin@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Taylor', 'Dameworth', 'Risk Management Officer', 'taylord5@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Ben', 'Albert', 'Scholarship Chair', 'btalbert@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Chris', 'White', 'Co-Rush Chair', 'cwhite96@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Carson', 'Southard', 'Co-Rush Chair', 'carsouth@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Akash', 'Mishra', 'Historian', 'akash97@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Tyler', 'Tonnesen', 'Philanthropy Chair', 'tyler_tonnesen@kenan-flagler.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))
+    records.append(contact_row('Sigma Nu-University of North Carolina at Chapel Hill', '', 'Colin', 'Russell', 'LEAD Chair', 'colinunc@live.unc.edu', 'https://uncsigmanu.2stayconnected.com/index.php?option=com_content&view=article&id=49&Itemid=569))

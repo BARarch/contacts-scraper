@@ -1,7 +1,8 @@
 ## Sheet Output Class
 ''' A general base class for google sheets API input/output
 '''
-from .modelGS import *
+#from .modelGS import * # If in package
+from modelGS import *
 
 def build_service():
     """Google Sheets API Code.
