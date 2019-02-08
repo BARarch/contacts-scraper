@@ -29,7 +29,7 @@ if __name__ == "__main__":
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Tyler', 'Murphy', 'Lieutenant Commander', 'murphyt18@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Jacob', 'Ingber', 'Treasurer', 'ingberj19@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Davis', 'Alliger', 'Marshal', 'alligerb19@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
-    records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Bennett', 'Newman', 'Senior Recruitment Chairman', 'newmanb19@mail.wlu.edu, 'https://sigmanu1.academic.wlu.edu/leadership/'))
+    records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Bennett', 'Newman', 'Senior Recruitment Chairman', 'newmanb19@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Hunter', 'Ward', 'Senior Social Chairman', 'wardh18@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Keeghan', 'Sweeney', 'Chaplain', 'sweeneyk18@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
     records.append(contact_row('Sigma Nu-Washington and Lee University', '', 'Daniel', 'Morris', 'House Manager', 'morrisj20@mail.wlu.edu', 'https://sigmanu1.academic.wlu.edu/leadership/'))
@@ -88,23 +88,19 @@ if __name__ == "__main__":
     records.append(contact_row('Sigma Nu-Auburn University', '', 'Charlie', 'Gibson', 'Rush Chairman', 'gibsoch@auburn.edu', 'http://www.auburn.edu/student_info/greeks/sigma_nu/officers.html'))
     records.append(contact_row('Sigma Nu-Auburn University', '', 'Kyle', 'Gaston', 'Alumni Chairman', 'gastoka@auburn.edu', 'http://www.auburn.edu/student_info/greeks/sigma_nu/officers.html'))
 
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Nick Oetting', 'Eminent Commander', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Forrest Brown', 'Lieutenant Commander', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Eric Eagon', 'Treasurer', '', 'https://www.purduesigmanu.org/officers'))
-
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Anders Hovstadius', 'Recorder', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'John Lawicki', 'Chaplain', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Ben Collins', 'Risk Reduction Chairman', '', 'https://www.purduesigmanu.org/officers'))
-
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Jackson Glenn', 'Social Chairman', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Kyle Weiss', 'Recruitment Chairman', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Anish Mohan', 'Scholarship Chairman', '', 'https://www.purduesigmanu.org/officers'))
-
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Jake Copas', 'LEAD Chairman', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Everett Mitchel ', 'Philanthropy and  Service Chairman', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Logan Plack', 'Athletics Chairman', '', 'https://www.purduesigmanu.org/officers'))
-
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Aaron Fischer', 'Alumni Relations Chairman', '', 'https://www.purduesigmanu.org/officers'))
-    records.append(contact_row('Sigma Nu-Purdue University', '', 'Austin Duarte', 'Marshal', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Nick', 'Oetting', 'Eminent Commander', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Forrest', 'Brown', 'Lieutenant Commander', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Eric', 'Eagon', 'Treasurer', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Anders', 'Hovstadius', 'Recorder', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'John', 'Lawicki', 'Chaplain', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Ben', 'Collins', 'Risk Reduction Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Jackson', 'Glenn', 'Social Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Kyle', 'Weiss', 'Recruitment Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Anish', 'Mohan', 'Scholarship Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Jake', 'Copas', 'LEAD Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Everett', 'Mitchel ', 'Philanthropy and  Service Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Logan', 'Plack', 'Athletics Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Aaron', 'Fischer', 'Alumni Relations Chairman', '', 'https://www.purduesigmanu.org/officers'))
+    records.append(contact_row('Sigma Nu-Purdue University', '', 'Austin', 'Duarte', 'Marshal', '', 'https://www.purduesigmanu.org/officers'))
 
     
