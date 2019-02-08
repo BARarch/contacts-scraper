@@ -11,8 +11,25 @@ def contact_row(accountName, contactId, firstName, lastName, title, email, conta
         'Contact Source': contactSource
     }
 
+def sheet_row(record):
+    return [
+        '',                         ## A
+        record['Account Name'],     ## B
+        record['Contact ID'],       ## C
+        record['First Name'],       ## D
+        record['Last Name'],        ## E
+        record['Title'],            ## F
+        record['Email'],            ## G
+        '', '', '', '', '', '',     ## H I J K L M
+        record['Contact Source']    ## N
+    ]
+
 if __name__ == "__main__":
+    ## Get the Sheet 
+    sheet = SheetOutput('1p1LNyQhNhDBNEOkYQPV9xcNRe60WDlmnuiPp78hxkIs','FRAT Scraper Output', 'N')
+
     records = []
+    ## Stuff these records
     records.append(contact_row('Sigma Nu-The University of Alabama', '', 'Clyde', 'Yelverton','Commander', '', 'http://sigmanualabama.com/chapter-news/2016-theta-chapter-officers/'))
     records.append(contact_row('Sigma Nu-The University of Alabama', '', 'Andrew', 'Palmer', 'Lt. Commander', '', 'http://sigmanualabama.com/chapter-news/2016-theta-chapter-officers/'))
     records.append(contact_row('Sigma Nu-The University of Alabama', '', 'George', 'McMillan','Treasurer', '', 'http://sigmanualabama.com/chapter-news/2016-theta-chapter-officers/'))
@@ -103,4 +120,6 @@ if __name__ == "__main__":
     records.append(contact_row('Sigma Nu-Purdue University', '', 'Aaron', 'Fischer', 'Alumni Relations Chairman', '', 'https://www.purduesigmanu.org/officers'))
     records.append(contact_row('Sigma Nu-Purdue University', '', 'Austin', 'Duarte', 'Marshal', '', 'https://www.purduesigmanu.org/officers'))
 
+    ## Write to the sheet
+    sheet.output_rows(list(map(sheet_row, records)), 'A','7')
     
